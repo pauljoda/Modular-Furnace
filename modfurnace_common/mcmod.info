@@ -1,0 +1,20 @@
+[
+{
+  "modid": "modularfurnace",
+  "name": "Modular Furnace",
+  "description": "Build your own furnace!",
+  "version": "0.0.01",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+    "pauljoda"
+  ],
+  "credits": "By pauljoda",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
