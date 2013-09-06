@@ -2,6 +2,9 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import modularfurnace.ModularFurnace;
 import modularfurnace.lib.Reference;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
@@ -10,7 +13,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,11 +32,14 @@ public class BlockFurnaceCore extends BlockContainer
     public static final int META_DIR_EAST = 0x00000003;
     public static final int META_DIR_WEST = 0x00000000;
     
-    private Icon faceIconUnlit;
-    private Icon faceIconLit;
+    @SideOnly(Side.CLIENT)
+    private Icon furnaceIconTop;
+    @SideOnly(Side.CLIENT)
+    private Icon furnaceIconFront;
+	private Icon furnaceIconFrontLit;
+
     
-    
-    public BlockFurnaceCore(int blockId)
+    public BlockFurnaceCore(int blockId, boolean par2)
     {
         super(blockId, Material.rock);
         
@@ -49,42 +55,84 @@ public class BlockFurnaceCore extends BlockContainer
         return ((world.getBlockMetadata(x, y, z) >> 3) == 0 ? 0 : 15); 
     }
     
-    @Override
-    public void registerIcons(IconRegister iconRegister)
-    {
-        blockIcon = iconRegister.registerIcon("coresides");
-        faceIconUnlit = iconRegister.registerIcon("oven");
-        faceIconLit = iconRegister.registerIcon("ovenlit");
-    }
     
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity, ItemStack itemStack)
+    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
     {
-        int metadata = 0;
-        int facing = META_DIR_WEST;
-        
-        int dir = MathHelper.floor_double((double)(entity.rotationYaw * 4f / 360f) + 0.5) & 3;
-        if(dir == 0)
+    	int facing = META_DIR_WEST;
+    	int metadata = 0;
+    	
+        int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+
+        if (l == 0)
+        {
+            par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
             facing = META_DIR_NORTH;
-        if(dir == 1)
+        }
+
+        if (l == 1)
+        {
+            par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
             facing = META_DIR_EAST;
-        if(dir == 2)
+        }
+
+        if (l == 2)
+        {
+            par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
             facing = META_DIR_SOUTH;
-        if(dir == 3)
+        }
+
+        if (l == 3)
+        {
+            par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
             facing = META_DIR_WEST;
-        
+        }
+
+        if (par6ItemStack.hasDisplayName())
+        {
+            ((TileEntityFurnaceCore)par1World.getBlockTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
+        }
         metadata |= facing;
-        world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, metadata, 2);
+    }
+
+	@Override
+	public Icon getIcon(int side, int metadata)
+	{
+		boolean isActive = ((metadata >> 3) == 1);
+		int facing = (metadata & MASK_DIR);
+		
+		return (side == getSideFromFacing(facing) ? (isActive ? furnaceIconFrontLit : furnaceIconFront) : blockIcon);
+	}
+
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("coresides");
+        this.furnaceIconFront = par1IconRegister.registerIcon("oven");
+        this.furnaceIconTop = par1IconRegister.registerIcon("coresides");
+        this.furnaceIconFrontLit = par1IconRegister.registerIcon("overnlit");
     }
     
-    @Override
-    public Icon getIcon(int side, int metadata)
-    {
-        boolean isActive = ((metadata >> 3) == 1);
-        int facing = (metadata & MASK_DIR);
-        
-        return (side == getSideFromFacing(facing) ? (isActive ? faceIconLit : faceIconUnlit) : blockIcon);
-    }
+	private static int getSideFromFacing(int facing)
+	{
+		switch(facing)
+		{
+		case META_DIR_WEST:
+			return 4;
+			
+		case META_DIR_EAST:
+			return 5;
+			
+		case META_DIR_NORTH:
+			return 2;
+			
+		case META_DIR_SOUTH:
+			return 3;
+			
+		default:
+			return 4;
+		}
+	}
+
     
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
@@ -174,27 +222,6 @@ public class BlockFurnaceCore extends BlockContainer
         super.breakBlock(world, x, y, z, par5, par6);
       
         
-    }
-    
-    private static int getSideFromFacing(int facings)
-    {
-        switch(facings)
-        {
-        case META_DIR_WEST:
-            return 4;
-            
-        case META_DIR_EAST:
-            return 5;
-            
-        case META_DIR_NORTH:
-            return 2;
-            
-        case META_DIR_SOUTH:
-            return 3;
-            
-        default:
-            return 4;
-        }
     }
     
     private void dropItems(World world, int x, int y, int z)

@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 
 
@@ -15,6 +16,12 @@ public class BlockCrafterInactive extends Block {
         setHardness(3.5f);
         setCreativeTab(CreativeTabs.tabDecorations);
         
+    }
+    
+    @Override
+    public void registerIcons(IconRegister iconRegister)
+    {
+        blockIcon = iconRegister.registerIcon("crafterInactive");
     }
 
 }

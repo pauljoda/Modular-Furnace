@@ -19,13 +19,15 @@ public class BlockManager
     public static Block crafterInactive = null;
     public static Block crafterActive = null;
     public static Block furnaceDummyEmerald = null;
+    public static Block furnaceCoreActive = null;
     
     public static void registerBlocks()
     {
-        furnaceCore = new BlockFurnaceCore(Reference.furnaceCoreID);
+        furnaceCore = new BlockFurnaceCore(Reference.furnaceCoreID, false);
+        furnaceCoreActive = new BlockFurnaceCore(Reference.furnaceCoreActiveID, true);
         furnaceDummy = new BlockFurnaceDummy(Reference.furnaceDummyID);
         furnaceDummyRedstone = new BlockFurnaceDummyRedstone(Reference.furnaceDummyIDRedstone);
-        furnaceDummyGlowStone = new BlockFurnaceDummyGlowStone(Reference.furnaceDummyIDGlowStone);
+        furnaceDummyGlowStone = new BlockFurnaceDummyIron(Reference.furnaceDummyIDGlowStone);
         furnaceDummyDiamond = new BlockFurnaceDummyDiamond(Reference.furnaceDummyIDDiamond);
         crafterInactive = new BlockCrafterInactive(Reference.crafterInactive, Material.wood);
         crafterActive = new BlockCrafterActive(Reference.crafterActive);

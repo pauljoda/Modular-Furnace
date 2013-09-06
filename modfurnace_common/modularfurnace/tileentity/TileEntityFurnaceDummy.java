@@ -114,16 +114,19 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
     public void closeChest() { }
 
     @Override
-    public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-        // TODO Auto-generated method stub
-        return tileEntityCore.isStackValidForSlot(i, itemstack);
-    }
+
 
 
     public int[] getAccessibleSlotsFromSide(int par1)
     {
         return null;
     }
+    
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return tileEntityCore.isItemValidForSlot(i, itemstack);
+	}
 
     /**
      * Returns true if automation can insert the given item in the given slot from the given side. Args: Slot, item,
@@ -131,7 +134,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
      */
     public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
     {
-        return false;
+        return tileEntityCore.canInsertItem(par1, par2ItemStack, par3);
     }
 
     /**
@@ -140,6 +143,8 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
      */
     public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
     {
-        return false;
+        return tileEntityCore.canExtractItem(par1, par2ItemStack, par3);
     }
+
+
 }

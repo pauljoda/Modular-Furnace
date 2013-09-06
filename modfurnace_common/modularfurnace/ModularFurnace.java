@@ -17,10 +17,6 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-
-
-
-
 @Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.Version)
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 
@@ -39,6 +35,7 @@ public class ModularFurnace {
     public static int crafterInactiveID;
     public static int crafterActiveID;
     public static int furnaceDummyIDEmerald;
+	public static int furnaceCoreActiveID;
 
     @PreInit
     public void preInit(FMLPreInitializationEvent event){
@@ -51,8 +48,9 @@ public class ModularFurnace {
         furnaceDummyIDGlowStone = config.getBlock("Furnace Dummy GlowStone", 303).getInt();
         furnaceDummyIDDiamond = config.getBlock("Furnace Dummy Diamond", 304).getInt();
         crafterInactiveID = config.getBlock("Crafter Inactive", 305).getInt();
-        crafterActiveID = config.getBlock("Crafter Active", 306).getInt();
+        crafterActiveID = config.getBlock("Crafter Active", 308).getInt();
         furnaceDummyIDEmerald = config.getBlock("Furnace Dummy Emerald", 307).getInt();
+        furnaceCoreActiveID = config.getBlock("Furnace Core Active", 306).getInt();
         
         config.save();
    

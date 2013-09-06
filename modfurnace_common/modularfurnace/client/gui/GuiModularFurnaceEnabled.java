@@ -1,9 +1,10 @@
-package modularfurnace.client.gui;
+	package modularfurnace.client.gui;
 
 import modularfurnace.tileentity.ContainerModularFurnaceCrafter;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -12,6 +13,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiModularFurnaceEnabled extends GuiContainer
 {
     private TileEntityFurnaceCore tileEntity;
+    
+    private static final ResourceLocation field_110410_t = new ResourceLocation("textures/crafter.png");
     
     public GuiModularFurnaceEnabled(InventoryPlayer par1InventoryPlayer, World par2World, int par3, int par4, int par5, TileEntityFurnaceCore tileEntity)
     {
@@ -33,7 +36,7 @@ public class GuiModularFurnaceEnabled extends GuiContainer
     {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         
-        mc.renderEngine.bindTexture("/textures/crafter.png");
+        this.mc.func_110434_K().func_110577_a(field_110410_t);
         
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;

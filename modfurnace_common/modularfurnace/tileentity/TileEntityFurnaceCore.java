@@ -2,6 +2,7 @@ package modularfurnace.tileentity;
 
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import modularfurnace.ModularFurnace;
@@ -9,10 +10,15 @@ import modularfurnace.blocks.BlockFurnaceCore;
 import modularfurnace.blocks.BlockManager;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,10 +27,11 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 {
-    private static final int[] field_102010_d = new int[] {0};
-    private static final int[] field_102011_e = new int[] {2, 1};
-    private static final int[] field_102009_f = new int[] {1};
-    
+    private static final int[] slots_top = new int[] {0};
+    private static final int[] slots_bottom = new int[] {2, 1};
+    private static final int[] slots_sides = new int[] {1};
+
+	
     public int redstoneBlocksInFurnace = 0;
     public int redstoneMultiplier = 6;
     public int cookSpeed = 151;
@@ -420,6 +427,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         return furnaceItems.length;
     }
     
+    public void setGuiDisplayName(String par1Str)
+    {
+    }
+
+    
     @Override
     public ItemStack getStackInSlot(int slot)
     {
@@ -497,9 +509,57 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public void closeChest() { }
 
     @Override
-    public boolean isStackValidForSlot(int slot, ItemStack itemStack)
+    public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
     {
-        return slot == 2 ? false : (slot == 1 ? TileEntityFurnace.isItemFuel(itemStack) : true);
+        return par1 == 2 ? false : (par1 == 1 ? isItemFuel(par2ItemStack) : true);
+    }
+    
+    public static boolean isItemFuel(ItemStack par0ItemStack)
+    {
+        return getItemBurnTime(par0ItemStack) > 0;
+    }
+    
+    public static int getItemBurnTime(ItemStack par0ItemStack)
+    {
+        if (par0ItemStack == null)
+        {
+            return 0;
+        }
+        else
+        {
+            int i = par0ItemStack.getItem().itemID;
+            Item item = par0ItemStack.getItem();
+
+            if (par0ItemStack.getItem() instanceof ItemBlock && Block.blocksList[i] != null)
+            {
+                Block block = Block.blocksList[i];
+
+                if (block == Block.woodSingleSlab)
+                {
+                    return 150;
+                }
+
+                if (block.blockMaterial == Material.wood)
+                {
+                    return 300;
+                }
+
+                if (block == Block.field_111034_cE)
+                {
+                    return 16000;
+                }
+            }
+
+            if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD")) return 200;
+            if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) return 200;
+            if (item instanceof ItemHoe && ((ItemHoe) item).getMaterialName().equals("WOOD")) return 200;
+            if (i == Item.stick.itemID) return 100;
+            if (i == Item.coal.itemID) return 1600;
+            if (i == Item.bucketLava.itemID) return 20000;
+            if (i == Block.sapling.blockID) return 100;
+            if (i == Item.blazeRod.itemID) return 2400;
+            return GameRegistry.getFuelValue(par0ItemStack);
+        }
     }
 
    
@@ -648,18 +708,20 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int par1) {
-        return null;
+    public int[] getAccessibleSlotsFromSide(int par1)
+    {
+        return par1 == 0 ? slots_bottom : (par1 == 1 ? slots_top : slots_sides);
     }
 
     @Override
-    public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-        return false;
+    public boolean canInsertItem(int par1, ItemStack par2ItemStack, int par3)
+    {
+        return this.isItemValidForSlot(par1, par2ItemStack);
     }
-
     @Override
-    public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3) {
-        return false;
+    public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
+    {
+        return par3 != 0 || par1 != 1 || par2ItemStack.itemID == Item.bucketEmpty.itemID;
     }
 
     

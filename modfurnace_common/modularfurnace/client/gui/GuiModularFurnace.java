@@ -5,11 +5,14 @@ import modularfurnace.tileentity.ContainerModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 public class GuiModularFurnace extends GuiContainer
 {
     private TileEntityFurnaceCore tileEntity;
+    
+    private static final ResourceLocation field_110410_t = new ResourceLocation("textures/gui/container/furnace.png");
     
     public GuiModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity)
     {
@@ -31,7 +34,7 @@ public class GuiModularFurnace extends GuiContainer
     {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         
-        mc.renderEngine.bindTexture("/gui/furnace.png");
+        this.mc.func_110434_K().func_110577_a(field_110410_t);
         
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;

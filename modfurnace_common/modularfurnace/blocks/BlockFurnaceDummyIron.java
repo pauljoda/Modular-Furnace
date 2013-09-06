@@ -13,19 +13,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockFurnaceDummy extends BlockContainer
+public class BlockFurnaceDummyIron extends BlockContainer
 
 
 {
-    public BlockFurnaceDummy(int blockId)
+    public BlockFurnaceDummyIron(int blockId)
     {
         
         super(blockId, Material.rock);
         
         setUnlocalizedName("blockFurnaceDummy");
-        setStepSound(Block.soundStoneFootstep);
+        setStepSound(Block.soundMetalFootstep);
         setHardness(3.5f);
         setCreativeTab(CreativeTabs.tabDecorations);
+        
     }
     public int meta = 0;
     
@@ -33,7 +34,7 @@ public class BlockFurnaceDummy extends BlockContainer
     public int idDropped(int par1, Random par2Random, int par3)
     {
   
-        return Block.cobblestone.blockID;
+        return Block.blockIron.blockID;
     }
     
     @Override
@@ -45,7 +46,7 @@ public class BlockFurnaceDummy extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("cobblestone");
+        blockIcon = iconRegister.registerIcon("iron_block");
     }
     
     @Override

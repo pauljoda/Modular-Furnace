@@ -45,7 +45,7 @@ public class BlockFurnaceDummyDiamond extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("blockDiamond");
+        blockIcon = iconRegister.registerIcon("diamond_block");
     }
     
     @Override

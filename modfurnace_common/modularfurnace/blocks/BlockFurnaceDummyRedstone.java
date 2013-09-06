@@ -45,7 +45,7 @@ public class BlockFurnaceDummyRedstone extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("blockRedstone");
+        blockIcon = iconRegister.registerIcon("redstone_block");
     }
     
     @Override

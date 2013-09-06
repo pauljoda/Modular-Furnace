@@ -12,6 +12,7 @@ public class Reference {
     public static final String Version = "0.4";
     
     public static int furnaceCoreID = ModularFurnace.furnaceCoreID;
+    public static int furnaceCoreActiveID = ModularFurnace.furnaceCoreActiveID;
     public static int furnaceDummyID = ModularFurnace.furnaceDummyID;
     public static int furnaceDummyIDRedstone = ModularFurnace.furnaceDummyIDRedstone;
     public static int furnaceDummyIDGlowStone = ModularFurnace.furnaceDummyIDGlowStone;
