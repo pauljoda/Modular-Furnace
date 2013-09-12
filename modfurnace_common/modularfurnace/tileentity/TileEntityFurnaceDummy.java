@@ -119,7 +119,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
     public int[] getAccessibleSlotsFromSide(int par1)
     {
-        return null;
+        return tileEntityCore.getAccessibleSlotsFromSide(par1);
     }
     
 	@Override

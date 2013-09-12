@@ -35,7 +35,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public int redstoneBlocksInFurnace = 0;
     public int redstoneMultiplier = 6;
     public int cookSpeed = 151;
-    public int glowstoneBlocksInFurnace = 0;
+    public int ironBlocksInFurnace = 0;
     public static boolean emeralds;
   
     private ItemStack[] furnaceItems = new ItemStack[3];
@@ -70,7 +70,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         currentItemBurnTime = 0;
         furnaceCookTime = 0;
         redstoneBlocksInFurnace = 0;
-        glowstoneBlocksInFurnace = 0;
+        ironBlocksInFurnace = 0;
         diamonds = false;
         crafterEnabled = false;
         emeralds = false;
@@ -174,7 +174,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                     
                     if(worldObj.getBlockId(x, y, z) == Block.blockIron.blockID)
                     {
-                        this.glowstoneBlocksInFurnace = glowstoneBlocksInFurnace + 1;
+                        this.ironBlocksInFurnace = ironBlocksInFurnace + 1;
                         worldObj.setBlock(x, y, z, Reference.furnaceDummyIDGlowStone);
                         worldObj.markBlockForUpdate(x, y, z);
                         TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
@@ -375,7 +375,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         {
             if(furnaceBurnTime == 0 && canSmelt())
             {
-                currentItemBurnTime = furnaceBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((glowstoneBlocksInFurnace / 2) + 1)));
+                currentItemBurnTime = furnaceBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
 
                 if(furnaceBurnTime > 0)
                 {
@@ -586,9 +586,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         
         furnaceBurnTime = tagCompound.getShort("BurnTime");
         furnaceCookTime = tagCompound.getShort("CookTime");
-        currentItemBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((glowstoneBlocksInFurnace / 2) + 1)));
+        currentItemBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
         redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlocks"); 
-        glowstoneBlocksInFurnace = tagCompound.getShort("GlowStoneBlocks");
+        ironBlocksInFurnace = tagCompound.getShort("IronStoneBlocks");
         diamonds = tagCompound.getBoolean("Diamonds");
         crafterEnabled = tagCompound.getBoolean("Enabled");
         emeralds = tagCompound.getBoolean("Emeralds");
@@ -607,7 +607,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         tagCompound.setShort("BurnTime", (short)furnaceBurnTime);
         tagCompound.setShort("CookTime", (short)furnaceCookTime);
         tagCompound.setShort("RedstoneBlocks", (short)redstoneBlocksInFurnace);
-        tagCompound.setShort("GlowStoneBlocks", (short)glowstoneBlocksInFurnace);
+        tagCompound.setShort("IronStoneBlocks", (short)ironBlocksInFurnace);
         tagCompound.setBoolean("Diamonds", (boolean)diamonds);
         tagCompound.setBoolean("Enabled", (boolean)crafterEnabled);
         tagCompound.setBoolean("Emeralds",(boolean)emeralds);
