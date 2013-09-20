@@ -3,14 +3,14 @@
   "modid": "modularfurnace",
   "name": "Modular Furnace",
   "description": "Build your own furnace!",
-  "version": "0.0.01",
+  "version": "0.6",
   "url": "",
   "updateUrl": "",
   "authorList": [
     "pauljoda"
   ],
   "credits": "By pauljoda",
-  "logoFile": "",
+  "logoFile": "modularfurnace.assets.minecraft.textures.logo.png",
   "screenshots": [
   ],
   "parent":"",

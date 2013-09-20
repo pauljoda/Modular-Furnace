@@ -42,7 +42,6 @@ public class BlockCrafterActive extends BlockContainer
     {
         return new TileEntityFurnaceDummy();
     }
-    
     @Override
     public void registerIcons(IconRegister iconRegister)
     {

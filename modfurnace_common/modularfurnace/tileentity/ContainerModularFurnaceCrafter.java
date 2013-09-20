@@ -1,5 +1,7 @@
 package modularfurnace.tileentity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -28,8 +30,7 @@ public class ContainerModularFurnaceCrafter extends Container
     {
         
         this.worldObj = par2World;
-        this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 19, 9, 45));
-        int l;
+        int i;
         int i1;
         this.tileEntity = tileEntity;
         
@@ -41,33 +42,31 @@ public class ContainerModularFurnaceCrafter extends Container
         
         // Output
         addSlotToContainer(new SlotModularFurnace(par1InventoryPlayer.player, tileEntity, 2, 148, 47));
-        
-        bindPlayerInventory(par1InventoryPlayer);
-        
-        for (l = 0; l < 3; ++l)
+  
+        this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, this.craftMatrix, this.craftResult, 47, 9, 45));
+        for (i = 0; i < 3; ++i)
         {
             for (i1 = 0; i1 < 3; ++i1)
             {
-                this.addSlotToContainer(new Slot(this.craftMatrix, i1 + l * 3, 32 + i1 * 18, 9 + l * 18));
+                this.addSlotToContainer(new Slot(this.craftMatrix, i1 + i * 3, 32 + i1 * 18, 9 + i * 18));
             }
         }
+        
 
-        for (l = 0; l < 3; ++l)
+        for (i = 0; i < 3; ++i)
         {
-            for (i1 = 0; i1 < 9; ++i1)
+            for (int j = 0; j < 9; ++j)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, i1 + l * 9 + 9, 8 + i1 * 18, 84 + l * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for (l = 0; l < 9; ++l)
+        for (i = 0; i < 9; ++i)
         {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, l, 8 + l * 18, 142));
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
         }
-
-        this.onCraftMatrixChanged(this.craftMatrix);
-    
     }
+
     
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
@@ -93,18 +92,12 @@ public class ContainerModularFurnaceCrafter extends Container
         }
     }
 
-    
-    public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
-    {
-        return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
-    }
-
-    
+        
     @Override
     public void addCraftingToCrafters(ICrafting par1ICrafting)
     {
         super.addCraftingToCrafters(par1ICrafting);
-        par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.furnaceCookTime);
+        par1ICrafting.sendProgressBarUpdate(this, 47, this.tileEntity.furnaceCookTime);
         par1ICrafting.sendProgressBarUpdate(this, 1, this.tileEntity.furnaceBurnTime);
         par1ICrafting.sendProgressBarUpdate(this, 2, this.tileEntity.currentItemBurnTime);
     }
@@ -133,7 +126,7 @@ public class ContainerModularFurnaceCrafter extends Container
         this.lastItemBurnTime = this.tileEntity.currentItemBurnTime;
     }
     
-    @Override
+    @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2)
     {
         if (par1 == 0)
@@ -158,99 +151,72 @@ public class ContainerModularFurnaceCrafter extends Container
         return tileEntity.isUseableByPlayer(entityPlayer);
     }
     
-    private void bindPlayerInventory(InventoryPlayer playerInventory)
-    {
-        // Inventory
-        for(int y = 0; y < 3; y++)
-            for(int x = 0; x < 9; x++)
-                addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
-        
-        // Action Bar
-        for(int x = 0; x < 9; x++)
-            addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 142));
-    }
+
     
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
     {
-        ItemStack stack = null;
-        Slot slotObject = (Slot)inventorySlots.get(slot);
-        
-        if(slotObject != null && slotObject.getHasStack())
-        {
-            ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
-            
-            // Merges the item into the player inventory
-            if(slot < 3)
-            {
-                if(!this.mergeItemStack(stackInSlot, 3, 39, true))
-                    return null;
-            }
-            else if(!this.mergeItemStack(stackInSlot, 0, 3, false))
-                return null;
-            
-            if(stackInSlot.stackSize == 0)
-                slotObject.putStack(null);
-            else
-                slotObject.onSlotChanged();
-            
-            if(stackInSlot.stackSize == stack.stackSize)
-                return null;
-            
-            slotObject.onPickupFromSlot(player, stackInSlot);
-        }
-        
-        if (slotObject != null && slotObject.getHasStack())
-        {
-            ItemStack itemstack1 = slotObject.getStack();
-            stack = itemstack1.copy();
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(par2);
 
-            if (slot == 0)
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            if (par2 == 0 || par2 == 49)
             {
                 if (!this.mergeItemStack(itemstack1, 10, 46, true))
                 {
                     return null;
                 }
 
-                slotObject.onSlotChange(itemstack1, stack);
+                slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (slot >= 10 && slot < 37)
+            else if (par2 >= 13 && par2 < 40)
             {
-                if (!this.mergeItemStack(itemstack1, 37, 46, false))
+                if (!this.mergeItemStack(itemstack1, 40, 49, false))
                 {
                     return null;
                 }
             }
-            else if (slot >= 37 && slot < 46)
+            else if (par2 >= 40 && par2 < 49)
             {
-                if (!this.mergeItemStack(itemstack1, 10, 37, false))
+                if (!this.mergeItemStack(itemstack1, 13, 40, false))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 10, 46, false))
+            else if (!this.mergeItemStack(itemstack1, 13, 49, false))
             {
                 return null;
             }
+            
 
             if (itemstack1.stackSize == 0)
             {
-                slotObject.putStack((ItemStack)null);
+                slot.putStack((ItemStack)null);
             }
             else
             {
-                slotObject.onSlotChanged();
+                slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == stack.stackSize)
+            if (itemstack1.stackSize == itemstack.stackSize)
             {
                 return null;
             }
 
-            slotObject.onPickupFromSlot(player, itemstack1);
+            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
         }
         
-        return stack;
+        return itemstack;
     }
+
+
+    public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot)
+    {
+        return par2Slot.inventory != this.craftResult && super.func_94530_a(par1ItemStack, par2Slot);
+    }
+    
 }

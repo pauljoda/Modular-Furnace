@@ -109,8 +109,10 @@ public class BlockFurnaceCore extends BlockContainer
         this.blockIcon = par1IconRegister.registerIcon("coresides");
         this.furnaceIconFront = par1IconRegister.registerIcon("oven");
         this.furnaceIconTop = par1IconRegister.registerIcon("coresides");
-        this.furnaceIconFrontLit = par1IconRegister.registerIcon("overnlit");
+        this.furnaceIconFrontLit = par1IconRegister.registerIcon("ovenlit");
     }
+    
+    
     
 	private static int getSideFromFacing(int facing)
 	{

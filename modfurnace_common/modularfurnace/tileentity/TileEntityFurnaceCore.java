@@ -38,7 +38,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public int ironBlocksInFurnace = 0;
     public static boolean emeralds;
   
-    private ItemStack[] furnaceItems = new ItemStack[3];
+    private ItemStack[] furnaceItems = new ItemStack[50];
     public int furnaceBurnTime = 0;
     public int currentItemBurnTime = 0;
     public int furnaceCookTime = 0;
@@ -375,8 +375,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         {
             if(furnaceBurnTime == 0 && canSmelt())
             {
-                currentItemBurnTime = furnaceBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
-
+                currentItemBurnTime = furnaceBurnTime = this.scaledBurnTime();
                 if(furnaceBurnTime > 0)
                 {
                     flag1 = true;
@@ -722,6 +721,27 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public boolean canExtractItem(int par1, ItemStack par2ItemStack, int par3)
     {
         return par3 != 0 || par1 != 1 || par2ItemStack.itemID == Item.bucketEmpty.itemID;
+    }
+    
+    public int scaledBurnTime()
+    {
+    
+    	if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace == 0)
+    	{
+    		return ((TileEntityFurnace.getItemBurnTime(furnaceItems[1])) / (redstoneBlocksInFurnace * redstoneBlocksInFurnace));
+    	}
+    	
+    	if (redstoneBlocksInFurnace == 0 && ironBlocksInFurnace >0)
+    	{
+    		return (TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace));
+    	}
+    	if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace > 0)
+    	{
+    		return (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace)) / (redstoneBlocksInFurnace * redstoneBlocksInFurnace)));
+    	}
+
+    	else
+    		return TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
     }
 
     
