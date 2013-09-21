@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
+import modularfurnace.ModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import modularfurnace.tileentity.TileEntityFurnaceDummy;
 import net.minecraft.block.Block;
@@ -45,7 +46,10 @@ public class BlockFurnaceDummyRedstone extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
+    	if(ModularFurnace.useTextures)
         blockIcon = iconRegister.registerIcon("redstone_block");
+    	else
+    	blockIcon = iconRegister.registerIcon("modfurnacesides");
     }
     
     @Override

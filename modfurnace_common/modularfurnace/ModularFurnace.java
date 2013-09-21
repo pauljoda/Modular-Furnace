@@ -36,6 +36,8 @@ public class ModularFurnace {
     public static int crafterActiveID;
     public static int furnaceDummyIDEmerald;
 	public static int furnaceCoreActiveID;
+	
+	public static boolean useTextures;
 
     @PreInit
     public void preInit(FMLPreInitializationEvent event){
@@ -51,6 +53,9 @@ public class ModularFurnace {
         crafterActiveID = config.getBlock("Crafter Active", 308).getInt();
         furnaceDummyIDEmerald = config.getBlock("Furnace Dummy Emerald", 307).getInt();
         furnaceCoreActiveID = config.getBlock("Furnace Core Active", 306).getInt();
+        
+        useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use vanilla textures?", false).getBoolean(false);
+        
         
         config.save();
    

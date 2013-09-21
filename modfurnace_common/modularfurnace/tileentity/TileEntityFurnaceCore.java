@@ -36,7 +36,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public int redstoneMultiplier = 6;
     public int cookSpeed = 151;
     public int ironBlocksInFurnace = 0;
-    public static boolean emeralds;
+    public boolean emeralds;
   
     private ItemStack[] furnaceItems = new ItemStack[50];
     public int furnaceBurnTime = 0;
@@ -744,5 +744,5 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     		return TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
     }
 
-    
+ 
 }

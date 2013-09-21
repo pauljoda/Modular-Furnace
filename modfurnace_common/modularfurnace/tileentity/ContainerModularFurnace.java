@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -27,8 +28,12 @@ public class ContainerModularFurnace extends Container
         addSlotToContainer(new Slot(tileEntity, 1, 56, 53));
         
         // Output
-        addSlotToContainer(new SlotModularFurnace(playerInventory.player, tileEntity, 2, 116, 35));
         
+        if(tileEntity.emeralds)
+            addSlotToContainer(new SlotModularFurnace(playerInventory.player, tileEntity, 2, 116, 35));
+        	else
+        addSlotToContainer(new SlotFurnace(playerInventory.player, tileEntity, 2, 116, 35));
+         
         bindPlayerInventory(playerInventory);
     }
     
@@ -174,4 +179,5 @@ public class ContainerModularFurnace extends Container
 
         return itemstack;
     }
+ 
 }

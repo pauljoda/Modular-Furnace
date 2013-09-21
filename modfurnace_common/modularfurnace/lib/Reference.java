@@ -9,7 +9,7 @@ public class Reference {
 
     public static final String MOD_ID = "modularfurnace";
     public static final String MOD_NAME = "Modular Furnace";
-    public static final String Version = "0.4";
+    public static final String Version = "0.8";
     
     public static int furnaceCoreID = ModularFurnace.furnaceCoreID;
     public static int furnaceCoreActiveID = ModularFurnace.furnaceCoreActiveID;
