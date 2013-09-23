@@ -39,9 +39,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public boolean emeralds;
   
     private ItemStack[] furnaceItems = new ItemStack[50];
-    public int furnaceBurnTime = 0;
-    public int currentItemBurnTime = 0;
-    public int furnaceCookTime = 0;
+    public int furnaceBurnTime;
+    public int currentItemBurnTime;
+    public int furnaceCookTime;
  
     private boolean isValidMultiblock = false;
     public boolean diamonds = false;
@@ -66,9 +66,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         metadata = metadata & BlockFurnaceCore.MASK_DIR;
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata, 2);
         
-        furnaceBurnTime = 0;
-        currentItemBurnTime = 0;
-        furnaceCookTime = 0;
         redstoneBlocksInFurnace = 0;
         ironBlocksInFurnace = 0;
         diamonds = false;
@@ -362,39 +359,40 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         if(!isValidMultiblock)
             return;
         
-        
         boolean flag1 = false;
         int metadata = getBlockMetadata();
         int isActive = (metadata >> 3);
         
         
         if(furnaceBurnTime > 0)
-            furnaceBurnTime--;
+            --furnaceBurnTime;
         
         if(!this.worldObj.isRemote)
         {
             if(furnaceBurnTime == 0 && canSmelt())
             {
-                currentItemBurnTime = furnaceBurnTime = this.scaledBurnTime();
+                this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
                 if(furnaceBurnTime > 0)
                 {
                     flag1 = true;
                     
-                    if(furnaceItems[1] != null)
+                    if(this.furnaceItems[1] != null)
                     {
-                        furnaceItems[1].stackSize--;
+                        --this.furnaceItems[1].stackSize;
                         
-                        if(furnaceItems[1].stackSize == 0)
-                            furnaceItems[1] = furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]);
-                    }
+                        if(this.furnaceItems[1].stackSize == 0)
+                        {
+                        	 this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]); 
+                        }
                 }
+               }     
             }
             
             if(isBurning() && canSmelt())
             {
                 furnaceCookTime++;
                 
-                if(furnaceCookTime == getSpeedMultiplier())
+                if(furnaceCookTime  == this.getSpeedMultiplier())
                 {
                     furnaceCookTime = 0;
                     smeltItem();
@@ -583,14 +581,14 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                 furnaceItems[slot] = ItemStack.loadItemStackFromNBT(slotTag);
         }
         
-        furnaceBurnTime = tagCompound.getShort("BurnTime");
-        furnaceCookTime = tagCompound.getShort("CookTime");
-        currentItemBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
-        redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlocks"); 
-        ironBlocksInFurnace = tagCompound.getShort("IronStoneBlocks");
-        diamonds = tagCompound.getBoolean("Diamonds");
-        crafterEnabled = tagCompound.getBoolean("Enabled");
-        emeralds = tagCompound.getBoolean("Emeralds");
+        this.furnaceBurnTime = tagCompound.getShort("BurnTime");
+        this.furnaceCookTime = tagCompound.getShort("CookTime");
+        this.currentItemBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
+        this.redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlocks"); 
+        this.ironBlocksInFurnace = tagCompound.getShort("IronStoneBlocks");
+        this.diamonds = tagCompound.getBoolean("Diamonds");
+        this.crafterEnabled = tagCompound.getBoolean("Enabled");
+        this.emeralds = tagCompound.getBoolean("Emeralds");
         
         
     }
@@ -603,13 +601,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         tagCompound.setBoolean("isValidMultiblock", isValidMultiblock);
         System.out.println("Is valid? " + (isValidMultiblock ? "Yes" : "No"));
         
-        tagCompound.setShort("BurnTime", (short)furnaceBurnTime);
-        tagCompound.setShort("CookTime", (short)furnaceCookTime);
-        tagCompound.setShort("RedstoneBlocks", (short)redstoneBlocksInFurnace);
-        tagCompound.setShort("IronStoneBlocks", (short)ironBlocksInFurnace);
-        tagCompound.setBoolean("Diamonds", (boolean)diamonds);
-        tagCompound.setBoolean("Enabled", (boolean)crafterEnabled);
-        tagCompound.setBoolean("Emeralds",(boolean)emeralds);
+        tagCompound.setShort("BurnTime", (short)this.furnaceBurnTime);
+        tagCompound.setShort("CookTime", (short)this.furnaceCookTime);
+        tagCompound.setShort("RedstoneBlocks", (short)this.redstoneBlocksInFurnace);
+        tagCompound.setShort("IronStoneBlocks", (short)this.ironBlocksInFurnace);
+        tagCompound.setBoolean("Diamonds", (boolean)this.diamonds);
+        tagCompound.setBoolean("Enabled", (boolean)this.crafterEnabled);
+        tagCompound.setBoolean("Emeralds",(boolean)this.emeralds);
         
        
         NBTTagList itemsList = new NBTTagList();
@@ -638,9 +636,10 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     @SideOnly(Side.CLIENT)
     public int getBurnTimeRemainingScaled(int scaleVal)
     {
-        if(currentItemBurnTime == 0){
+        if(currentItemBurnTime == 0)
+        {
             currentItemBurnTime = getSpeedMultiplier();
-    } 
+        } 
         return furnaceBurnTime * scaleVal / this.currentItemBurnTime;
     }
     

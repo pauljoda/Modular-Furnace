@@ -13,9 +13,9 @@ import net.minecraft.tileentity.TileEntityFurnace;
 public class ContainerModularFurnace extends Container
 {
     private TileEntityFurnaceCore tileEntity;
-    private int lastCookTime = 0;
-    private int lastBurnTime = 0;
-    private int lastItemBurnTime = 0;
+    private int lastCookTime;
+    private int lastBurnTime;
+    private int lastItemBurnTime;
     
     public ContainerModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity)
     {
@@ -56,13 +56,19 @@ public class ContainerModularFurnace extends Container
             ICrafting icrafting = (ICrafting)this.crafters.get(i);
 
             if (this.lastCookTime != this.tileEntity.furnaceCookTime)
+            {
                 icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.furnaceCookTime);
+            }
 
             if (this.lastBurnTime != this.tileEntity.furnaceBurnTime)
+            {
                 icrafting.sendProgressBarUpdate(this, 1, this.tileEntity.furnaceBurnTime);
+            }
 
             if (this.lastItemBurnTime != this.tileEntity.currentItemBurnTime)
+            {
                 icrafting.sendProgressBarUpdate(this, 2, this.tileEntity.currentItemBurnTime);
+            }
         }
 
         this.lastCookTime = this.tileEntity.furnaceCookTime;
