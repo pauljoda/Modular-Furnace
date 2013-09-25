@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -23,10 +22,9 @@ public class BlockFurnaceDummy extends BlockContainer
         
         super(blockId, Material.rock);
         
-        setUnlocalizedName("blockFurnaceDummy");
+        setUnlocalizedName("blockFurnaceDummyCobble");
         setStepSound(Block.soundStoneFootstep);
         setHardness(3.5f);
-        setCreativeTab(CreativeTabs.tabDecorations);
     }
     public int meta = 0;
     

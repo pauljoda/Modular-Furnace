@@ -20,6 +20,9 @@ public class Reference {
     public static int crafterInactive = ModularFurnace.crafterInactiveID;
     public static int crafterActive = ModularFurnace.crafterActiveID;
     public static int furnaceDummyIDEmerald = ModularFurnace.furnaceDummyIDEmerald;
+    public static int lavaCore = ModularFurnace.laveCoreID;
+   
+
     
     public static int modularFurnaceGui = 0;
     public static int modularFurnaceGuiCrafter = 1;

@@ -32,20 +32,22 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     private static final int[] slots_sides = new int[] {1};
 
 	
-    public int redstoneBlocksInFurnace = 0;
+    public int redstoneBlocksInFurnace;
     public int redstoneMultiplier = 6;
-    public int cookSpeed = 151;
+    public int cookSpeed = 175;
     public int ironBlocksInFurnace = 0;
     public boolean emeralds;
   
-    private ItemStack[] furnaceItems = new ItemStack[50];
+    private ItemStack[] furnaceItems = new ItemStack[3];
     public int furnaceBurnTime;
     public int currentItemBurnTime;
     public int furnaceCookTime;
+    private String field_94130_e;
  
     private boolean isValidMultiblock = false;
     public boolean diamonds = false;
     public boolean crafterEnabled = false;
+
     
     Random r = new Random();
     
@@ -65,12 +67,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
         metadata = metadata & BlockFurnaceCore.MASK_DIR;
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata, 2);
-        
-        redstoneBlocksInFurnace = 0;
+   
         ironBlocksInFurnace = 0;
+        redstoneBlocksInFurnace = 0;
         diamonds = false;
         crafterEnabled = false;
         emeralds = false;
+        
         
         
         
@@ -113,10 +116,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                         
                         if(depth == 1)  // Center must be air!
                         {
-                            if(blockId != 0)
+                            if(blockId != 0 && blockId != Reference.lavaCore)
+                            {
                                 return false;
-                            else
+                            }
+                            else                    		
                                 continue;
+                            
                         }
                     }
                  
@@ -158,11 +164,18 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                     int y = yCoord + vert;
                     int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
                     
-                    if(horiz == 0 && vert == 0 && (depth == 0 || depth == 1))
+                    if(horiz == 0 && vert == 0 && depth == 1)
+                    {
+                    
                         continue;
+                    	
+                    }
+                    if(horiz == 0 && vert == 0)
+                    	if(depth == 0)
+                    		continue;
                     if(worldObj.getBlockId(x, y, z) == Block.blockRedstone.blockID)
                     {
-                        this.redstoneBlocksInFurnace = redstoneBlocksInFurnace + 1;
+                        this.redstoneBlocksInFurnace = this.redstoneBlocksInFurnace + 1;
                         worldObj.setBlock(x, y, z, Reference.furnaceDummyIDRedstone);
                         worldObj.markBlockForUpdate(x, y, z);
                         TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
@@ -211,7 +224,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                     worldObj.markBlockForUpdate(x, y, z);
                     TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
                     dummyTE.setCore(this);
-                }
+                    }
+                    
+                  
+                  
+               
             }
         }
         
@@ -292,6 +309,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                         worldObj.markBlockForUpdate(x, y, z);
                         continue;
                     }
+                   
                     worldObj.markBlockForUpdate(x, y, z);
                 }
             }
@@ -299,7 +317,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         
         isValidMultiblock = false;
     }
-    
+
     public boolean checkIfCrafting()
     {
         int dir = (getBlockMetadata() & BlockFurnaceCore.MASK_DIR);
@@ -351,17 +369,21 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         }
         return false;
     }
-
-
+    
+    
+   
     @Override
     public void updateEntity()
     {
         if(!isValidMultiblock)
             return;
         
+      
         boolean flag1 = false;
-        int metadata = getBlockMetadata();
-        int isActive = (metadata >> 3);
+        boolean flag = furnaceBurnTime > 0;
+        int i = 1;
+        i = i++;
+
         
         
         if(furnaceBurnTime > 0)
@@ -371,7 +393,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         {
             if(furnaceBurnTime == 0 && canSmelt())
             {
-                this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
+            	
+            		this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
+            	
                 if(furnaceBurnTime > 0)
                 {
                     flag1 = true;
@@ -404,13 +428,10 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
                 furnaceCookTime = 0;
             }
             
-            if(isActive == 0 && furnaceBurnTime > 0)
+            if(flag != furnaceBurnTime > 0)
             {
                 flag1 = true;
-                metadata = getBlockMetadata();
-                isActive = 1;
-                metadata = (isActive << 3) | (metadata);
-                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata, 2);
+              BlockFurnaceCore.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             }
         }
         
@@ -423,11 +444,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     {
         return furnaceItems.length;
     }
-    
-    public void setGuiDisplayName(String par1Str)
-    {
-    }
-
     
     @Override
     public ItemStack getStackInSlot(int slot)
@@ -478,8 +494,14 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     @Override
     public String getInvName()
     {
-        return "multifurnace.container.multifurnacecore";
+        return this.isInvNameLocalized() ? this.field_94130_e : "multifurnace.container.multifurnacecore";
     }
+    
+    public void setGuiDisplayName(String par1Str)
+    {
+        this.field_94130_e = par1Str;
+    }
+    
 
     @Override
     public boolean isInvNameLocalized()
@@ -508,7 +530,15 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     @Override
     public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
     {
-        return par1 == 2 ? false : (par1 == 1 ? isItemFuel(par2ItemStack) : true);
+       if(par1 == 2)
+        	return false;
+       if(par1 == 1 && isItemFuel(par2ItemStack))
+    	   return true;
+       if(par1 == 0)
+    	   return true;
+       else
+    	   return false;
+    	   
     }
     
     public static boolean isItemFuel(ItemStack par0ItemStack)
@@ -568,29 +598,38 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         
         tagCompound.getInteger("BlockMeta");
         isValidMultiblock = tagCompound.getBoolean("isValidMultiblock");
+       
         
         NBTTagList itemsTag = tagCompound.getTagList("Items");
-        furnaceItems = new ItemStack[getSizeInventory()];
+        furnaceItems = new ItemStack[this.getSizeInventory()];
         
-        for(int i = 0; i < itemsTag.tagCount(); i++)
+        for (int i = 0; i < itemsTag.tagCount(); ++i)
         {
-            NBTTagCompound slotTag = (NBTTagCompound)itemsTag.tagAt(i);
-            byte slot = slotTag.getByte("Slot");
-            
-            if(slot >= 0 && slot < furnaceItems.length)
-                furnaceItems[slot] = ItemStack.loadItemStackFromNBT(slotTag);
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)itemsTag.tagAt(i);
+            byte b0 = nbttagcompound1.getByte("Slot");
+
+            if (b0 >= 0 && b0 < this.furnaceItems.length)
+            {
+                this.furnaceItems[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+            }
         }
+        
         
         this.furnaceBurnTime = tagCompound.getShort("BurnTime");
         this.furnaceCookTime = tagCompound.getShort("CookTime");
-        this.currentItemBurnTime = (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / ((redstoneBlocksInFurnace) + 1)) * ((ironBlocksInFurnace / 2) + 1)));
-        this.redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlocks"); 
+        this.currentItemBurnTime = this.scaledBurnTime();
+        this.redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlock"); 
         this.ironBlocksInFurnace = tagCompound.getShort("IronStoneBlocks");
         this.diamonds = tagCompound.getBoolean("Diamonds");
         this.crafterEnabled = tagCompound.getBoolean("Enabled");
         this.emeralds = tagCompound.getBoolean("Emeralds");
         
         
+        if (tagCompound.hasKey("CustomName"))
+        {
+            this.field_94130_e = tagCompound.getString("CustomName");
+        }
+         
     }
     
     @Override
@@ -603,34 +642,40 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
         
         tagCompound.setShort("BurnTime", (short)this.furnaceBurnTime);
         tagCompound.setShort("CookTime", (short)this.furnaceCookTime);
-        tagCompound.setShort("RedstoneBlocks", (short)this.redstoneBlocksInFurnace);
+        tagCompound.setShort("RedstoneBlock", (short)this.redstoneBlocksInFurnace);
         tagCompound.setShort("IronStoneBlocks", (short)this.ironBlocksInFurnace);
         tagCompound.setBoolean("Diamonds", (boolean)this.diamonds);
         tagCompound.setBoolean("Enabled", (boolean)this.crafterEnabled);
         tagCompound.setBoolean("Emeralds",(boolean)this.emeralds);
+
         
        
         NBTTagList itemsList = new NBTTagList();
         
-        for(int i = 0; i < furnaceItems.length; i++)
+        for (int i = 0; i < this.furnaceItems.length; ++i)
         {
-            if(furnaceItems[i] != null)
+            if (this.furnaceItems[i] != null)
             {
-                NBTTagCompound slotTag = new NBTTagCompound();
-                slotTag.setByte("Slot", (byte)i);
-                furnaceItems[i].writeToNBT(slotTag);
-                itemsList.appendTag(slotTag);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.furnaceItems[i].writeToNBT(nbttagcompound1);
+                itemsList.appendTag(nbttagcompound1);
             }
-            
-            tagCompound.setTag("Items", itemsList);
         }
+        tagCompound.setTag("Items", itemsList);
+
+        if (this.isInvNameLocalized())
+        {
+            tagCompound.setString("CustomName", this.field_94130_e);
+        }
+        
     }
     
     @SideOnly(Side.CLIENT)
     public int getCookProgressScaled(int scaleVal)
-    {
-        
-        return (int) (furnaceCookTime * scaleVal / getSpeedMultiplier());
+    { 
+    	int scale = this.getSpeedMultiplier();
+    	return this.furnaceCookTime * scaleVal / scale;
     }
     
     @SideOnly(Side.CLIENT)
@@ -702,7 +747,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     }
     public int getSpeedMultiplier()
     {
-       return  (cookSpeed - (redstoneBlocksInFurnace * redstoneMultiplier));
+    	int red = this.redstoneBlocksInFurnace;
+       return  (cookSpeed - (red * redstoneMultiplier));
     }
 
     @Override
@@ -727,7 +773,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     
     	if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace == 0)
     	{
-    		return ((TileEntityFurnace.getItemBurnTime(furnaceItems[1])) / (redstoneBlocksInFurnace * redstoneBlocksInFurnace));
+    		return ((TileEntityFurnace.getItemBurnTime(furnaceItems[1])) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * (redstoneBlocksInFurnace - 1))); 
     	}
     	
     	if (redstoneBlocksInFurnace == 0 && ironBlocksInFurnace >0)
@@ -736,12 +782,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     	}
     	if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace > 0)
     	{
-    		return (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace)) / (redstoneBlocksInFurnace * redstoneBlocksInFurnace)));
+    		return (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace)) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * redstoneBlocksInFurnace)));
     	}
 
     	else
     		return TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
     }
+    
 
  
 }

@@ -45,8 +45,9 @@ public class GuiModularFurnace extends GuiContainer
         {
             i1 = tileEntity.getBurnTimeRemainingScaled(12);
             drawTexturedModalRect(x + 56, y + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 2);
+          
         }
-        
+        System.out.println("Debug " + tileEntity.redstoneBlocksInFurnace);
         i1 = tileEntity.getCookProgressScaled(24);
         drawTexturedModalRect(x + 79, y + 34, 176, 14, i1 + 1, 16);
     }

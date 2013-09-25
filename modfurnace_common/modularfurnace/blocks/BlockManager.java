@@ -20,6 +20,8 @@ public class BlockManager
     public static Block crafterActive = null;
     public static Block furnaceDummyEmerald = null;
     public static Block furnaceCoreActive = null;
+    public static Block lavaCore = null;
+
     
     public static void registerBlocks()
     {
@@ -32,6 +34,9 @@ public class BlockManager
         crafterInactive = new BlockCrafterInactive(Reference.crafterInactive, Material.wood);
         crafterActive = new BlockCrafterActive(Reference.crafterActive);
         furnaceDummyEmerald = new BlockFurnaceDummyEmerald(Reference.furnaceDummyIDEmerald);
+        lavaCore = new BlockLavaCore(Reference.lavaCore, Material.iron);
+      ;
+
         
         GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
         GameRegistry.registerBlock(furnaceDummy, "blockFurnaceDummy");
@@ -41,15 +46,22 @@ public class BlockManager
         GameRegistry.registerBlock(crafterActive, "crafterActive");
         GameRegistry.registerBlock(furnaceDummyDiamond, "blockFurnaceDummyDiamond");
         GameRegistry.registerBlock(furnaceDummyEmerald, "blockFurnaceDummyEmerald");
+        GameRegistry.registerBlock(lavaCore, "blockLavaCore");
+       
+
         
         LanguageRegistry.addName(furnaceCore, "Modular Furnace Core");
         LanguageRegistry.addName(furnaceDummy, "Modular Furnace Dummy CobbleStone");
         LanguageRegistry.addName(furnaceDummyRedstone, "Modular Furnace Dummy Redstone");
-        LanguageRegistry.addName(furnaceDummyGlowStone, "Modular Furnace Dummy");
+        LanguageRegistry.addName(furnaceDummyGlowStone, "Modular Furnace Dummy Iron");
         LanguageRegistry.addName(crafterInactive, "Crafting Core");
         LanguageRegistry.addName(crafterActive, "Crafting Core Active");
         LanguageRegistry.addName(furnaceDummyDiamond, "Modular Furnace Dummy Diamond");
         LanguageRegistry.addName(furnaceDummyEmerald, "Modular Furance Dummy Emerald");
+        LanguageRegistry.addName(lavaCore, "Lava Lamp");
+
+
+
         
     }
     
@@ -64,5 +76,11 @@ public class BlockManager
                 "XxX",
                 "xCx",
                 "XxX", 'X', Item.ingotIron, 'x', new ItemStack(Item.dyePowder, 9, 4), 'C', Block.workbench); 
+        
+     CraftingManager.getInstance().addRecipe(new ItemStack(lavaCore, 1),
+                "XXX",
+                "XCX",
+                "XXX", 'X', Block.glass, 'C', Item.bucketLava); 
+                
     }
 }

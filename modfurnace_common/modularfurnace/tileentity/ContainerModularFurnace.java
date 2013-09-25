@@ -57,6 +57,7 @@ public class ContainerModularFurnace extends Container
 
             if (this.lastCookTime != this.tileEntity.furnaceCookTime)
             {
+            	
                 icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.furnaceCookTime);
             }
 
@@ -81,7 +82,7 @@ public class ContainerModularFurnace extends Container
     {
         if (par1 == 0)
         {
-            this.tileEntity.furnaceCookTime = par2;
+           this.tileEntity.furnaceCookTime = par2;
         }
 
         if (par1 == 1)
