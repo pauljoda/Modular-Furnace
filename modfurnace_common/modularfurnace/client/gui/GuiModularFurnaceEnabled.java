@@ -36,7 +36,7 @@ public class GuiModularFurnaceEnabled extends GuiContainer
     {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         
-        this.mc.func_110434_K().func_110577_a(field_110410_t);
+        this.mc.getTextureManager().bindTexture(field_110410_t);
         
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;

@@ -21,7 +21,8 @@ public class BlockManager
     public static Block furnaceDummyEmerald = null;
     public static Block furnaceCoreActive = null;
     public static Block lavaCore = null;
-
+    public static Block furnaceDummyIO = null;
+    public static Block furnaceDummyActiveIO = null;
     
     public static void registerBlocks()
     {
@@ -35,7 +36,8 @@ public class BlockManager
         crafterActive = new BlockCrafterActive(Reference.crafterActive);
         furnaceDummyEmerald = new BlockFurnaceDummyEmerald(Reference.furnaceDummyIDEmerald);
         lavaCore = new BlockLavaCore(Reference.lavaCore, Material.iron);
-      ;
+        furnaceDummyIO = new BlockFurnaceDummyIO(Reference.furnaceDummyIOID, Material.rock);
+        furnaceDummyActiveIO = new BlockFurnaceDummyIOActive(Reference.furnaceDummyActiveIOID);
 
         
         GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
@@ -47,7 +49,9 @@ public class BlockManager
         GameRegistry.registerBlock(furnaceDummyDiamond, "blockFurnaceDummyDiamond");
         GameRegistry.registerBlock(furnaceDummyEmerald, "blockFurnaceDummyEmerald");
         GameRegistry.registerBlock(lavaCore, "blockLavaCore");
-       
+        GameRegistry.registerBlock(furnaceDummyIO, "furnaceDummyIO");
+        GameRegistry.registerBlock(furnaceDummyActiveIO, "furnaceDummyActiveIO");
+
 
         
         LanguageRegistry.addName(furnaceCore, "Modular Furnace Core");
@@ -59,6 +63,8 @@ public class BlockManager
         LanguageRegistry.addName(furnaceDummyDiamond, "Modular Furnace Dummy Diamond");
         LanguageRegistry.addName(furnaceDummyEmerald, "Modular Furance Dummy Emerald");
         LanguageRegistry.addName(lavaCore, "Lava Lamp");
+        LanguageRegistry.addName(furnaceDummyIO, "Modular Furnace IO");
+        LanguageRegistry.addName(furnaceDummyActiveIO, "Modular Furnace IO Active");
 
 
 
@@ -71,6 +77,11 @@ public class BlockManager
                 "XXX",
                 "XxX",
                 "XXX", 'X', Block.stoneBrick, 'x', Block.furnaceIdle);
+        
+        CraftingManager.getInstance().addRecipe(new ItemStack(furnaceDummyIO, 1),
+                "XXX",
+                "XxX",
+                "XXX", 'X', Block.stoneBrick, 'x', Block.dispenser);
         
         CraftingManager.getInstance().addRecipe(new ItemStack(crafterInactive, 1),
                 "XxX",

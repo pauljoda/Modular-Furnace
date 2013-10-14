@@ -3,8 +3,8 @@
   "modid": "modularfurnace",
   "name": "Modular Furnace",
   "description": "Build your own furnace!",
-  "version": "Beta",
-  "url": "",
+  "version": "1.0",
+  "url": "pauljoda.com",
   "updateUrl": "",
   "authorList": [
     "pauljoda"

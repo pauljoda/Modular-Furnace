@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventory
 {
-	public int slot = 3;
+	public int slot = 4;
 	TileEntityFurnaceCore tileEntityCore;
 	int coreX;
 	int coreY;
@@ -43,7 +43,6 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		coreY = tagCompound.getInteger("CoreY");
 		coreZ = tagCompound.getInteger("CoreZ");
 		
-		if(slot != 3)
 		slot = tagCompound.getInteger("Slot");
 	}
 	
@@ -127,17 +126,25 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		// TODO Auto-generated method stub
-		
-		tileEntityCore = this.getCore();
+
+		if(slot != 4)
+		{
+			if(slot == 0)
+			var1 = 0;
+			if(slot == 1)
+			var1 = 1;
+			if(slot == 2)
+			var1 = 2;
+		}
 	
+		tileEntityCore = this.getCore();
 			return tileEntityCore.getAccessibleSlotsFromSide(var1);
 			
 	}
 		
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		// TODO Auto-generated method stub
+		
 		tileEntityCore = this.getCore();
 		return tileEntityCore.isItemValidForSlot(i, itemstack);
 			

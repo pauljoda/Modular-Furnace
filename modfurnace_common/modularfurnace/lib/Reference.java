@@ -9,7 +9,7 @@ public class Reference {
 
     public static final String MOD_ID = "modularfurnace";
     public static final String MOD_NAME = "Modular Furnace";
-    public static final String Version = "0.8";
+    public static final String Version = "1.0";
     
     public static int furnaceCoreID = ModularFurnace.furnaceCoreID;
     public static int furnaceCoreActiveID = ModularFurnace.furnaceCoreActiveID;
@@ -21,7 +21,9 @@ public class Reference {
     public static int crafterActive = ModularFurnace.crafterActiveID;
     public static int furnaceDummyIDEmerald = ModularFurnace.furnaceDummyIDEmerald;
     public static int lavaCore = ModularFurnace.laveCoreID;
-   
+    public static int furnaceDummyIOID = ModularFurnace.furnaceDummyIOID;
+    public static int furnaceDummyActiveIOID = ModularFurnace.furnaceDummyActiveIOID;
+
 
     
     public static int modularFurnaceGui = 0;

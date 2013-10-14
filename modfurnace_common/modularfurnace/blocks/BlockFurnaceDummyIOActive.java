@@ -13,14 +13,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockCrafterActive extends BlockContainer
+public class BlockFurnaceDummyIOActive extends BlockContainer
+
 
 
 {
-    public BlockCrafterActive(int blockId)
+    public BlockFurnaceDummyIOActive(int blockId)
     {
         
-        super(blockId, Material.wood);
+        super(blockId, Material.rock);
         
         setUnlocalizedName("crafterActive");
         setStepSound(Block.soundWoodFootstep);
@@ -33,7 +34,7 @@ public class BlockCrafterActive extends BlockContainer
     public int idDropped(int par1, Random par2Random, int par3)
     {
   
-        return Reference.crafterInactive;
+        return Reference.furnaceDummyIOID;
     }
     
     @Override
@@ -44,7 +45,7 @@ public class BlockCrafterActive extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("crafterActive");
+        blockIcon = iconRegister.registerIcon("coresidesio");
     }
     
     @Override
@@ -61,10 +62,22 @@ public class BlockCrafterActive extends BlockContainer
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
-        if(player.isSneaking())
-            return false;
-        
         TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getBlockTileEntity(x, y, z);
+        if(player.isSneaking())
+        {
+        	if(dummy.slot == 4)
+        		dummy.slot = 0;
+        	
+        	dummy.slot = dummy.slot + 1;
+        	if(dummy.slot == 3)
+        		dummy.slot = 0;
+        	
+        	this.displaySlot(world, x, y, z, player);
+        	
+            return false;
+        }
+        
+   
         
         if(dummy != null && dummy.getCore() != null)
         {
@@ -73,5 +86,22 @@ public class BlockCrafterActive extends BlockContainer
         }
         
         return true;
+    }
+    
+    private void displaySlot(World world, int x, int y, int z, EntityPlayer player)
+    {
+        TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getBlockTileEntity(x, y, z);
+
+    	switch(dummy.slot)
+    	{
+    	case 0 :  player.addChatMessage("Slot is Fuel");
+    			  break;
+    			  
+    	case 1 :  player.addChatMessage("Slot is Input");
+    			  break;
+    			  
+    	default : player.addChatMessage("Slot is Output");
+    			  break;
+    	}
     }
 }

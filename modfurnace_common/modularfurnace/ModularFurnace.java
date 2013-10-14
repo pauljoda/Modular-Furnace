@@ -37,6 +37,8 @@ public class ModularFurnace {
     public static int furnaceDummyIDEmerald;
 	public static int furnaceCoreActiveID;
 	public static int laveCoreID;
+	public static int furnaceDummyIOID;
+	public static int furnaceDummyActiveIOID;
 
 
 	
@@ -57,7 +59,9 @@ public class ModularFurnace {
         crafterInactiveID = config.getBlock("Crafter Inactive", 307).getInt();
         crafterActiveID = config.getBlock("Crafter Active", 308).getInt();
         laveCoreID = config.getBlock("LaveCore", 309).getInt();
-
+        furnaceDummyIOID = config.getBlock("Furnace IO", 310).getInt();
+        furnaceDummyActiveIOID = config.getBlock("Furnace IO Active", 311).getInt();
+        
         useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use vanilla textures?", false).getBoolean(false);
         
         

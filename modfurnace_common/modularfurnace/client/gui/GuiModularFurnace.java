@@ -34,7 +34,7 @@ public class GuiModularFurnace extends GuiContainer
     {
         GL11.glColor4f(1f, 1f, 1f, 1f);
         
-        this.mc.func_110434_K().func_110577_a(field_110410_t);
+        this.mc.getTextureManager().bindTexture(field_110410_t);
         
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
@@ -47,7 +47,6 @@ public class GuiModularFurnace extends GuiContainer
             drawTexturedModalRect(x + 56, y + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 2);
           
         }
-        System.out.println("Debug " + tileEntity.redstoneBlocksInFurnace);
         i1 = tileEntity.getCookProgressScaled(24);
         drawTexturedModalRect(x + 79, y + 34, 176, 14, i1 + 1, 16);
     }
