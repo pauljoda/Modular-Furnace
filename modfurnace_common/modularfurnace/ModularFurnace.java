@@ -39,7 +39,9 @@ public class ModularFurnace {
 	public static int laveCoreID;
 	public static int furnaceDummyIOID;
 	public static int furnaceDummyActiveIOID;
-
+	public static int furnaceCoreSmelteryID;
+	public static int furnaceCoreSmelteryActiveID;
+	public static int furnaceDummySmelteryID;
 
 	
 	public static boolean useTextures;
@@ -61,6 +63,9 @@ public class ModularFurnace {
         laveCoreID = config.getBlock("LaveCore", 309).getInt();
         furnaceDummyIOID = config.getBlock("Furnace IO", 310).getInt();
         furnaceDummyActiveIOID = config.getBlock("Furnace IO Active", 311).getInt();
+        furnaceCoreSmelteryID = config.getBlock("Smeltery Core", 312).getInt();
+        furnaceCoreSmelteryActiveID = config.getBlock("Smeltery Inacive", 313).getInt();
+        furnaceDummySmelteryID = config.getBlock("Smeltery Dummy Core", 314).getInt();
         
         useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use vanilla textures?", false).getBoolean(false);
         
