@@ -1,14 +1,16 @@
 package modularfurnace.lib;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import modularfurnace.blocks.BlockManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModularFurnacesSmelteryRecipies    
 {
@@ -23,21 +25,30 @@ private HashMap<List<Integer>, Float> metaExperience = new HashMap<List<Integer>
 /**
  * Used to call methods addSmelting and getSmeltingResult.
  */
+
 public static final ModularFurnacesSmelteryRecipies smelting()
 {
     return smeltingBase;
 }
 
+
+
 private ModularFurnacesSmelteryRecipies()
 {
+	this.addSmelting(Block.oreDiamond.blockID, new ItemStack(Item.diamond), 1.0F);
     this.addSmelting(Block.oreIron.blockID, new ItemStack(Item.ingotIron), 0.7F);
     this.addSmelting(Block.oreGold.blockID, new ItemStack(Item.ingotGold), 1.0F);
     this.addSmelting(Block.oreNetherQuartz.blockID, new ItemStack(Item.netherQuartz), 0.2F);
+    this.addSmelting(Block.cobblestone.blockID, new ItemStack(Block.glass), 0.1F);
+    this.addSmelting(Block.oreEmerald.blockID, new ItemStack(Item.emerald), 0.5F);
+    
 }
 
 /**
  * Adds a smelting recipe.
  */
+
+
 public void addSmelting(int par1, ItemStack par2ItemStack, float par3)
 {
     this.smeltingList.put(Integer.valueOf(par1), par2ItemStack);
@@ -80,7 +91,24 @@ public void addSmelting(int itemID, int metadata, ItemStack itemstack, float exp
  * @return The result ItemStack
  */
 public ItemStack getSmeltingResult(ItemStack item) 
-{
+{	
+	int isOre = OreDictionary.getOreID(item);
+	int realCopper = OreDictionary.getOreID("oreCopper");
+	int realTin = OreDictionary.getOreID("oreTin");
+	int realAluminum = OreDictionary.getOreID("oreAluminum");
+	
+	if(isOre == realCopper)
+	{
+		return new ItemStack(BlockManager.copperIngot, 1);
+	}
+	if(isOre == realTin)
+	{
+		return new ItemStack(BlockManager.tinIngot, 1);
+	}
+	if(isOre == realAluminum)
+	{
+		return new ItemStack(BlockManager.aluminiumIngot, 1);
+	}
     if (item == null)
     {
         return null;

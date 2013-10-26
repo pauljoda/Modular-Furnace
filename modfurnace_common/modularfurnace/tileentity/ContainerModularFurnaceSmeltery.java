@@ -22,6 +22,7 @@ public class ContainerModularFurnaceSmeltery extends Container
         
         // Input
         addSlotToContainer(new Slot(tileEntity, 0, 80, 24));
+        //addSlotToContainer(new Slot(tileEntity, 4, 153, 6));
         
         // Fuel
         addSlotToContainer(new Slot(tileEntity, 1, 80, 60));
@@ -123,16 +124,16 @@ public class ContainerModularFurnaceSmeltery extends Container
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (par2 == 2)
+            if (par2 == 2 || par2 == 3)
             {
-                if (!this.mergeItemStack(itemstack1, 4, 40, true))
+                if (!this.mergeItemStack(itemstack1, 5, 40, true))
                 {
                     return null;
                 }
 
                 slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (par2 != 1 && par2 != 0 && par2 != 3)
+            else if (par2 != 1 && par2 != 0)
             {
                 if (ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult(itemstack1) != null)
                 {
@@ -141,6 +142,7 @@ public class ContainerModularFurnaceSmeltery extends Container
                         return null;
                     }
                 }
+        
                 else if (TileEntityFurnaceCoreSmeltery.isItemFuel(itemstack1))
                 {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false))

@@ -50,7 +50,7 @@ public class GuiModularFurnaceSmeltery extends GuiContainer
         }
         i1 = tileEntity.getCookProgressScaled(24);
         drawTexturedModalRect(x + 102, y + 42, 176, 14, i1 + 1, 16);
-        drawTexturedModalRect(x + 49, y + 41, 176, 30, 24 - i1, 16);
+        drawTexturedModalRect(x + 49, y + 41, 176, 30, 23 - i1, 16);
 
     }
 }

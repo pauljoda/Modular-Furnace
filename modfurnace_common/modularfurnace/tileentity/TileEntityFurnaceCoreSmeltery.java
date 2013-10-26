@@ -6,18 +6,10 @@ import modularfurnace.blocks.BlockFurnaceCoreSmeltery;
 import modularfurnace.blocks.BlockManager;
 import modularfurnace.lib.ModularFurnacesSmelteryRecipies;
 import modularfurnace.lib.Reference;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -95,7 +87,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 					if(horiz == 0 && vert == 0)
 					{
 						if(depth == 0)  // Looking at self, move on!
-						continue;
+							continue;
 
 						if(depth == 1)  // Center must be air!
 						{
@@ -109,7 +101,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 						}
 					}
 
-					if(blockId != Block.brick.blockID)
+					if(blockId != BlockManager.furnaceSmelteryBrick.blockID)
 						return false;
 				}
 
@@ -156,13 +148,13 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 					if(horiz == 0 && vert == 0)
 						if(depth == 0)
 							continue;
-					if(worldObj.getBlockId(x, y, z) == Block.brick.blockID)
+					if(worldObj.getBlockId(x, y, z) == BlockManager.furnaceSmelteryBrick.blockID)
 					{
 						worldObj.setBlock(x, y, z, Reference.furnaceDummySmelteryID);
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummySmeltery dummy = (TileEntityFurnaceDummySmeltery)worldObj.getBlockTileEntity(x, y, z);
 						dummy.setCore(this);
-						
+
 					}
 
 				}
@@ -207,7 +199,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 					if(blockId == BlockManager.furnaceDummySmeltery.blockID)
 					{
-						worldObj.setBlock(x, y, z, Block.brick.blockID);
+						worldObj.setBlock(x, y, z, BlockManager.furnaceSmelteryBrick.blockID);
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 					}
@@ -222,66 +214,162 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 
 	@Override
-	  public void updateEntity()
-    {
-        boolean flag = this.furnaceBurnTime > 0;
-        boolean flag1 = false;
+	public void updateEntity()
+	{
+		boolean flag = this.furnaceBurnTime > 0;
+		boolean flag1 = false;
 
-        if (this.furnaceBurnTime > 0)
-        {
-            --this.furnaceBurnTime;
-        }
+		if (this.furnaceBurnTime > 0)
+		{
+			--this.furnaceBurnTime;
+		}
 
-        if (!this.worldObj.isRemote)
-        {
-            if (this.furnaceBurnTime == 0 && this.canSmelt())
-            {
-                this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItems[1]);
+		if (!this.worldObj.isRemote)
+		{
+			if (this.furnaceBurnTime == 0 && this.canSmelt())
+			{
+				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItems[1]);
 
-                if (this.furnaceBurnTime > 0)
-                {
-                    flag1 = true;
+				if (this.furnaceBurnTime > 0)
+				{
+					flag1 = true;
 
-                    if (this.furnaceItems[1] != null)
-                    {
-                        --this.furnaceItems[1].stackSize;
+					if (this.furnaceItems[1] != null)
+					{
+						--this.furnaceItems[1].stackSize;
 
-                        if (this.furnaceItems[1].stackSize == 0)
-                        {
-                            this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]);
-                        }
-                    }
-                }
-            }
+						if (this.furnaceItems[1].stackSize == 0)
+						{
+							this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]);
+						}
+					}
+				}
+			}
 
-            if (this.isBurning() && this.canSmelt())
-            {
-                ++this.furnaceCookTime;
+			if (this.isBurning() && this.canSmelt())
+			{
+				++this.furnaceCookTime;
 
-                if (this.furnaceCookTime == 200)
-                {
-                    this.furnaceCookTime = 0;
-                    this.smeltItem();
-                    flag1 = true;
-                }
-            }
-            else
-            {
-                this.furnaceCookTime = 0;
-            }
+				if (this.furnaceCookTime == 200)
+				{
+					this.furnaceCookTime = 0;
+					this.smeltItem();
+					flag1 = true;
+				}
+			}
+			else
+			{
+				this.furnaceCookTime = 0;
+			}
 
-            if (flag != this.furnaceBurnTime > 0)
-            {
-                flag1 = true;
-                BlockFurnaceCoreSmeltery.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-            }
-        }
+			if (flag != this.furnaceBurnTime > 0)
+			{
+				flag1 = true;
+				BlockFurnaceCoreSmeltery.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+			}
+		}
 
-        if (flag1)
-        {
-            this.onInventoryChanged();
-        }
-    }
+		if (flag1)
+		{
+			this.onInventoryChanged();
+		}
+
+/*
+		//This Does the conversion from other ores to my ores -oops-
+		if(furnaceItems[4] != null)
+		{
+			if(furnaceItems[0] == null)
+			{
+				ItemStack itemStack = ModularFurnaceConversionRecipies.smelting().getSmeltingResult(furnaceItems[4]);
+				if(itemStack != null)
+				{
+					ItemStack itemstack = ModularFurnaceConversionRecipies.smelting().getSmeltingResult(furnaceItems[4]);
+
+					ItemStack copperOre = new ItemStack(BlockManager.copperOreUniversal);
+					ItemStack aluminiumOre = new ItemStack(BlockManager.aluminiumOreUniversal);
+					ItemStack tinOre = new ItemStack(BlockManager.tinOreUniversal);
+
+					if(itemstack.itemID == copperOre.itemID)
+					{
+						if (this.furnaceItems[0] == null)
+						{
+							this.furnaceItems[0] = itemstack.copy();
+						}
+						else if (this.furnaceItems[0].isItemEqual(itemstack))
+						{
+							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
+
+						}
+
+						this.furnaceItems[4].stackSize = 0;
+
+						if (this.furnaceItems[4].stackSize <= 0)
+						{
+							this.furnaceItems[4] = null;
+						}
+					}
+					
+					if(itemstack.itemID == aluminiumOre.itemID)
+					{
+						if (this.furnaceItems[0] == null)
+						{
+							this.furnaceItems[0] = itemstack.copy();
+						}
+						else if (this.furnaceItems[0].isItemEqual(itemstack))
+						{
+							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
+
+						}
+
+						this.furnaceItems[4].stackSize = 0;
+
+						if (this.furnaceItems[4].stackSize <= 0)
+						{
+							this.furnaceItems[4] = null;
+						}
+					}
+					
+					if(itemstack.itemID == tinOre.itemID)
+					{
+						if (this.furnaceItems[0] == null)
+						{
+							this.furnaceItems[0] = itemstack.copy();
+						}
+						else if (this.furnaceItems[0].isItemEqual(itemstack))
+						{
+							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
+
+						}
+
+						this.furnaceItems[4].stackSize = 0;
+
+						if (this.furnaceItems[4].stackSize <= 0)
+						{
+							this.furnaceItems[4] = null;
+						}
+					}
+				}
+				else
+				{
+					if(this.furnaceItems[0] == null)
+					{
+						this.furnaceItems[0] = this.furnaceItems[4].copy();
+					}
+					else if (this.furnaceItems[0].isItemEqual(this.furnaceItems[4]))
+					{
+						furnaceItems[0].stackSize += furnaceItems[4].stackSize;
+					}
+				this.furnaceItems[4].stackSize = 0;
+				if (this.furnaceItems[4].stackSize <= 0)
+				{
+					this.furnaceItems[4] = null;
+				}
+
+				}
+			}
+		}
+		*/
+	}
 
 	@Override
 	public int getSizeInventory()
@@ -399,7 +487,6 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 		else
 		{
 			int i = par0ItemStack.getItem().itemID;
-			Item item = par0ItemStack.getItem();
 
 			if (i == Item.flint.itemID) return 400;
 			return GameRegistry.getFuelValue(par0ItemStack);
@@ -476,21 +563,21 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 	}
 
 	@SideOnly(Side.CLIENT)
-    public int getCookProgressScaled(int par1)
-    {
-        return this.furnaceCookTime * par1 / 200;
-    }
+	public int getCookProgressScaled(int par1)
+	{
+		return this.furnaceCookTime * par1 / 200;
+	}
 
 	@SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int par1)
-    {
-        if (this.currentItemBurnTime == 0)
-        {
-            this.currentItemBurnTime = 200;
-        }
+	public int getBurnTimeRemainingScaled(int par1)
+	{
+		if (this.currentItemBurnTime == 0)
+		{
+			this.currentItemBurnTime = 200;
+		}
 
-        return this.furnaceBurnTime * par1 / this.currentItemBurnTime;
-    }
+		return this.furnaceBurnTime * par1 / this.currentItemBurnTime;
+	}
 	public boolean isBurning()
 	{
 		return furnaceBurnTime > 0;
@@ -498,56 +585,67 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 	private boolean canSmelt()
 	{
+	
 		if(furnaceItems[0] == null)
 			return false;
 		else
 		{
+			int resultingStackSize = 0;
+			int resultingStackSize1 = 0;
 			ItemStack itemStack = ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult(furnaceItems[0]);
 			if(itemStack == null)
 				return false;
-			if(furnaceItems[2] == null)
+			if(furnaceItems[2] == null && furnaceItems[3] == null)
 				return true;
-			if(!furnaceItems[2].isItemEqual(itemStack))
-				return false;
+			if(furnaceItems[2] != null)
+			{
+				resultingStackSize = furnaceItems[2].stackSize + itemStack.stackSize;
+				if(furnaceItems[3] != null)
+				{
+					resultingStackSize1 = furnaceItems[3].stackSize + itemStack.stackSize;
+					if(!furnaceItems[2].isItemEqual(itemStack) && !furnaceItems[3].isItemEqual(itemStack))
+						return false;
+				}
+			}
+			
+			return ( (resultingStackSize <= getInventoryStackLimit() &&  resultingStackSize1 <= getInventoryStackLimit()) && resultingStackSize <= itemStack.getMaxStackSize());
 
-			int resultingStackSize = furnaceItems[2].stackSize + itemStack.stackSize;
-			return (resultingStackSize <= getInventoryStackLimit() && resultingStackSize <= itemStack.getMaxStackSize());
 		}
 	}
 
-	   public void smeltItem()
-	    {
-	        if (this.canSmelt())
-	        {
-	            ItemStack itemstack = ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult(this.furnaceItems[0]);
+	public void smeltItem()
+	{
+		if (this.canSmelt())
+		{
+			ItemStack itemstack = ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult(this.furnaceItems[0]);
 
-	            if (this.furnaceItems[2] == null)
-	            {
-	                this.furnaceItems[2] = itemstack.copy();
-	            }
-	            else if (this.furnaceItems[2].isItemEqual(itemstack))
-	            {
-	                furnaceItems[2].stackSize += itemstack.stackSize;
+			if (this.furnaceItems[2] == null)
+			{
+				this.furnaceItems[2] = itemstack.copy();
+			}
+			else if (this.furnaceItems[2].isItemEqual(itemstack))
+			{
+				furnaceItems[2].stackSize += itemstack.stackSize;
 
-	            }
-	            if (this.furnaceItems[3] == null)
-	            {
-	                this.furnaceItems[3] = itemstack.copy();
-	            }
-	            else if (this.furnaceItems[3].isItemEqual(itemstack))
-	            {
-	                furnaceItems[3].stackSize += itemstack.stackSize;
+			}
+			if (this.furnaceItems[3] == null)
+			{
+				this.furnaceItems[3] = itemstack.copy();
+			}
+			else if (this.furnaceItems[3].isItemEqual(itemstack))
+			{
+				furnaceItems[3].stackSize += itemstack.stackSize;
 
-	            }
+			}
 
-	            --this.furnaceItems[0].stackSize;
+			--this.furnaceItems[0].stackSize;
 
-	            if (this.furnaceItems[0].stackSize <= 0)
-	            {
-	                this.furnaceItems[0] = null;
-	            }
-	        }
-	    }
+			if (this.furnaceItems[0].stackSize <= 0)
+			{
+				this.furnaceItems[0] = null;
+			}
+		}
+	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int par1)

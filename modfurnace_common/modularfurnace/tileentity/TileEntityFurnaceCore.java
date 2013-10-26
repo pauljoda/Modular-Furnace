@@ -38,7 +38,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     public int cookSpeed = 175;
     public int ironBlocksInFurnace = 0;
     public boolean emeralds;
-  
+
+    
     private ItemStack[] furnaceItems = new ItemStack[3];
     public int furnaceBurnTime;
     public int currentItemBurnTime;
@@ -755,8 +756,62 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
     }
     public int getSpeedMultiplier()
     {
-    	int red = this.redstoneBlocksInFurnace;
+    	int red = countRedstone();
        return  (cookSpeed - (red * redstoneMultiplier));
+    }
+    
+    public int countRedstone()
+    {
+       int output = 0;
+       int dir = (getBlockMetadata() & BlockFurnaceCore.MASK_DIR);
+        
+        int depthMultiplier = ((dir == BlockFurnaceCore.META_DIR_NORTH || dir == BlockFurnaceCore.META_DIR_WEST) ? 1 : -1);
+        boolean forwardZ = ((dir == BlockFurnaceCore.META_DIR_NORTH) || (dir == BlockFurnaceCore.META_DIR_SOUTH));
+        /*
+         *          FORWARD     BACKWARD
+         * North:   -z              +z
+         * South:   +z              -z
+         * East:    +x              -x
+         * West:    -x              +x
+         * 
+         * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
+         */
+        
+        for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+        {
+            for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+            {
+                for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+                {
+                    int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
+                    int y = yCoord + vert;
+                    int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
+                    
+                    int blockId = worldObj.getBlockId(x, y, z);
+                    
+                    if(horiz == 0 && vert == 0)
+                    {
+                        if(depth == 0)  // Looking at self, move on!
+                            continue;
+                        
+                        if(depth == 1)  // Center must be air!
+                        {
+                        	continue;
+                        }
+                    }
+                    if(blockId == Reference.furnaceDummyIDRedstone || blockId == Block.blockRedstone.blockID)
+                    {
+                        output++;
+                    }
+                    
+                }
+            }
+        }	
+    	
+    	
+    	
+    	
+    	return output;
     }
 
     @Override

@@ -26,6 +26,17 @@ public class BlockManager
 	public static Block furnaceCoreSmeltery = null;
 	public static Block furnaceCoreSmelteryActive = null;
 	public static Block furnaceDummySmeltery = null;
+	public static Block furnaceSmelteryBrick = null;
+	
+	//Ores
+	public static Block copperOreUniversal = null;
+	public static Block aluminiumOreUniversal = null;
+	public static Block tinOreUniversal = null;
+	
+	//Items
+	public static Item copperIngot = null;
+	public static Item aluminiumIngot = null;
+	public static Item tinIngot = null;
 
 	public static void registerBlocks()
 	{
@@ -44,7 +55,16 @@ public class BlockManager
 		furnaceCoreSmeltery = new BlockFurnaceCoreSmeltery(Reference.furnaceCoreSmelteryID, false);
 		furnaceCoreSmelteryActive = new BlockFurnaceCoreSmeltery(Reference.furnaceCoreSmelteryActiveID, true);
 		furnaceDummySmeltery = new BlockFurnaceDummySmeltery(Reference.furnaceDummySmelteryID);
+		furnaceSmelteryBrick = new BlockFurnaceSmelteryBrick(Reference.furnaceSmelteryBrickID);
+		
+		copperOreUniversal = new BlockCopperOreUniversal(Reference.copperOreUniversalID);
+		copperIngot = new MetalCopperIngot(Reference.copperIngotID);
 
+		aluminiumOreUniversal = new BlockAluminiumOreUniversal(Reference.aluminiumOreUniversalID);
+		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
+		
+		tinOreUniversal = new BlockTinOreUniversal(Reference.tinOreUniversalID);
+		tinIngot = new MetalTinIngot(Reference.tinIngotID);
 
 		GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
 		GameRegistry.registerBlock(furnaceDummy, "blockFurnaceDummy");
@@ -59,8 +79,17 @@ public class BlockManager
 		GameRegistry.registerBlock(furnaceDummyActiveIO, "furnaceDummyActiveIO");
 		GameRegistry.registerBlock(furnaceCoreSmeltery, "furnaceCoreSmeltery");
 		GameRegistry.registerBlock(furnaceDummySmeltery, "blockFurnaceDummySmeltery");
-
-
+		GameRegistry.registerBlock(furnaceSmelteryBrick, "furnaceSmelteryBrick");
+		
+		GameRegistry.registerBlock(copperOreUniversal, "copperOreUniversal");
+		GameRegistry.registerItem(copperIngot, "copperIngot");
+		
+		GameRegistry.registerBlock(aluminiumOreUniversal, "aluminiumOreUniversal");
+		GameRegistry.registerItem(aluminiumIngot, "aluminiumIngot");
+		
+		GameRegistry.registerBlock(tinOreUniversal, "tinOreUniversal");
+		GameRegistry.registerItem(tinIngot, "tinIngot");
+		
 
 		LanguageRegistry.addName(furnaceCore, "Modular Furnace Core");
 		LanguageRegistry.addName(furnaceDummy, "Modular Furnace Dummy CobbleStone");
@@ -75,6 +104,16 @@ public class BlockManager
 		LanguageRegistry.addName(furnaceDummyActiveIO, "Modular Furnace IO Active");
 		LanguageRegistry.addName(furnaceCoreSmeltery, "Modular Furnace Core Smeltery");
 		LanguageRegistry.addName(furnaceDummySmeltery, "Modular Furnace Smeltery Dummy");
+		LanguageRegistry.addName(furnaceSmelteryBrick, "Modular Furnace Smeltery Brick");
+		
+		LanguageRegistry.addName(copperOreUniversal, "Copper Ore");
+		LanguageRegistry.addName(copperIngot, "Copper Ingot");
+		
+		LanguageRegistry.addName(aluminiumOreUniversal, "Aluminium Ore");
+		LanguageRegistry.addName(aluminiumIngot, "Aluminium Ingot");
+		
+		LanguageRegistry.addName(tinOreUniversal, "Tin Ore");
+		LanguageRegistry.addName(tinIngot, "Tin Ingot");
 
 
 
@@ -106,7 +145,12 @@ public class BlockManager
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCoreSmeltery, 1),
 				"XXX",
 				"XxX",
-				"XXX", 'X', Block.brick, 'x', BlockManager.furnaceCore);
+				"XXX", 'X', BlockManager.furnaceSmelteryBrick, 'x', BlockManager.furnaceCore);
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceSmelteryBrick, 1),
+				"OXO",
+				"XOX",
+				"OXO", 'X', Block.brick, 'O', Block.obsidian); 
 
 
 	}

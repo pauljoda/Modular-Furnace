@@ -27,7 +27,13 @@ public class Reference {
 	public static int furnaceCoreSmelteryID = ModularFurnace.furnaceCoreSmelteryID;
 	public static int furnaceCoreSmelteryActiveID = ModularFurnace.furnaceCoreSmelteryActiveID;
 	public static int furnaceDummySmelteryID = ModularFurnace.furnaceDummySmelteryID;
-
+	public static int furnaceSmelteryBrickID = ModularFurnace.furnaceSmelteryBrickID;
+	public static int copperOreUniversalID = ModularFurnace.copperOreUniversalID;
+	public static int copperIngotID = ModularFurnace.copperIngotID;
+	public static int aluminiumOreUniversalID = ModularFurnace.aluminiumOreUniversalID;
+	public static int aluminiumIngotID = ModularFurnace.aluminiumIngotID;
+	public static int tinOreUniversalID = ModularFurnace.tinOreUniversalID;
+	public static int tinIngotID = ModularFurnace.tinIngotID;
 
 
 	public static int modularFurnaceGui = 0;
