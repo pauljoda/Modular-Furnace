@@ -28,18 +28,20 @@ public class BlockManager
 	public static Block furnaceDummySmeltery = null;
 	public static Block furnaceSmelteryBrick = null;
 	
-	//Ores
-	public static Block copperOreUniversal = null;
-	public static Block aluminiumOreUniversal = null;
-	public static Block tinOreUniversal = null;
+	//OverLays
+	public static Block overLayTexture = null;
 	
 	//Items
 	public static Item copperIngot = null;
 	public static Item aluminiumIngot = null;
 	public static Item tinIngot = null;
+	
+	//PaintBrush
+	public static Item paintBrush = null;
 
 	public static void registerBlocks()
 	{
+		//Creation
 		furnaceCore = new BlockFurnaceCore(Reference.furnaceCoreID, false);
 		furnaceCoreActive = new BlockFurnaceCore(Reference.furnaceCoreActiveID, true);
 		furnaceDummy = new BlockFurnaceDummy(Reference.furnaceDummyID);
@@ -57,15 +59,17 @@ public class BlockManager
 		furnaceDummySmeltery = new BlockFurnaceDummySmeltery(Reference.furnaceDummySmelteryID);
 		furnaceSmelteryBrick = new BlockFurnaceSmelteryBrick(Reference.furnaceSmelteryBrickID);
 		
-		copperOreUniversal = new BlockCopperOreUniversal(Reference.copperOreUniversalID);
 		copperIngot = new MetalCopperIngot(Reference.copperIngotID);
 
-		aluminiumOreUniversal = new BlockAluminiumOreUniversal(Reference.aluminiumOreUniversalID);
+		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID);
 		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
 		
-		tinOreUniversal = new BlockTinOreUniversal(Reference.tinOreUniversalID);
 		tinIngot = new MetalTinIngot(Reference.tinIngotID);
+		
+		
+		paintBrush = new ItemPaintBrush(Reference.paintBrushID);
 
+		//Register
 		GameRegistry.registerBlock(furnaceCore, "blockFurnaceCore");
 		GameRegistry.registerBlock(furnaceDummy, "blockFurnaceDummy");
 		GameRegistry.registerBlock(furnaceDummyRedstone, "blockFurnaceDummyRedstone");
@@ -81,16 +85,18 @@ public class BlockManager
 		GameRegistry.registerBlock(furnaceDummySmeltery, "blockFurnaceDummySmeltery");
 		GameRegistry.registerBlock(furnaceSmelteryBrick, "furnaceSmelteryBrick");
 		
-		GameRegistry.registerBlock(copperOreUniversal, "copperOreUniversal");
 		GameRegistry.registerItem(copperIngot, "copperIngot");
 		
-		GameRegistry.registerBlock(aluminiumOreUniversal, "aluminiumOreUniversal");
+		GameRegistry.registerBlock(overLayTexture, "overLayTexture");
 		GameRegistry.registerItem(aluminiumIngot, "aluminiumIngot");
 		
-		GameRegistry.registerBlock(tinOreUniversal, "tinOreUniversal");
 		GameRegistry.registerItem(tinIngot, "tinIngot");
 		
+		
+		GameRegistry.registerItem(paintBrush, "paintBrush");
+		
 
+		//Add Name
 		LanguageRegistry.addName(furnaceCore, "Modular Furnace Core");
 		LanguageRegistry.addName(furnaceDummy, "Modular Furnace Dummy CobbleStone");
 		LanguageRegistry.addName(furnaceDummyRedstone, "Modular Furnace Dummy Redstone");
@@ -106,14 +112,13 @@ public class BlockManager
 		LanguageRegistry.addName(furnaceDummySmeltery, "Modular Furnace Smeltery Dummy");
 		LanguageRegistry.addName(furnaceSmelteryBrick, "Modular Furnace Smeltery Brick");
 		
-		LanguageRegistry.addName(copperOreUniversal, "Copper Ore");
 		LanguageRegistry.addName(copperIngot, "Copper Ingot");
-		
-		LanguageRegistry.addName(aluminiumOreUniversal, "Aluminium Ore");
 		LanguageRegistry.addName(aluminiumIngot, "Aluminium Ingot");
-		
-		LanguageRegistry.addName(tinOreUniversal, "Tin Ore");
 		LanguageRegistry.addName(tinIngot, "Tin Ingot");
+		
+		LanguageRegistry.addName(overLayTexture, "Tough Glass");
+	
+		LanguageRegistry.addName(paintBrush, "Paint Brush");
 
 
 
@@ -151,7 +156,12 @@ public class BlockManager
 				"OXO",
 				"XOX",
 				"OXO", 'X', Block.brick, 'O', Block.obsidian); 
-
-
+		
+		CraftingManager.getInstance().addRecipe(new ItemStack(overLayTexture, 8),
+				"XXX",
+				"XOX",
+				"XXX", 'X', Item.ingotIron, 'O', Block.glass); 
+		
+		
 	}
 }

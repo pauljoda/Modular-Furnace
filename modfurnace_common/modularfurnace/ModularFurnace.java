@@ -1,11 +1,13 @@
 package modularfurnace;
 
 import modularfurnace.blocks.BlockManager;
+import modularfurnace.client.ClientProxy;
 import modularfurnace.common.CommonProxy;
 import modularfurnace.lib.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -16,7 +18,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 //I prefer to use a Reference class to label my mod. Makes it ... modular ;)
@@ -51,15 +52,20 @@ public class ModularFurnace {
 	public static int furnaceSmelteryBrickID;
 	
 	//Id's associated with ore conversion
-	public static int copperOreUniversalID;
 	public static int copperIngotID;
-	public static int aluminiumOreUniversalID;
 	public static int aluminiumIngotID;
-	public static int tinOreUniversalID;
 	public static int tinIngotID;
+	public static int textureOverlayID;
 
-	//checks to see if we are using resouce pack or not
+	
+	//PaintBrush
+	public static int paintBrushID;
+
+	//checks to see if we are using resource pack or not
 	public static boolean useTextures;
+	public static String textureName;
+	
+	
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event){
@@ -83,14 +89,15 @@ public class ModularFurnace {
         furnaceCoreSmelteryActiveID = config.getBlock("Smeltery Inacive", 313).getInt();
         furnaceDummySmelteryID = config.getBlock("Smeltery Dummy Core", 314).getInt();
         furnaceSmelteryBrickID = config.getBlock("Smeltery Brick", 315).getInt();
-        copperOreUniversalID = config.getBlock("Copper Ore", 317).getInt();
         copperIngotID = config.getBlock("CopperIngot", 318).getInt();
-        aluminiumOreUniversalID = config.getBlock("Aluminium Ore", 319).getInt();
+        textureOverlayID = config.getBlock("Texture Overlay ID", 319).getInt();
         aluminiumIngotID = config.getBlock("Aluminium Ingot", 320).getInt();
-        tinOreUniversalID = config.getBlock("Tin Ore", 321).getInt();
         tinIngotID = config.getBlock("Tin Ingot", 322).getInt();
+        paintBrushID = config.getBlock("Paint Brush", 323).getInt();
         
-        useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use vanilla textures?", false).getBoolean(false);
+        useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use overlay?", false).getBoolean(false);
+        textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
+        
         
         
         config.save();
@@ -100,6 +107,7 @@ public class ModularFurnace {
     @EventHandler
     public void init(FMLInitializationEvent event) {
     	
+    	ClientProxy.setCustomRenderers();
     	//Labels the creative tab
     	LanguageRegistry.instance().addStringLocalization("itemGroup." + Reference.MOD_ID, "en_US", "Modular Furnace");
         
@@ -115,24 +123,16 @@ public class ModularFurnace {
         LanguageRegistry.instance().addStringLocalization("multifurnace.container.multifurnacecore", "Modular Furnace");
         LanguageRegistry.instance().addStringLocalization("multifurnace.container.multifurnacecoresmeltery", "Modular Furnace Smeltery");
         
-        //Lets get Gui's
+        //Lets get Gui
         NetworkRegistry.instance().registerGuiHandler(this, proxy);
         
         //Lets make things work with our neighbors
         OreDictionary.registerOre("ingotCopper", new ItemStack(BlockManager.copperIngot));
         OreDictionary.registerOre("ingotTin", new ItemStack(BlockManager.tinIngot));
         OreDictionary.registerOre("ingotAluminium", new ItemStack(BlockManager.aluminiumIngot));
-        
-        OreDictionary.registerOre("oreCopper", new ItemStack(BlockManager.copperOreUniversal));
-        OreDictionary.registerOre("oreTin", new ItemStack(BlockManager.tinOreUniversal));
-        OreDictionary.registerOre("oreAluminum", new ItemStack(BlockManager.aluminiumOreUniversal));
-        
-        
-        
-        //Adding support for vanilla
-        GameRegistry.addSmelting(BlockManager.aluminiumOreUniversal.blockID, new ItemStack(BlockManager.aluminiumIngot), 0.5f);
-        GameRegistry.addSmelting(BlockManager.copperOreUniversal.blockID, new ItemStack(BlockManager.copperIngot), 0.5f);
-        GameRegistry.addSmelting(BlockManager.tinOreUniversal.blockID, new ItemStack(BlockManager.tinIngot), 0.5f);
+        MinecraftForge.setBlockHarvestLevel(BlockManager.overLayTexture, "pickaxe", 0);
+
+
         
     
     }

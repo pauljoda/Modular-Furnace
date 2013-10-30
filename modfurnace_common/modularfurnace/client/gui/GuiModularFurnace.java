@@ -13,6 +13,7 @@ public class GuiModularFurnace extends GuiContainer
     private TileEntityFurnaceCore tileEntity;
     
     private static final ResourceLocation field_110410_t = new ResourceLocation("textures/gui/container/furnace.png");
+
     
     public GuiModularFurnace(InventoryPlayer playerInventory, TileEntityFurnaceCore tileEntity)
     {
@@ -25,7 +26,19 @@ public class GuiModularFurnace extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         final String invTitle = "Modular Furnace";
+        final double redStone = 1.14 + (tileEntity.countRedstone() * .28);
+        String redStoneResult = String.format("%.2f", redStone);
+        final String redStoneWidth = "" + redStoneResult + "x ";
+        
+        final double ironScale = 1 + ((.16 * tileEntity.countIron()) - (.16 * tileEntity.countRedstone()));
+        String ironResult = String.format("%.2f", ironScale);
+        final String iron = ironResult + "x ";
+
+        fontRenderer.drawString(iron, xSize - fontRenderer.getStringWidth(iron), 6 , 5000000);
+        fontRenderer.drawString(redStoneWidth, xSize - fontRenderer.getStringWidth(redStoneWidth), 15 , 3999000);
+        
         fontRenderer.drawString(invTitle, xSize / 2 - fontRenderer.getStringWidth(invTitle) / 2, 6, 4210752);
+        
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
     
@@ -50,4 +63,6 @@ public class GuiModularFurnace extends GuiContainer
         i1 = tileEntity.getCookProgressScaled(24);
         drawTexturedModalRect(x + 79, y + 34, 176, 14, i1 + 1, 16);
     }
+    
+    
 }

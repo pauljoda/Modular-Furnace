@@ -306,4 +306,6 @@ public class BlockFurnaceCore extends BlockContainer
         super.breakBlock(par1World, par2, par3, par4, par5, par6);
         
     }
+    
+	
 }

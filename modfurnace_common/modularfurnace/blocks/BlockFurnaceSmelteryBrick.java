@@ -30,5 +30,7 @@ public class BlockFurnaceSmelteryBrick extends Block {
 	{
 		blockIcon = iconRegister.registerIcon("smelterBrick");
 	}
+	
+	
 
 }

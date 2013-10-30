@@ -1,6 +1,7 @@
 package modularfurnace.blocks;
 
 import modularfurnace.ModularFurnace;
+import modularfurnace.client.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -23,5 +24,6 @@ public class BlockCrafterInactive extends Block {
     {
         blockIcon = iconRegister.registerIcon("crafterInactive");
     }
+
 
 }

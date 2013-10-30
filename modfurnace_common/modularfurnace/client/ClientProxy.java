@@ -1,5 +1,7 @@
 package modularfurnace.client;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import modularfurnace.blocks.renderer.DummyRenderer;
 import modularfurnace.client.gui.GuiModularFurnace;
 import modularfurnace.client.gui.GuiModularFurnaceEnabled;
 import modularfurnace.client.gui.GuiModularFurnaceSmeltery;
@@ -13,6 +15,19 @@ import net.minecraft.world.World;
 
 public class ClientProxy extends CommonProxy
 {
+	
+	public static int renderPass;
+
+	 public static int dummyRenderType;
+     
+     public static void setCustomRenderers()
+     {
+             dummyRenderType = RenderingRegistry.getNextAvailableRenderId();
+             RenderingRegistry.registerBlockHandler(new DummyRenderer());
+     }
+	
+	
+	
 
 
 	@Override

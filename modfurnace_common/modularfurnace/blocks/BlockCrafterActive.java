@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
+import modularfurnace.client.ClientProxy;
 import modularfurnace.lib.Reference;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import modularfurnace.tileentity.TileEntityFurnaceDummy;
@@ -74,4 +75,6 @@ public class BlockCrafterActive extends BlockContainer
         
         return true;
     }
+    
+
 }

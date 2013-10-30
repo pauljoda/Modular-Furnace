@@ -27,6 +27,17 @@ public class GuiModularFurnaceEnabled extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         final String invTitle = " Modular Furnace";
+        final double redStone = 1.14 + (tileEntity.countRedstone() * .28);
+        String redStoneResult = String.format("%.2f", redStone);
+        final String redStoneWidth = "" + redStoneResult + "x ";
+        
+        final double ironScale = 1 + ((.16 * tileEntity.countIron()) - (.16 * tileEntity.countRedstone()));
+        String ironResult = String.format("%.2f", ironScale);
+        final String iron = ironResult + "x ";
+
+        fontRenderer.drawString(iron, xSize - fontRenderer.getStringWidth(iron), 15 , 5000000);
+        fontRenderer.drawString(redStoneWidth, xSize - fontRenderer.getStringWidth(redStoneWidth), 24 , 3999000);
+        
         fontRenderer.drawString(invTitle, xSize / 2 - fontRenderer.getStringWidth(invTitle) / 20, 6, 4210752);
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
