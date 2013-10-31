@@ -45,7 +45,7 @@ public class BlockCrafterActive extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon("crafterActive");
+        blockIcon = iconRegister.registerIcon("crafting_table_top");
     }
     
     @Override
@@ -75,6 +75,35 @@ public class BlockCrafterActive extends BlockContainer
         
         return true;
     }
-    
+    @Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+	@Override
+	public int getRenderType()
+	{
+		return ClientProxy.dummyRenderType;
+	}
+
+	@Override
+	public boolean canRenderInPass(int pass)
+	{
+		//Set the static var in the client proxy
+		ClientProxy.renderPass = pass;
+		//the block can render in both passes, so return true always
+		return true;
+	}
+	@Override
+	public int getRenderBlockPass()
+	{
+		return 1;
+	}    
 
 }

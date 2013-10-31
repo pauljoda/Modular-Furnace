@@ -11,14 +11,17 @@ import net.minecraft.world.World;
 
 public class BlockTextureOverlay extends Block {
 
-	public BlockTextureOverlay(int par1) {
-		super(par1, Material.glass);
-		setUnlocalizedName("overLayTexture");
+	public String texture;
+	public boolean blastProof;
+	public BlockTextureOverlay(int par1, String string, String name, boolean bool) {
+		super(par1,Material.glass);
+		setUnlocalizedName(name);
 		setCreativeTab(ModularFurnace.tabModularFurnace);
 		this.setHardness(3.5F);
-		this.setStepSound(soundGlassFootstep);
+		this.setStepSound(soundGlassFootstep);	
 		this.setLightOpacity(0);
-		
+		texture = string;
+		blastProof = bool;
 	}
 
 	@Override
@@ -30,7 +33,10 @@ public class BlockTextureOverlay extends Block {
 	@Override
 	 public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
     {
+		if(blastProof)
         return 100000F;
+		
+		return super.getExplosionResistance(par1Entity, world, x, y, z, explosionX, explosionY, explosionZ);
     }
 	
 	@Override
@@ -38,12 +44,18 @@ public class BlockTextureOverlay extends Block {
 	{
 		return false;
 	}
+		
+	@Override
+	public int getRenderBlockPass()
+    {
+        return 1;
+    }
 
 
 	@Override
 	public void registerIcons(IconRegister iconRegister)
 	{
-		blockIcon = iconRegister.registerIcon(ModularFurnace.textureName);
+		blockIcon = iconRegister.registerIcon(texture);
 	}
 
 }

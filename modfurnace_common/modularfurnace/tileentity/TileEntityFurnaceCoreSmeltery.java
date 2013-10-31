@@ -46,10 +46,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 	public void invalidateMultiblock()
 	{
-		isValidMultiblock = false;
-
 		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		metadata = metadata & BlockFurnaceCoreSmeltery.MASK_DIR;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata, 2);
 
 		revertDummies();
@@ -58,10 +55,10 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 	public boolean checkIfProperlyFormed()
 	{
-		int dir = (getBlockMetadata() & BlockFurnaceCoreSmeltery.MASK_DIR);
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
 
-		int depthMultiplier = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH || dir == BlockFurnaceCoreSmeltery.META_DIR_WEST) ? 1 : -1);
-		boolean forwardZ = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH) || (dir == BlockFurnaceCoreSmeltery.META_DIR_SOUTH));
 		/*
 		 *          FORWARD     BACKWARD
 		 * North:   -z              +z
@@ -114,10 +111,10 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 	public void convertDummies()
 	{
-		int dir = (getBlockMetadata() & BlockFurnaceCoreSmeltery.MASK_DIR);
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
 
-		int depthMultiplier = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH || dir == BlockFurnaceCoreSmeltery.META_DIR_WEST) ? 1 : -1);
-		boolean forwardZ = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH) || (dir == BlockFurnaceCoreSmeltery.META_DIR_SOUTH));
 
 		/*
 		 *          FORWARD     BACKWARD
@@ -167,10 +164,10 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 
 	private void revertDummies()
 	{
-		int dir = (getBlockMetadata() & BlockFurnaceCoreSmeltery.MASK_DIR);
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
 
-		int depthMultiplier = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH || dir == BlockFurnaceCoreSmeltery.META_DIR_WEST) ? 1 : -1);
-		boolean forwardZ = ((dir == BlockFurnaceCoreSmeltery.META_DIR_NORTH) || (dir == BlockFurnaceCoreSmeltery.META_DIR_SOUTH));
 
 		/*
 		 *          FORWARD     BACKWARD
@@ -273,102 +270,6 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 		{
 			this.onInventoryChanged();
 		}
-
-/*
-		//This Does the conversion from other ores to my ores -oops-
-		if(furnaceItems[4] != null)
-		{
-			if(furnaceItems[0] == null)
-			{
-				ItemStack itemStack = ModularFurnaceConversionRecipies.smelting().getSmeltingResult(furnaceItems[4]);
-				if(itemStack != null)
-				{
-					ItemStack itemstack = ModularFurnaceConversionRecipies.smelting().getSmeltingResult(furnaceItems[4]);
-
-					ItemStack copperOre = new ItemStack(BlockManager.copperOreUniversal);
-					ItemStack aluminiumOre = new ItemStack(BlockManager.aluminiumOreUniversal);
-					ItemStack tinOre = new ItemStack(BlockManager.tinOreUniversal);
-
-					if(itemstack.itemID == copperOre.itemID)
-					{
-						if (this.furnaceItems[0] == null)
-						{
-							this.furnaceItems[0] = itemstack.copy();
-						}
-						else if (this.furnaceItems[0].isItemEqual(itemstack))
-						{
-							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
-
-						}
-
-						this.furnaceItems[4].stackSize = 0;
-
-						if (this.furnaceItems[4].stackSize <= 0)
-						{
-							this.furnaceItems[4] = null;
-						}
-					}
-					
-					if(itemstack.itemID == aluminiumOre.itemID)
-					{
-						if (this.furnaceItems[0] == null)
-						{
-							this.furnaceItems[0] = itemstack.copy();
-						}
-						else if (this.furnaceItems[0].isItemEqual(itemstack))
-						{
-							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
-
-						}
-
-						this.furnaceItems[4].stackSize = 0;
-
-						if (this.furnaceItems[4].stackSize <= 0)
-						{
-							this.furnaceItems[4] = null;
-						}
-					}
-					
-					if(itemstack.itemID == tinOre.itemID)
-					{
-						if (this.furnaceItems[0] == null)
-						{
-							this.furnaceItems[0] = itemstack.copy();
-						}
-						else if (this.furnaceItems[0].isItemEqual(itemstack))
-						{
-							furnaceItems[0].stackSize += furnaceItems[4].stackSize;
-
-						}
-
-						this.furnaceItems[4].stackSize = 0;
-
-						if (this.furnaceItems[4].stackSize <= 0)
-						{
-							this.furnaceItems[4] = null;
-						}
-					}
-				}
-				else
-				{
-					if(this.furnaceItems[0] == null)
-					{
-						this.furnaceItems[0] = this.furnaceItems[4].copy();
-					}
-					else if (this.furnaceItems[0].isItemEqual(this.furnaceItems[4]))
-					{
-						furnaceItems[0].stackSize += furnaceItems[4].stackSize;
-					}
-				this.furnaceItems[4].stackSize = 0;
-				if (this.furnaceItems[4].stackSize <= 0)
-				{
-					this.furnaceItems[4] = null;
-				}
-
-				}
-			}
-		}
-		*/
 	}
 
 	@Override

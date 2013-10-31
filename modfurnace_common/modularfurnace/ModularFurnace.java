@@ -56,7 +56,7 @@ public class ModularFurnace {
 	public static int aluminiumIngotID;
 	public static int tinIngotID;
 	public static int textureOverlayID;
-
+	public static int smelterOverlayID;
 	
 	//PaintBrush
 	public static int paintBrushID;
@@ -94,7 +94,8 @@ public class ModularFurnace {
         aluminiumIngotID = config.getBlock("Aluminium Ingot", 320).getInt();
         tinIngotID = config.getBlock("Tin Ingot", 322).getInt();
         paintBrushID = config.getBlock("Paint Brush", 323).getInt();
-        
+        smelterOverlayID = config.getBlock("SmelterOverlay", 324).getInt();
+
         useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use overlay?", false).getBoolean(false);
         textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
         

@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import modularfurnace.ModularFurnace;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,7 +31,9 @@ public class BlockManager
 	
 	//OverLays
 	public static Block overLayTexture = null;
+	public static Block smelterOverlay = null;
 	
+
 	//Items
 	public static Item copperIngot = null;
 	public static Item aluminiumIngot = null;
@@ -60,12 +63,12 @@ public class BlockManager
 		furnaceSmelteryBrick = new BlockFurnaceSmelteryBrick(Reference.furnaceSmelteryBrickID);
 		
 		copperIngot = new MetalCopperIngot(Reference.copperIngotID);
-
-		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID);
 		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
-		
 		tinIngot = new MetalTinIngot(Reference.tinIngotID);
-		
+
+		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, ModularFurnace.textureName, "overLayTexture", true);
+		smelterOverlay = new BlockTextureOverlay(Reference.smelterOverlayID, "smelterOverlay","smelterOverlay", false);
+	
 		
 		paintBrush = new ItemPaintBrush(Reference.paintBrushID);
 
@@ -86,12 +89,13 @@ public class BlockManager
 		GameRegistry.registerBlock(furnaceSmelteryBrick, "furnaceSmelteryBrick");
 		
 		GameRegistry.registerItem(copperIngot, "copperIngot");
-		
-		GameRegistry.registerBlock(overLayTexture, "overLayTexture");
 		GameRegistry.registerItem(aluminiumIngot, "aluminiumIngot");
-		
 		GameRegistry.registerItem(tinIngot, "tinIngot");
-		
+
+		GameRegistry.registerBlock(overLayTexture, "overLayTexture");
+		GameRegistry.registerBlock(smelterOverlay, "smelterOverlay");
+
+
 		
 		GameRegistry.registerItem(paintBrush, "paintBrush");
 		
@@ -117,6 +121,9 @@ public class BlockManager
 		LanguageRegistry.addName(tinIngot, "Tin Ingot");
 		
 		LanguageRegistry.addName(overLayTexture, "Tough Glass");
+		LanguageRegistry.addName(smelterOverlay, "Tinted Glass");
+
+
 	
 		LanguageRegistry.addName(paintBrush, "Paint Brush");
 
@@ -145,7 +152,7 @@ public class BlockManager
 		CraftingManager.getInstance().addRecipe(new ItemStack(lavaCore, 1),
 				"OXO",
 				"XCX",
-				"OXO", 'X', Block.glass, 'C', Item.bucketLava, 'O', Block.obsidian); 
+				"OXO", 'X', Block.fenceIron, 'C', Item.bucketLava, 'O', Block.obsidian); 
 
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCoreSmeltery, 1),
 				"XXX",
@@ -155,12 +162,15 @@ public class BlockManager
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceSmelteryBrick, 1),
 				"OXO",
 				"XOX",
-				"OXO", 'X', Block.brick, 'O', Block.obsidian); 
+				"OXO", 'X', Block.stoneBrick, 'O', Block.obsidian); 
 		
 		CraftingManager.getInstance().addRecipe(new ItemStack(overLayTexture, 8),
 				"XXX",
 				"XOX",
 				"XXX", 'X', Item.ingotIron, 'O', Block.glass); 
+		
+        ItemStack ink =  new ItemStack(Item.dyePowder, 1, 0);
+		CraftingManager.getInstance().addShapelessRecipe(new ItemStack(smelterOverlay, 1), ink, new ItemStack(Block.glass, 1));
 		
 		
 	}

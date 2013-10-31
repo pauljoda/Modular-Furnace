@@ -21,7 +21,7 @@ public class BlockLavaCore extends Block
 	   @Override
 	    public void registerIcons(IconRegister iconRegister)
 	    {
-	        blockIcon = iconRegister.registerIcon("lavacore");
+	        blockIcon = iconRegister.registerIcon("lava_flow");
 	    }
 	   
 		@Override

@@ -3,7 +3,6 @@ package modularfurnace.lib;
 import net.minecraft.world.World;
 import modularfurnace.ModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
-import modularfurnace.tileentity.TileEntityFurnaceCoreSmeltery;
 
 
 public class Reference {
@@ -33,7 +32,7 @@ public class Reference {
 	public static int tinIngotID = ModularFurnace.tinIngotID;
 	public static int paintBrushID = ModularFurnace.paintBrushID;
 	public static int textureOverlayID = ModularFurnace.textureOverlayID;
-
+	public static int smelterOverlayID = ModularFurnace.smelterOverlayID;
 
 	public static int modularFurnaceGui = 0;
 	public static int modularFurnaceGuiCrafter = 1;
@@ -53,7 +52,6 @@ public class Reference {
 
 	public static int getGuiSmeltery(World world, int x, int y, int z)
 	{
-		TileEntityFurnaceCoreSmeltery tileEntity = (TileEntityFurnaceCoreSmeltery)world.getBlockTileEntity(x, y, z);
 
 		return 2;
 	}
