@@ -5,7 +5,6 @@ import java.util.Random;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import modularfurnace.ModularFurnace;
 import modularfurnace.blocks.BlockFurnaceCore;
 import modularfurnace.blocks.BlockManager;
 import modularfurnace.lib.Reference;
@@ -22,6 +21,9 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
@@ -46,7 +48,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	public int furnaceCookTime;
 	private String field_94130_e;
 
-	private boolean isValidMultiblock = false;
+	public boolean isValidMultiblock = false;
 	public boolean diamonds = false;
 	public boolean crafterEnabled = false;
 
@@ -57,10 +59,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	{
 	}
 
-	public boolean getIsValid()
-	{
-		return isValidMultiblock;
-	}
+	
 
 	public void invalidateMultiblock()
 	{
@@ -74,11 +73,16 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 		revertDummies();
 		isValidMultiblock = false;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata, 2);
-
 
 	}
 
+	public boolean getIsValid()
+	{
+		return isValidMultiblock;
+	}
+	
 	public boolean checkIfProperlyFormed()
 	{
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
@@ -124,8 +128,14 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						}
 					}
 
-					if(blockId != Block.cobblestone.blockID && blockId != Block.blockRedstone.blockID && blockId != Block.blockIron.blockID && blockId != Block.blockDiamond.blockID && blockId != ModularFurnace.crafterInactiveID && blockId != Block.blockEmerald.blockID && blockId != ModularFurnace.furnaceDummyIOID)
+					//if(blockId != Block.cobblestone.blockID && blockId != Block.blockRedstone.blockID && blockId != Block.blockIron.blockID && blockId != Block.blockDiamond.blockID && blockId != ModularFurnace.crafterInactiveID && blockId != Block.blockEmerald.blockID && blockId != ModularFurnace.furnaceDummyIOID)
+					if(!Reference.isValidBlock(blockId))
+					{
+						if(Reference.isModularTile(blockId))
+							return true;
+						
 						return false;
+					}
 				}
 
 			}
@@ -178,9 +188,10 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 						dummyTE.setCore(this);
+						
 					}
 
-					if(worldObj.getBlockId(x, y, z) == Block.blockIron.blockID)
+					else if(worldObj.getBlockId(x, y, z) == Block.blockIron.blockID)
 					{
 						this.ironBlocksInFurnace = ironBlocksInFurnace + 1;
 						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDGlowStone);
@@ -189,7 +200,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						dummyTE.setCore(this);
 					}
 
-					if(worldObj.getBlockId(x, y, z) == Block.blockDiamond.blockID)
+					else if(worldObj.getBlockId(x, y, z) == Block.blockDiamond.blockID)
 					{
 						diamonds = true;
 						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDDiamond);
@@ -198,7 +209,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						dummyTE.setCore(this);
 					}
 
-					if(worldObj.getBlockId(x, y, z) == Block.blockEmerald.blockID)
+					else if(worldObj.getBlockId(x, y, z) == Block.blockEmerald.blockID)
 					{
 						emeralds = true;
 						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDEmerald);
@@ -207,7 +218,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						dummyTE.setCore(this);
 					}
 
-					if(worldObj.getBlockId(x, y, z) == Reference.crafterInactive)
+					else if(worldObj.getBlockId(x, y, z) == Reference.crafterInactive)
 					{
 						crafterEnabled = true;
 						worldObj.setBlock(x, y, z, Reference.crafterActive);
@@ -216,18 +227,24 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						dummyTE.setCore(this);
 					}
 
-					if(worldObj.getBlockId(x, y, z) == Block.cobblestone.blockID)
-					{
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyID);
-						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
-						dummyTE.setCore(this);
-					}
-					if(worldObj.getBlockId(x, y, z) == Reference.furnaceDummyIOID)
+					else if(worldObj.getBlockId(x, y, z) == Reference.furnaceDummyIOID)
 					{
 						worldObj.setBlock(x, y, z, Reference.furnaceDummyActiveIOID);
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						dummyTE.setCore(this);
+					}
+					else
+					{
+						int icon = worldObj.getBlockId(x, y, z);
+						worldObj.setBlock(x, y, z, Reference.furnaceDummyID);
+						worldObj.markBlockForUpdate(x, y, z);
+						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						
+						if(icon == BlockManager.furnaceDummy.blockID)
+							icon = dummyTE.icon;
+							
+						dummyTE.icon = icon;
 						dummyTE.setCore(this);
 					}
 
@@ -245,6 +262,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
+		isValidMultiblock = false;
+
 
 		/*
 		 *          FORWARD     BACKWARD
@@ -279,7 +298,8 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					if(blockId == BlockManager.furnaceDummy.blockID)
 					{
-						worldObj.setBlock(x, y, z, Block.cobblestone.blockID);
+						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						worldObj.setBlock(x, y, z, dummyTE.getBlock().blockID);
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 					}
@@ -683,6 +703,19 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			tagCompound.setString("CustomName", this.field_94130_e);
 		}
 
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTag = new NBTTagCompound();
+		this.writeToNBT(nbtTag);
+		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
+	}
+	        
+	@Override
+	public void onDataPacket(INetworkManager netManager, Packet132TileEntityData packet)
+	{
+		readFromNBT(packet.data);
 	}
 
 	@SideOnly(Side.CLIENT)

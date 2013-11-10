@@ -66,7 +66,11 @@ public class BlockManager
 		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
 		tinIngot = new MetalTinIngot(Reference.tinIngotID);
 
+		if(ModularFurnace.useTextures)
 		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, ModularFurnace.textureName, "overLayTexture", true);
+		else
+		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, "custom_overlay", "overLayTexture", true);
+	
 		smelterOverlay = new BlockTextureOverlay(Reference.smelterOverlayID, "smelterOverlay","smelterOverlay", false);
 	
 		
@@ -137,12 +141,12 @@ public class BlockManager
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCore, 1),
 				"XXX",
 				"XxX",
-				"XXX", 'X', Block.stoneBrick, 'x', Block.furnaceIdle);
+				"XXX", 'X', Item.ingotIron, 'x', Block.furnaceIdle);
 
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceDummyIO, 1),
 				"XXX",
 				"XxX",
-				"XXX", 'X', Block.stoneBrick, 'x', Block.dispenser);
+				"XXX", 'X', Block.cobblestone, 'x', Block.dispenser);
 
 		CraftingManager.getInstance().addRecipe(new ItemStack(crafterInactive, 1),
 				"XxX",

@@ -1,5 +1,6 @@
 package modularfurnace.lib;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import modularfurnace.ModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
@@ -56,6 +57,57 @@ public class Reference {
 		return 2;
 	}
 
+	public static int[] badBlocks =
+		{0, Block.wood.blockID, Block.planks.blockID,
+			Block.dirt.blockID, Block.ice.blockID,
+			Block.snow.blockID, Block.bookShelf.blockID,
+			Block.leaves.blockID, Block.melon.blockID,
+			Block.pumpkin.blockID, Block.tnt.blockID,
+			Block.cloth.blockID, Block.hay.blockID,
+			Block.hardenedClay.blockID, Block.grass.blockID,
+			Block.stoneBrick.blockID};
+	
+	public static int[] modularTiles = 
+		{furnaceDummyID,
+		furnaceDummyIDRedstone,
+		furnaceDummyIDGlowStone,
+		furnaceDummyIDDiamond,
+		crafterActive,
+		furnaceDummyIDEmerald,
+		furnaceDummyActiveIOID
+		};
 
+
+	public static boolean isValidBlock(int blockId)
+	{
+		for(int i = 0; i < badBlocks.length; i++)
+		{
+			if(blockId == badBlocks[i])
+			{
+				return false;
+			}
+		}
+		if(blockId == crafterInactive || blockId == furnaceDummyIOID)
+			return true;
+		if(!Block.isNormalCube(blockId))
+			return false;
+		else if(Block.blocksList[blockId].hasTileEntity(blockId))
+			return false;
+		
+		
+		return true;
+	}
+
+	public static boolean isModularTile(int blockId) {
+		for(int i = 0; i < modularTiles.length; i++)
+		{
+			if(blockId == modularTiles[i])
+				return true;
+		}
+		return false;
+	}
 }
+
+
+
 

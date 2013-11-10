@@ -1,9 +1,13 @@
 package modularfurnace.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventory
@@ -13,11 +17,13 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 	int coreX;
 	int coreY;
 	int coreZ;
-	
+	public int icon = 0;
+
+
 	public TileEntityFurnaceDummy()
 	{
 	}
-	
+
 	public void setCore(TileEntityFurnaceCore core)
 	{
 		coreX = core.xCoord;
@@ -25,37 +31,60 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		coreZ = core.zCoord;
 		tileEntityCore = core;
 	}
-	
+
 	public TileEntityFurnaceCore getCore()
 	{
 		if(tileEntityCore == null)
 			tileEntityCore = (TileEntityFurnaceCore)worldObj.getBlockTileEntity(coreX, coreY, coreZ);
-		
+
 		return tileEntityCore;
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
 	{
 		super.readFromNBT(tagCompound);
-		
+
 		coreX = tagCompound.getInteger("CoreX");
 		coreY = tagCompound.getInteger("CoreY");
 		coreZ = tagCompound.getInteger("CoreZ");
-		
+
 		slot = tagCompound.getInteger("Slot");
+		icon = tagCompound.getInteger("Icon");
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
-		
+
 		tagCompound.setInteger("CoreX", coreX);
 		tagCompound.setInteger("CoreY", coreY);
 		tagCompound.setInteger("CoreZ", coreZ);
-		
+
 		tagCompound.setInteger("Slot", slot);
+		tagCompound.setInteger("Icon", icon);
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTag = new NBTTagCompound();
+		this.writeToNBT(nbtTag);
+		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
+	}
+	        
+	@Override
+	public void onDataPacket(INetworkManager netManager, Packet132TileEntityData packet)
+	{
+		readFromNBT(packet.data);
+	}
+
+	public Block getBlock()
+	{
+		if(Block.blocksList[this.icon] == null)
+			return Block.cobblestone;
+		
+		return Block.blocksList[this.icon];
 	}
 	
 	@Override
@@ -130,24 +159,24 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		if(slot != 4)
 		{
 			if(slot == 0)
-			var1 = 0;
+				var1 = 0;
 			if(slot == 1)
-			var1 = 1;
+				var1 = 1;
 			if(slot == 2)
-			var1 = 2;
+				var1 = 2;
 		}
-	
+
 		tileEntityCore = this.getCore();
-			return tileEntityCore.getAccessibleSlotsFromSide(var1);
-			
+		return tileEntityCore.getAccessibleSlotsFromSide(var1);
+
 	}
-		
+
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		
+
 		tileEntityCore = this.getCore();
 		return tileEntityCore.isItemValidForSlot(i, itemstack);
-			
+
 	}
 
 	@Override
@@ -155,13 +184,14 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 		// TODO Auto-generated method stub
 		tileEntityCore = this.getCore();
 		if(slot <= 3)
-			{
-				j = slot;
-				return tileEntityCore.canExtractItem(i, itemstack, j);
-			}
+		{
+			j = slot;
+			return tileEntityCore.canExtractItem(i, itemstack, j);
+		}
 		else
-			{
-		return tileEntityCore.canExtractItem(i, itemstack, j);
-			}
+		{
+			return tileEntityCore.canExtractItem(i, itemstack, j);
+		}
 	}
+
 }

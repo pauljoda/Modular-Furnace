@@ -2,14 +2,18 @@ package modularfurnace.blocks.renderer;
 
 import org.lwjgl.opengl.GL11;
 
-import modularfurnace.ModularFurnace;
 import modularfurnace.client.ClientProxy;
+import modularfurnace.tileentity.TileEntityFurnaceDummy;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import modularfurnace.blocks.BlockManager;
 
 public class DummyRenderer implements ISimpleBlockRenderingHandler {
@@ -88,6 +92,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 
 		return output;
 	}
+	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
@@ -95,12 +100,17 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 		//which render pass are we doing?
 				if(ClientProxy.renderPass == 0)
 				{
+					World world1 = Minecraft.getMinecraft().theWorld;
+					TileEntityFurnaceDummy dummy = null;
+
 					if(block.blockID == BlockManager.furnaceDummyRedstone.blockID)
 						renderer.renderStandardBlock(Block.blockRedstone, x, y, z);  
 
 					if(block.blockID == BlockManager.furnaceDummy.blockID)
-						renderer.renderStandardBlock(Block.cobblestone, x, y, z);
-
+					{
+						dummy = (TileEntityFurnaceDummy)world1.getBlockTileEntity(x, y, z);
+						renderer.renderStandardBlock(dummy.getBlock(), x, y, z);
+					}
 					if(block.blockID == BlockManager.furnaceDummyDiamond.blockID)
 						renderer.renderStandardBlock(Block.blockDiamond, x, y, z);
 
@@ -131,7 +141,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 						renderer.renderBlockAllFaces(Block.furnaceBurning, x, y, z);    
 
 				}
-				else if(!ModularFurnace.useTextures)                   
+				else                   
 				{
 
 					if(block.blockID == BlockManager.lavaCore.blockID)

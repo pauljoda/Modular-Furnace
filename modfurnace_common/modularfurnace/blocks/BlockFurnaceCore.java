@@ -47,8 +47,20 @@ public class BlockFurnaceCore extends BlockContainer
 		setStepSound(Block.soundStoneFootstep);
 		setHardness(3.5f);
 		setCreativeTab(ModularFurnace.tabModularFurnace);
-		
+
 	}
+
+	@Override
+	public int idDropped(int par1, Random par2Random, int par3)
+	{
+		return BlockManager.furnaceCore.blockID;
+	}
+
+	@Override
+	 public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return BlockManager.furnaceCore.blockID;
+    }
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z)
@@ -72,27 +84,23 @@ public class BlockFurnaceCore extends BlockContainer
 		if (l == 0)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-			System.out.println("2");
 		}
 
 		if (l == 1)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-			System.out.println("5");
 
 		}
 
 		if (l == 2)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-			System.out.println("3");
 
 		}
 
 		if (l == 3)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-			System.out.println("4");
 
 		}
 
@@ -101,63 +109,63 @@ public class BlockFurnaceCore extends BlockContainer
 			((TileEntityFurnaceCore)par1World.getBlockTileEntity(par2, par3, par4)).setGuiDisplayName(par6ItemStack.getDisplayName());
 		}
 	}
-	
-	  private void setDefaultDirection(World par1World, int par2, int par3, int par4)
-	    {
-	        if (!par1World.isRemote)
-	        {
-	            int l = par1World.getBlockId(par2, par3, par4 - 1);
-	            int i1 = par1World.getBlockId(par2, par3, par4 + 1);
-	            int j1 = par1World.getBlockId(par2 - 1, par3, par4);
-	            int k1 = par1World.getBlockId(par2 + 1, par3, par4);
-	            byte b0 = 3;
 
-	            if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
-	            {
-	                b0 = 3;
-	            }
-
-	            if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
-	            {
-	                b0 = 2;
-	            }
-
-	            if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
-	            {
-	                b0 = 5;
-	            }
-
-	            if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
-	            {
-	                b0 = 4;
-	            }
-
-	            par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
-	        }
-	    }
-
-
-		@Override
-	    public Icon getIcon(int par1, int par2)
-	    {
-			if(par1 == par2)
-				return this.furnaceIconFront;
-	            return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.blockIcon : this.furnaceIconFront));     
-	    }
-
-
-		@SideOnly(Side.CLIENT)
-
-		/**
-		 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-		 * is the only chance you get to register icons.
-		 */
-		public void registerIcons(IconRegister par1IconRegister)
+	private void setDefaultDirection(World par1World, int par2, int par3, int par4)
+	{
+		if (!par1World.isRemote)
 		{
-			this.blockIcon = par1IconRegister.registerIcon("furnace_side");
-			this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "furnace_front_on" : "furnace_front_off");
-			this.furnaceIconTop = par1IconRegister.registerIcon("furnace_top");
+			int l = par1World.getBlockId(par2, par3, par4 - 1);
+			int i1 = par1World.getBlockId(par2, par3, par4 + 1);
+			int j1 = par1World.getBlockId(par2 - 1, par3, par4);
+			int k1 = par1World.getBlockId(par2 + 1, par3, par4);
+			byte b0 = 3;
+
+			if (Block.opaqueCubeLookup[l] && !Block.opaqueCubeLookup[i1])
+			{
+				b0 = 3;
+			}
+
+			if (Block.opaqueCubeLookup[i1] && !Block.opaqueCubeLookup[l])
+			{
+				b0 = 2;
+			}
+
+			if (Block.opaqueCubeLookup[j1] && !Block.opaqueCubeLookup[k1])
+			{
+				b0 = 5;
+			}
+
+			if (Block.opaqueCubeLookup[k1] && !Block.opaqueCubeLookup[j1])
+			{
+				b0 = 4;
+			}
+
+			par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
 		}
+	}
+
+
+	@Override
+	public Icon getIcon(int par1, int par2)
+	{
+		if(par1 == par2)
+			return this.furnaceIconFront;
+		return par1 == 1 ? this.furnaceIconTop : (par1 == 0 ? this.furnaceIconTop : (par1 != par2 ? this.blockIcon : this.furnaceIconFront));     
+	}
+
+
+	@SideOnly(Side.CLIENT)
+
+	/**
+	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+	 * is the only chance you get to register icons.
+	 */
+	public void registerIcons(IconRegister par1IconRegister)
+	{
+		this.blockIcon = par1IconRegister.registerIcon("furnace_side");
+		this.furnaceIconFront = par1IconRegister.registerIcon(this.isActive ? "furnace_front_on" : "furnace_front_off");
+		this.furnaceIconTop = par1IconRegister.registerIcon("furnace_top");
+	}
 
 	public static void updateFurnaceBlockState(boolean par0, World par1World, int par2, int par3, int par4)
 	{
@@ -207,11 +215,9 @@ public class BlockFurnaceCore extends BlockContainer
 			}
 
 			// Check if the multi-block structure has been formed.
-			if(tileEntity.getIsValid())
+			if(tileEntity.getIsValid() && tileEntity.checkIfProperlyFormed())
 			{
-
 				player.openGui(ModularFurnace.instance, Reference.getGui(world, x, y, z), world, x, y, z);
-
 			}
 
 		}
@@ -324,7 +330,7 @@ public class BlockFurnaceCore extends BlockContainer
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube()
 	{

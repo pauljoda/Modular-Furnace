@@ -96,7 +96,7 @@ public class ModularFurnace {
         paintBrushID = config.getBlock("Paint Brush", 323).getInt();
         smelterOverlayID = config.getBlock("SmelterOverlay", 324).getInt();
 
-        useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use overlay?", false).getBoolean(false);
+        useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Vanilla Texture For Overlay?", true).getBoolean(true);
         textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
         
         

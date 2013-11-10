@@ -106,27 +106,23 @@ public class BlockFurnaceCoreSmeltery extends BlockContainer
 		if (l == 0)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-			System.out.println("2");
 		}
 
 		if (l == 1)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-			System.out.println("5");
 
 		}
 
 		if (l == 2)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-			System.out.println("3");
 
 		}
 
 		if (l == 3)
 		{
 			par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-			System.out.println("4");
 
 		}
 

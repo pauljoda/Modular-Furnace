@@ -1,6 +1,5 @@
 package modularfurnace.lib;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +16,8 @@ public class ModularFurnacesSmelteryRecipies
 private static final ModularFurnacesSmelteryRecipies smeltingBase = new ModularFurnacesSmelteryRecipies();
 
 /** The list of smelting results. */
-private Map smeltingList = new HashMap();
-private Map experienceList = new HashMap();
+private Map<Integer, ItemStack> smeltingList = new HashMap<Integer, ItemStack>();
+private Map<Integer, Float> experienceList = new HashMap<Integer, Float>();
 private HashMap<List<Integer>, ItemStack> metaSmeltingList = new HashMap<List<Integer>, ItemStack>();
 private HashMap<List<Integer>, Float> metaExperience = new HashMap<List<Integer>, Float>();
 
@@ -65,7 +64,7 @@ public ItemStack getSmeltingResult(int par1)
     return (ItemStack)this.smeltingList.get(Integer.valueOf(par1));
 }
 
-public Map getSmeltingList()
+public Map<Integer, ItemStack> getSmeltingList()
 {
     return this.smeltingList;
 }

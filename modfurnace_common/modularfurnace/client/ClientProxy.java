@@ -6,7 +6,6 @@ import modularfurnace.client.gui.GuiModularFurnace;
 import modularfurnace.client.gui.GuiModularFurnaceEnabled;
 import modularfurnace.client.gui.GuiModularFurnaceSmeltery;
 import modularfurnace.common.CommonProxy;
-import modularfurnace.tileentity.ContainerModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import modularfurnace.tileentity.TileEntityFurnaceCoreSmeltery;
 import net.minecraft.entity.player.EntityPlayer;

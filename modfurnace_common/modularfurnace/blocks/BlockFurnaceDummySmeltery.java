@@ -32,7 +32,7 @@ public class BlockFurnaceDummySmeltery extends BlockContainer
     public int idDropped(int par1, Random par2Random, int par3)
     {
   
-        return Block.brick.blockID;
+        return BlockManager.furnaceSmelteryBrick.blockID;
     }
     
     @Override

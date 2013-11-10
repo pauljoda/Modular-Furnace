@@ -14,7 +14,7 @@ public class BlockFurnaceSmelteryBrick extends Block {
 		super(par1, Material.rock);
 		setUnlocalizedName("furnaceSmelteryBrick");
 		setCreativeTab(ModularFurnace.tabModularFurnace);
-
+		this.setHardness(3.0F);
 
 	}
 
