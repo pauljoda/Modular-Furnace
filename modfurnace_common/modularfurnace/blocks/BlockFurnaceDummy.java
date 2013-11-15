@@ -2,7 +2,6 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
-import modularfurnace.ModularFurnace;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import modularfurnace.tileentity.TileEntityFurnaceDummy;
@@ -70,7 +69,7 @@ public class BlockFurnaceDummy extends BlockContainer
 			float f1 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
 			float f2 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
 
-			EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(dummy.getBlock(), 1));
+			EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(dummy.getBlock(), 1, dummy.getMeta()));
 
 			world.spawnEntityInWorld(entityitem);
 		}

@@ -26,11 +26,12 @@ public class GuiModularFurnace extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         final String invTitle = "Modular Furnace";
+        
         final double redStone = 1.14 + (tileEntity.countRedstone() * .28);
         String redStoneResult = String.format("%.2f", redStone);
         final String redStoneWidth = "" + redStoneResult + "x ";
         
-        final double ironScale = 1 + ((.16 * tileEntity.countIron()) - (.16 * tileEntity.countRedstone()));
+        final double ironScale = tileEntity.getEfficiency();
         String ironResult = String.format("%.2f", ironScale);
         final String iron = ironResult + "x ";
 

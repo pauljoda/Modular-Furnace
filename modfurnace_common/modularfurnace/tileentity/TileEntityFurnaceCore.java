@@ -9,6 +9,7 @@ import modularfurnace.blocks.BlockFurnaceCore;
 import modularfurnace.blocks.BlockManager;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -29,38 +30,40 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 {
+	//Automation related 
 	private static final int[] slots_top = new int[] {0};
 	private static final int[] slots_bottom = new int[] {2, 1};
 	private static final int[] slots_sides = new int[] {1};
 	private static final int[] slots_output_only = new int [] {2};
 
-
+	//Storage for blocks if they have meaning
 	public int redstoneBlocksInFurnace = 0;
 	public int redstoneMultiplier = 6;
 	public int cookSpeed = 175;
 	public int ironBlocksInFurnace = 0;
 	public boolean emeralds;
 
-
+	//Furnace related things
 	private ItemStack[] furnaceItems = new ItemStack[3];
 	public int furnaceBurnTime;
 	public int currentItemBurnTime;
 	public int furnaceCookTime;
 	private String field_94130_e;
 
+	//Booleans
 	public boolean isValidMultiblock = false;
 	public boolean diamonds = false;
 	public boolean crafterEnabled = false;
 
-
+	//Randomizer
 	Random r = new Random();
 
 	public TileEntityFurnaceCore()
 	{
 	}
 
-	
 
+	//Turns dummies back to their respective blocks
 	public void invalidateMultiblock()
 	{
 		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
@@ -78,11 +81,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 	}
 
+	//Called to check if this is already formed
 	public boolean getIsValid()
 	{
 		return isValidMultiblock;
 	}
-	
+
+	//Checks to see if the structure is valid
 	public boolean checkIfProperlyFormed()
 	{
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
@@ -114,11 +119,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					if(horiz == 0 && vert == 0)
 					{
 						if(depth == 0)  // Looking at self, move on!
-						continue;
+							continue;
 
 						if(depth == 1)  // Center must be air!
 						{
-							if(blockId != 0 && blockId != Reference.lavaCore)
+							if(blockId != 0)
 							{
 								return false;
 							}
@@ -133,7 +138,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					{
 						if(Reference.isModularTile(blockId))
 							return true;
-						
+
 						return false;
 					}
 				}
@@ -145,6 +150,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return true;
 	}
 
+	//Converts blocks into their respective dummies
 	public void convertDummies()
 	{
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
@@ -188,7 +194,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 						dummyTE.setCore(this);
-						
+
 					}
 
 					else if(worldObj.getBlockId(x, y, z) == Block.blockIron.blockID)
@@ -234,18 +240,30 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 						dummyTE.setCore(this);
 					}
-					else
+					else if(!Reference.isModularTile(worldObj.getBlockId(x, y, z)) && worldObj.getBlockId(x, y, z) != 0)
 					{
+
 						int icon = worldObj.getBlockId(x, y, z);
+						int metadata = worldObj.getBlockMetadata(x, y, z);
+
 						worldObj.setBlock(x, y, z, Reference.furnaceDummyID);
+
 						worldObj.markBlockForUpdate(x, y, z);
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
-						
+
 						if(icon == BlockManager.furnaceDummy.blockID)
+						{
 							icon = dummyTE.icon;
-							
-						dummyTE.icon = icon;
+							metadata = dummyTE.metadata;
+						}
+						else
+						{
+							dummyTE.icon = icon;
+							dummyTE.metadata = metadata;
+						}
+
 						dummyTE.setCore(this);
+
 					}
 
 				}
@@ -255,7 +273,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		}
 	}
 
-
+	//Turns dummies back to their blocks
 	private void revertDummies()
 	{
 
@@ -299,7 +317,10 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					if(blockId == BlockManager.furnaceDummy.blockID)
 					{
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+
 						worldObj.setBlock(x, y, z, dummyTE.getBlock().blockID);
+						worldObj.setBlockMetadataWithNotify(x, y, z, dummyTE.metadata, 2);
+
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 					}
@@ -353,6 +374,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		isValidMultiblock = false;
 	}
 
+	//See if crafting core is in the structure
 	public boolean checkIfCrafting()
 	{
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
@@ -384,7 +406,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					if(horiz == 0 && vert == 0)
 					{
 						if(depth == 0)  // Looking at self, move on!
-						continue;
+							continue;
 
 						if(depth == 1)  // Center must be air!
 						{
@@ -406,74 +428,69 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	}
 
 
-
+	//Furnace stuff
 	@Override
 	public void updateEntity()
 	{
-		if(!isValidMultiblock)
-			return;
-
-
+		boolean flag = this.furnaceBurnTime > 0;
 		boolean flag1 = false;
-		boolean flag = furnaceBurnTime > 0;
-		int i = 1;
-		i = i++;
 
-
-
-		if(furnaceBurnTime > 0)
-			--furnaceBurnTime;
-
-		if(!this.worldObj.isRemote)
+		if (this.furnaceBurnTime > 0)
 		{
-			if(furnaceBurnTime == 0 && canSmelt())
-			{
+			--this.furnaceBurnTime;
+		}
 
+		if (!this.worldObj.isRemote)
+		{
+			if (this.furnaceBurnTime == 0 && this.canSmelt())
+			{
 				this.currentItemBurnTime = this.furnaceBurnTime = this.scaledBurnTime();
 
-				if(furnaceBurnTime > 0)
+				if (this.furnaceBurnTime > 0)
 				{
 					flag1 = true;
 
-					if(this.furnaceItems[1] != null)
+					if (this.furnaceItems[1] != null)
 					{
 						--this.furnaceItems[1].stackSize;
 
-						if(this.furnaceItems[1].stackSize == 0)
+						if (this.furnaceItems[1].stackSize == 0)
 						{
-							this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]); 
+							this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]);
 						}
 					}
-				}     
+				}
 			}
 
-			if(isBurning() && canSmelt())
+			if (this.isBurning() && this.canSmelt())
 			{
-				furnaceCookTime++;
+				++this.furnaceCookTime;
 
-				if(furnaceCookTime  == this.getSpeedMultiplier())
+				if (this.furnaceCookTime == this.getSpeedMultiplier())
 				{
-					furnaceCookTime = 0;
-					smeltItem();
+					this.furnaceCookTime = 0;
+					this.smeltItem();
 					flag1 = true;
 				}
 			}
 			else
 			{
-				furnaceCookTime = 0;
+				this.furnaceCookTime = 0;
 			}
 
-			if(flag != furnaceBurnTime > 0)
+			if (flag != this.furnaceBurnTime > 0)
 			{
 				flag1 = true;
-				BlockFurnaceCore.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-			}
+				BlockFurnaceCore.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);			}
 		}
 
-		if(flag1)
-			onInventoryChanged();
+		if (flag1)
+		{
+			this.onInventoryChanged();
+		}
 	}
 
+	//Furnace stuff
 	@Override
 	public int getSizeInventory()
 	{
@@ -562,6 +579,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	@Override
 	public void closeChest() { }
 
+	//Re-writen for the I/O block
 	@Override
 	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
 	{
@@ -704,19 +722,20 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		}
 
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbtTag = new NBTTagCompound();
 		this.writeToNBT(nbtTag);
 		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 1, nbtTag);
 	}
-	        
+
 	@Override
 	public void onDataPacket(INetworkManager netManager, Packet132TileEntityData packet)
 	{
 		readFromNBT(packet.data);
 	}
+
 
 	@SideOnly(Side.CLIENT)
 	public int getCookProgressScaled(int scaleVal)
@@ -740,24 +759,24 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return furnaceBurnTime > 0;
 	}
 
-	private boolean canSmelt()
-	{
-		if(furnaceItems[0] == null)
-			return false;
-		else
-		{
-			ItemStack itemStack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItems[0]);
-			if(itemStack == null)
-				return false;
-			if(furnaceItems[2] == null)
-				return true;
-			if(!furnaceItems[2].isItemEqual(itemStack))
-				return false;
+    private boolean canSmelt()
+    {
+            if(furnaceItems[0] == null)
+                    return false;
+            else
+            {
+                    ItemStack itemStack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItems[0]);
+                    if(itemStack == null)
+                            return false;
+                    if(furnaceItems[2] == null)
+                            return true;
+                    if(!furnaceItems[2].isItemEqual(itemStack))
+                            return false;
 
-			int resultingStackSize = furnaceItems[2].stackSize + itemStack.stackSize;
-			return (resultingStackSize <= getInventoryStackLimit() && resultingStackSize <= itemStack.getMaxStackSize());
-		}
-	}
+                    int resultingStackSize = furnaceItems[2].stackSize + itemStack.stackSize;
+                    return (resultingStackSize <= getInventoryStackLimit() && resultingStackSize <= itemStack.getMaxStackSize());
+            }
+    }
 
 	public void smeltItem()
 	{
@@ -782,12 +801,15 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			}
 		}
 	}
+
+	//Used in cook progress
 	public int getSpeedMultiplier()
 	{
 		int red = countRedstone();
 		return  (cookSpeed - (red * redstoneMultiplier));
 	}
 
+	//Counts redstone blocks in structure
 	public int countRedstone()
 	{
 		int output = 0;
@@ -805,40 +827,41 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		 for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
-		 {
-			 for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
-			 {
-				 for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
-				 {
-					 int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
-					 int y = yCoord + vert;
-					 int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
+		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		{
+			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			{
+				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				{
+					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
+					int y = yCoord + vert;
+					int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
 
-					 int blockId = worldObj.getBlockId(x, y, z);
+					int blockId = worldObj.getBlockId(x, y, z);
 
-					 if(horiz == 0 && vert == 0)
-					 {
-						 if(depth == 0)  // Looking at self, move on!
-						 continue;
+					if(horiz == 0 && vert == 0)
+					{
+						if(depth == 0)  // Looking at self, move on!
+							continue;
 
-						 if(depth == 1)  // Center must be air!
-						 {
-							 continue;
-						 }
-					 }
-					 if(blockId == Reference.furnaceDummyIDRedstone || blockId == Block.blockRedstone.blockID)
-					 {
-						 output++;
-					 }
+						if(depth == 1)  // Center must be air!
+						{
+							continue;
+						}
+					}
+					if(blockId == Reference.furnaceDummyIDRedstone || blockId == Block.blockRedstone.blockID)
+					{
+						output++;
+					}
 
-				 }
-			 }
-		 }	
+				}
+			}
+		}	
 
-		 return output;
+		return output;
 	}
 
+	//Counts Iron Blocks in structure
 	public int countIron()
 	{
 		int output = 0;
@@ -871,7 +894,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					if(horiz == 0 && vert == 0)
 					{
 						if(depth == 0)  // Looking at self, move on!
-						continue;
+							continue;
 
 						if(depth == 1)  // Center must be air!
 						{
@@ -890,6 +913,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return output;
 	}
 
+	//Reworked for I/O
 	@Override
 	public int[] getAccessibleSlotsFromSide(int par1)
 	{
@@ -915,6 +939,55 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return par3 != 0 || par1 != 1 || par2ItemStack.itemID == Item.bucketEmpty.itemID;
 	}
 
+	//Algorithm Behind the performance of the furnace
+	/*public int scaledBurnTime()
+	{
+		int output = TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
+	
+		output = (output + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 8) * this.ironBlocksInFurnace)) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 10) * this.redstoneBlocksInFurnace);
+
+		return output;
+
+	}
+*/
+	public double scaledBurnTimeTest(double input)
+	{
+		double output = input;
+
+		for(int i = 0; i <= this.countIron(); i++)
+		{
+			output = (input / 4) + output;
+		}
+
+		for(int j = 0; j <= this.countRedstone(); j++)
+		{
+			if(output > 0)
+				output = output - (input / 25);
+
+			if(output <= 0)
+				output = 10;
+		}
+
+
+		return output;
+
+	}
+
+	public double getEfficiency()
+	{
+
+		double current = this.scaledBurnTimeTest(16000);
+		double output = 0;
+		if(current >= 16000)
+			output = (current / 16000) - 1;
+		else
+			output = -(16000 / current);
+
+		return output;
+
+	}
+
+	
 	public int scaledBurnTime()
 	{
 
@@ -936,5 +1009,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		else
 			return TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
 	}
+	 
+
 
 }

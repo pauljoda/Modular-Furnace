@@ -4,6 +4,7 @@ import modularfurnace.blocks.BlockManager;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.common.CommonProxy;
 import modularfurnace.lib.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
@@ -58,6 +59,9 @@ public class ModularFurnace {
 	public static int textureOverlayID;
 	public static int smelterOverlayID;
 	
+	//Banned Blocks
+	public static int[] bannedBlocks;
+	
 	//PaintBrush
 	public static int paintBrushID;
 
@@ -95,6 +99,17 @@ public class ModularFurnace {
         tinIngotID = config.getBlock("Tin Ingot", 322).getInt();
         paintBrushID = config.getBlock("Paint Brush", 323).getInt();
         smelterOverlayID = config.getBlock("SmelterOverlay", 324).getInt();
+        
+        bannedBlocks = config.get(Configuration.CATEGORY_GENERAL, "Banned Block ID's",
+        		new int[] 	{0, Block.wood.blockID, Block.planks.blockID,
+    			Block.dirt.blockID, Block.ice.blockID,
+    			Block.snow.blockID, Block.bookShelf.blockID,
+    			Block.leaves.blockID, Block.melon.blockID,
+    			Block.pumpkin.blockID, Block.tnt.blockID,
+    			Block.cloth.blockID, Block.hay.blockID,
+    			Block.grass.blockID, Block.bedrock.blockID,
+    			Block.oreDiamond.blockID, Block.oreIron.blockID,
+    			Block.oreEmerald.blockID, Block.oreGold.blockID,}).getIntList();
 
         useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Vanilla Texture For Overlay?", true).getBoolean(true);
         textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
@@ -108,7 +123,9 @@ public class ModularFurnace {
     @EventHandler
     public void init(FMLInitializationEvent event) {
     	
+    	//Custom Block renders, for alpha layering
     	ClientProxy.setCustomRenderers();
+    	
     	//Labels the creative tab
     	LanguageRegistry.instance().addStringLocalization("itemGroup." + Reference.MOD_ID, "en_US", "Modular Furnace");
         

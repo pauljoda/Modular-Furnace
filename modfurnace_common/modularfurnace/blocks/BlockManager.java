@@ -46,7 +46,7 @@ public class BlockManager
 	{
 		//Creation
 		furnaceCore = new BlockFurnaceCore(Reference.furnaceCoreID, false);
-		furnaceCoreActive = new BlockFurnaceCore(Reference.furnaceCoreActiveID, true);
+		furnaceCoreActive = new BlockFurnaceCore(Reference.furnaceCoreActiveID, true).setLightValue(0.875F);
 		furnaceDummy = new BlockFurnaceDummy(Reference.furnaceDummyID);
 		furnaceDummyRedstone = new BlockFurnaceDummyRedstone(Reference.furnaceDummyIDRedstone);
 		furnaceDummyGlowStone = new BlockFurnaceDummyIron(Reference.furnaceDummyIDGlowStone);

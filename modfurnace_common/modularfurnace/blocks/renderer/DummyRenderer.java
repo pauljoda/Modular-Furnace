@@ -80,15 +80,14 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 	{
 		Icon output;
 
-		if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.crafterInactive.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID)
+		if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.crafterInactive.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID)
 			output = BlockManager.overLayTexture.getIcon(0, 0);
 		else if(block.blockID == BlockManager.lavaCore.blockID)
 			output = Block.mobSpawner.getIcon(0, 0);
-		else
-			output = block.getIcon(0, 0);
-
-
-
+		else if(block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID)
+			output = BlockManager.smelterOverlay.getIcon(0, 0);
+		else 
+			output = block.getIcon(0,0);
 
 		return output;
 	}
@@ -109,7 +108,8 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 					if(block.blockID == BlockManager.furnaceDummy.blockID)
 					{
 						dummy = (TileEntityFurnaceDummy)world1.getBlockTileEntity(x, y, z);
-						renderer.renderStandardBlock(dummy.getBlock(), x, y, z);
+						renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMeta()));
+						
 					}
 					if(block.blockID == BlockManager.furnaceDummyDiamond.blockID)
 						renderer.renderStandardBlock(Block.blockDiamond, x, y, z);
@@ -134,7 +134,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 					
 					if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID)
 					{
-						renderer.renderBlockAllFaces(Block.furnaceIdle, x, y, z);    
+						renderer.renderBlockAllFaces(Block.furnaceIdle, x, y, z);   
 					}
 
 					if(block.blockID == BlockManager.furnaceCoreActive.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
@@ -147,7 +147,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 					if(block.blockID == BlockManager.lavaCore.blockID)
 						renderer.renderStandardBlock(Block.mobSpawner, x, y, z);
 					else if(block.blockID == BlockManager.furnaceDummySmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
-						renderer.renderBlockUsingTexture(Block.cauldron, x, y, z, Block.cauldron.getIcon(1, 0));
+						renderer.renderBlockUsingTexture(BlockManager.smelterOverlay, x, y, z, BlockManager.smelterOverlay.getIcon(1, 0));
 					else
 						renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
 				}

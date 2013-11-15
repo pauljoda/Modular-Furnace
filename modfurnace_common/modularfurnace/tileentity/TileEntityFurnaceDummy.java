@@ -18,6 +18,8 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 	int coreY;
 	int coreZ;
 	public int icon = 0;
+	int metadata = 0;
+
 
 
 	public TileEntityFurnaceDummy()
@@ -51,6 +53,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 		slot = tagCompound.getInteger("Slot");
 		icon = tagCompound.getInteger("Icon");
+		metadata = tagCompound.getInteger("Meta");
 	}
 
 	@Override
@@ -64,6 +67,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 		tagCompound.setInteger("Slot", slot);
 		tagCompound.setInteger("Icon", icon);
+		tagCompound.setInteger("Meta", metadata);
 	}
 	
 	@Override
@@ -81,10 +85,16 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 	public Block getBlock()
 	{
+
 		if(Block.blocksList[this.icon] == null)
 			return Block.cobblestone;
 		
 		return Block.blocksList[this.icon];
+	}
+	
+	public int getMeta()
+	{
+		return metadata;
 	}
 	
 	@Override
