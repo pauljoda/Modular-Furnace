@@ -3,6 +3,7 @@ package modularfurnace.lib;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import modularfurnace.GeneralSettings;
 import modularfurnace.ModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 
@@ -12,31 +13,36 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "2";
+	public static final String Version = "2.6";
+    public static final String CHANNEL_NAME = MOD_ID;
+    public static final String VERSION_NUMBER = "2.6";
+    public static final int VERSION_CHECK_ATTEMPTS = 3;
+
+
 
 	//Inbetween for id storage
-	public static int furnaceCoreID = ModularFurnace.furnaceCoreID;
-	public static int furnaceCoreActiveID = ModularFurnace.furnaceCoreActiveID;
-	public static int furnaceDummyID = ModularFurnace.furnaceDummyID;
-	public static int furnaceDummyIDRedstone = ModularFurnace.furnaceDummyIDRedstone;
-	public static int furnaceDummyIDGlowStone = ModularFurnace.furnaceDummyIDGlowStone;
-	public static int furnaceDummyIDDiamond = ModularFurnace.furnaceDummyIDDiamond;
-	public static int crafterInactive = ModularFurnace.crafterInactiveID;
-	public static int crafterActive = ModularFurnace.crafterActiveID;
-	public static int furnaceDummyIDEmerald = ModularFurnace.furnaceDummyIDEmerald;
-	public static int lavaCore = ModularFurnace.laveCoreID;
-	public static int furnaceDummyIOID = ModularFurnace.furnaceDummyIOID;
-	public static int furnaceDummyActiveIOID = ModularFurnace.furnaceDummyActiveIOID;
-	public static int furnaceCoreSmelteryID = ModularFurnace.furnaceCoreSmelteryID;
-	public static int furnaceCoreSmelteryActiveID = ModularFurnace.furnaceCoreSmelteryActiveID;
-	public static int furnaceDummySmelteryID = ModularFurnace.furnaceDummySmelteryID;
-	public static int furnaceSmelteryBrickID = ModularFurnace.furnaceSmelteryBrickID;
-	public static int copperIngotID = ModularFurnace.copperIngotID;
-	public static int aluminiumIngotID = ModularFurnace.aluminiumIngotID;
-	public static int tinIngotID = ModularFurnace.tinIngotID;
-	public static int paintBrushID = ModularFurnace.paintBrushID;
-	public static int textureOverlayID = ModularFurnace.textureOverlayID;
-	public static int smelterOverlayID = ModularFurnace.smelterOverlayID;
+	public static int furnaceCoreID = GeneralSettings.furnaceCoreID;
+	public static int furnaceCoreActiveID = GeneralSettings.furnaceCoreActiveID;
+	public static int furnaceDummyID = GeneralSettings.furnaceDummyID;
+	public static int furnaceDummyIDRedstone = GeneralSettings.furnaceDummyIDRedstone;
+	public static int furnaceDummyIDGlowStone = GeneralSettings.furnaceDummyIDGlowStone;
+	public static int furnaceDummyIDDiamond = GeneralSettings.furnaceDummyIDDiamond;
+	public static int crafterInactive = GeneralSettings.crafterInactiveID;
+	public static int crafterActive = GeneralSettings.crafterActiveID;
+	public static int furnaceDummyIDEmerald = GeneralSettings.furnaceDummyIDEmerald;
+	public static int lavaCore = GeneralSettings.laveCoreID;
+	public static int furnaceDummyIOID = GeneralSettings.furnaceDummyIOID;
+	public static int furnaceDummyActiveIOID = GeneralSettings.furnaceDummyActiveIOID;
+	public static int furnaceCoreSmelteryID = GeneralSettings.furnaceCoreSmelteryID;
+	public static int furnaceCoreSmelteryActiveID = GeneralSettings.furnaceCoreSmelteryActiveID;
+	public static int furnaceDummySmelteryID = GeneralSettings.furnaceDummySmelteryID;
+	public static int furnaceSmelteryBrickID = GeneralSettings.furnaceSmelteryBrickID;
+	public static int copperIngotID = GeneralSettings.copperIngotID;
+	public static int aluminiumIngotID = GeneralSettings.aluminiumIngotID;
+	public static int tinIngotID = GeneralSettings.tinIngotID;
+	public static int paintBrushID = GeneralSettings.paintBrushID;
+	public static int textureOverlayID = GeneralSettings.textureOverlayID;
+	public static int smelterOverlayID = GeneralSettings.smelterOverlayID;
 
 	//GUI ids
 	public static int modularFurnaceGui = 0;
@@ -87,9 +93,9 @@ public class Reference {
 	//Checks if the block is valid to form furnace
 	public static boolean isValidBlock(int blockId)
 	{
-		for(int i = 0; i < ModularFurnace.bannedBlocks.length; i++)
+		for(int i = 0; i < GeneralSettings.bannedBlocks.length; i++)
 		{
-			if(blockId == ModularFurnace.bannedBlocks[i])
+			if(blockId == GeneralSettings.bannedBlocks[i])
 			{
 				return false;
 			}

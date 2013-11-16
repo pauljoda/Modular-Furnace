@@ -18,7 +18,7 @@ public class CreativeModularFurnace extends CreativeTabs {
 	     */
 	    public int getTabIconItemIndex() {
 
-	        return ModularFurnace.crafterInactiveID;
+	        return GeneralSettings.crafterInactiveID;
 	    }
 
 	}

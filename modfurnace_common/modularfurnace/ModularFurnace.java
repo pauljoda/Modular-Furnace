@@ -1,5 +1,13 @@
 package modularfurnace;
 
+import java.io.File;
+
+import modularfurnace.versionchecker.ConfigurationHandler;
+import modularfurnace.versionchecker.ConfigurationSettings;
+import modularfurnace.versionchecker.LogHelper;
+import modularfurnace.versionchecker.VersionHelper;
+import modularfurnace.versionchecker.VersionTickHandler;
+
 import modularfurnace.blocks.BlockManager;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.common.CommonProxy;
@@ -20,6 +28,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 //I prefer to use a Reference class to label my mod. Makes it ... modular ;)
 @Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.Version)
@@ -33,7 +43,7 @@ public class ModularFurnace {
    
     //Creates the Creative Tab
     public static CreativeTabs tabModularFurnace = new CreativeModularFurnace(CreativeTabs.getNextID(), Reference.MOD_ID);
-    
+    /*
     //Sets base id for blocks
     public static int furnaceCoreID;
     public static int furnaceDummyID;
@@ -68,14 +78,14 @@ public class ModularFurnace {
 	//checks to see if we are using resource pack or not
 	public static boolean useTextures;
 	public static String textureName;
-	
+	*/
 	
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event){
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-        
+        /*
         //Grabs the ids from the config
         furnaceCoreID = config.getBlock("Furnace Core", 300).getInt();
         furnaceCoreActiveID = config.getBlock("Furnace Core Active", 301).getInt();
@@ -113,12 +123,30 @@ public class ModularFurnace {
 
         useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Vanilla Texture For Overlay?", true).getBoolean(true);
         textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();
+      
         
         
         
         config.save();
+       */
+        
+        // Initialize the log helper
+        LogHelper.init();
+
+        // Initialize the configuration
+        ConfigurationHandler.init(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator);
+
+        // Conduct the version check and log the result
+        VersionHelper.execute();
+        
+        // Initialize the Version Check Tick Handler (Client only)
+        TickRegistry.registerTickHandler(new VersionTickHandler(), Side.CLIENT);
+
+        
    
     }
+
+   
     
     @EventHandler
     public void init(FMLInitializationEvent event) {

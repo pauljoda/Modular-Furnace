@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
+import modularfurnace.GeneralSettings;
 import modularfurnace.ModularFurnace;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
@@ -46,7 +47,7 @@ public class BlockFurnaceDummyIron extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-    	if(ModularFurnace.useTextures)
+    	if(GeneralSettings.useTextures)
         blockIcon = iconRegister.registerIcon("iron_block");
     	else
     	blockIcon = iconRegister.registerIcon("modfurnacesides");

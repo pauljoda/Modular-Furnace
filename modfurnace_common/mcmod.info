@@ -10,7 +10,7 @@
     "pauljoda"
   ],
   "credits": "By pauljoda",
-  "logoFile": "assets/minecraft/textures/logo.png.png",
+  "logoFile": "/assets/minecraft/textures/logo.png.png",
   "screenshots": [
   ],
   "parent":"",

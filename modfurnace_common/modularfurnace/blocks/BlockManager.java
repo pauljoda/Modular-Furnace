@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import modularfurnace.GeneralSettings;
 import modularfurnace.ModularFurnace;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
@@ -66,8 +67,8 @@ public class BlockManager
 		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
 		tinIngot = new MetalTinIngot(Reference.tinIngotID);
 
-		if(ModularFurnace.useTextures)
-		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, ModularFurnace.textureName, "overLayTexture", true);
+		if(GeneralSettings.useTextures)
+		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, GeneralSettings.textureName, "overLayTexture", true);
 		else
 		overLayTexture = new BlockTextureOverlay(Reference.textureOverlayID, "custom_overlay", "overLayTexture", true);
 	

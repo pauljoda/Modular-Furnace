@@ -2,6 +2,7 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
+import modularfurnace.GeneralSettings;
 import modularfurnace.ModularFurnace;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
@@ -45,7 +46,7 @@ public class BlockFurnaceDummyDiamond extends BlockContainer
     @Override
     public void registerIcons(IconRegister iconRegister)
     {
-    	if(ModularFurnace.useTextures)
+    	if(GeneralSettings.useTextures)
         blockIcon = iconRegister.registerIcon("diamond_block");
     	else
     	blockIcon = iconRegister.registerIcon("modfurnacesides");
