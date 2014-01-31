@@ -35,6 +35,13 @@ public class GeneralSettings {
 	public static int furnaceDummySmelteryID;
 	public static int furnaceSmelteryBrickID;
 	
+	public static int furnaceCoreMultiID;
+	public static int furnaceCoreMultiActiveID;
+	public static int furnaceMultiDummyID;
+	public static int furnaceDummyMultiRedstoneID;
+	public static int furnaceDummyMultiIronID;
+	public static int furnaceDummyMultiEmeraldID;
+	
 	//Id's associated with ore conversion
 	public static int copperIngotID;
 	public static int aluminiumIngotID;
@@ -44,6 +51,10 @@ public class GeneralSettings {
 	
 	//Banned Blocks
 	public static int[] bannedBlocks;
+	
+	//Additional Smeltery Recipes
+	public static int[] smelteryInput;
+	public static int [] smelteryOutput;
 	
 	//PaintBrush
 	public static int paintBrushID;
@@ -82,12 +93,19 @@ public class GeneralSettings {
             furnaceCoreSmelteryActiveID = config.getBlock("Smeltery Inacive", 313).getInt();
             furnaceDummySmelteryID = config.getBlock("Smeltery Dummy Core", 314).getInt();
             furnaceSmelteryBrickID = config.getBlock("Smeltery Brick", 315).getInt();
-            copperIngotID = config.getBlock("CopperIngot", 318).getInt();
+            copperIngotID = config.getItem("CopperIngot", 318).getInt();
             textureOverlayID = config.getBlock("Texture Overlay ID", 319).getInt();
-            aluminiumIngotID = config.getBlock("Aluminium Ingot", 320).getInt();
-            tinIngotID = config.getBlock("Tin Ingot", 322).getInt();
-            paintBrushID = config.getBlock("Paint Brush", 323).getInt();
+            aluminiumIngotID = config.getItem("Aluminium Ingot", 320).getInt();
+            tinIngotID = config.getItem("Tin Ingot", 322).getInt();
+            paintBrushID = config.getItem("Paint Brush", 323).getInt();
             smelterOverlayID = config.getBlock("SmelterOverlay", 324).getInt();
+            
+            furnaceCoreMultiID = config.getBlock("Multi Core Furnace", 325).getInt();
+            furnaceCoreMultiActiveID = config.getBlock("Multi Core Active Furnace", 326).getInt();
+            furnaceMultiDummyID = config.getBlock("Multi Furnace Dummy ID", 327).getInt();
+            furnaceDummyMultiRedstoneID = config.getBlock("Multi Furnace Redstone Dummy", 328).getInt();
+            furnaceDummyMultiIronID = config.getBlock("Multi Furnace Iron Dummy", 329).getInt();
+            furnaceDummyMultiEmeraldID = config.getBlock("Multi Furnace Emerald Dummy", 330).getInt();
             
             bannedBlocks = config.get(Configuration.CATEGORY_GENERAL, "Banned Block ID's",
             		new int[] 	{0, Block.wood.blockID, Block.planks.blockID,
@@ -99,6 +117,13 @@ public class GeneralSettings {
         			Block.grass.blockID, Block.bedrock.blockID,
         			Block.oreDiamond.blockID, Block.oreIron.blockID,
         			Block.oreEmerald.blockID, Block.oreGold.blockID,}).getIntList();
+            
+            smelteryInput = config.get(Configuration.CATEGORY_GENERAL, "Smeltery Input ID", 
+            		new int[] {}).getIntList();
+            
+            smelteryOutput = config.get(Configuration.CATEGORY_GENERAL, "Smeltery Ouput ID, must line up with inputs,for each one in inputs, must list two here or crashes happen", 
+            		new int[] {}).getIntList();
+            		
 
             useTextures = config.get(Configuration.CATEGORY_GENERAL, "Use Vanilla Texture For Overlay?", true).getBoolean(true);
             textureName = config.get(Configuration.CATEGORY_GENERAL, "Overlay Texture Name (from assets folder)", "hopper_top").getString();

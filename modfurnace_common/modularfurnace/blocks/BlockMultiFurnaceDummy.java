@@ -3,8 +3,8 @@ package modularfurnace.blocks;
 import java.util.Random;
 
 import modularfurnace.client.ClientProxy;
-import modularfurnace.tileentity.TileEntityFurnaceCore;
-import modularfurnace.tileentity.TileEntityFurnaceDummy;
+import modularfurnace.tileentity.TileEntityFurnaceMultiCore;
+import modularfurnace.tileentity.TileEntityMultiFurnaceDummy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -15,17 +15,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockFurnaceDummy extends BlockContainer
+public class BlockMultiFurnaceDummy extends BlockContainer
 {
 
-	public BlockFurnaceDummy(int blockId)
+	public BlockMultiFurnaceDummy(int blockId)
 	{
+
 		super(blockId, Material.rock);
-		setUnlocalizedName("blockFurnaceDummy");
+
+		setUnlocalizedName("blockMultiFurnaceDummy");
 		setStepSound(Block.soundStoneFootstep);
 		setHardness(3.5f);
-		
-		
 	}
 	public int meta = 0;
 	Random furnaceRand = new Random();
@@ -34,7 +34,7 @@ public class BlockFurnaceDummy extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World world)
 	{
-		return new TileEntityFurnaceDummy();
+		return new TileEntityMultiFurnaceDummy();
 	}
 
 
@@ -47,7 +47,7 @@ public class BlockFurnaceDummy extends BlockContainer
 	@Override
 	public void registerIcons(IconRegister iconRegister)
 	{
-			blockIcon = iconRegister.registerIcon("cobblestone"); 
+			blockIcon = iconRegister.registerIcon("cauldron_bottom"); 
 
 	}
 
@@ -55,7 +55,7 @@ public class BlockFurnaceDummy extends BlockContainer
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
 	{
-		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getBlockTileEntity(x, y, z);
+		TileEntityMultiFurnaceDummy dummy = (TileEntityMultiFurnaceDummy)world.getBlockTileEntity(x, y, z);
 
 		if(dummy != null && dummy.getCore() != null)
 		{
@@ -85,11 +85,11 @@ public class BlockFurnaceDummy extends BlockContainer
 		if(player.isSneaking())
 			return false;
 
-		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getBlockTileEntity(x, y, z);
+		TileEntityMultiFurnaceDummy dummy = (TileEntityMultiFurnaceDummy)world.getBlockTileEntity(x, y, z);
 
 		if(dummy != null && dummy.getCore() != null)
 		{
-			TileEntityFurnaceCore core = dummy.getCore();
+			TileEntityFurnaceMultiCore core = dummy.getCore();
 			return core.getBlockType().onBlockActivated(world, core.xCoord, core.yCoord, core.zCoord, player, par6, par7, par8, par9);
 		}
 

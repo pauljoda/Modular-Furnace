@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import modularfurnace.client.ClientProxy;
 import modularfurnace.tileentity.TileEntityFurnaceDummy;
+import modularfurnace.tileentity.TileEntityMultiFurnaceDummy;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -80,12 +81,14 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 	{
 		Icon output;
 
-		if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.crafterInactive.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID)
+		if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.crafterInactive.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID || BlockManager.furnaceCoreMulti.blockID == block.blockID)
 			output = BlockManager.overLayTexture.getIcon(0, 0);
 		else if(block.blockID == BlockManager.lavaCore.blockID)
 			output = Block.mobSpawner.getIcon(0, 0);
 		else if(block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID)
 			output = BlockManager.smelterOverlay.getIcon(0, 0);
+		else if(block.blockID == BlockManager.furnaceCoreMulti.blockID || block.blockID == BlockManager.furnaceMultiDummy.blockID || block.blockID == BlockManager.furnaceDummyMultiEmerald.blockID || block.blockID == BlockManager.furnaceDummyMultiIron.blockID || block.blockID == BlockManager.furnaceDummyMultiRedstone.blockID)
+			output = BlockManager.furnaceMultiDummy.getIcon(0, 0);
 		else 
 			output = block.getIcon(0,0);
 
@@ -97,75 +100,100 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 			Block block, int modelId, RenderBlocks renderer) {
 
 		//which render pass are we doing?
-				if(ClientProxy.renderPass == 0)
-				{
-					World world1 = Minecraft.getMinecraft().theWorld;
-					TileEntityFurnaceDummy dummy = null;
+		if(ClientProxy.renderPass == 0)
+		{
+			World world1 = Minecraft.getMinecraft().theWorld;
+			TileEntityFurnaceDummy dummy = null;
+			TileEntityMultiFurnaceDummy dummy2 = null;
 
-					if(block.blockID == BlockManager.furnaceDummyRedstone.blockID)
-						renderer.renderStandardBlock(Block.blockRedstone, x, y, z);  
+			if(block.blockID == BlockManager.furnaceDummyRedstone.blockID)
+				renderer.renderStandardBlock(Block.blockRedstone, x, y, z); 
+			
+			if(block.blockID == BlockManager.furnaceDummyMultiRedstone.blockID)
+				renderer.renderStandardBlock(Block.blockRedstone, x, y, z);
 
-					if(block.blockID == BlockManager.furnaceDummy.blockID)
-					{
-						dummy = (TileEntityFurnaceDummy)world1.getBlockTileEntity(x, y, z);
-						renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMeta()));
-						
-					}
-					if(block.blockID == BlockManager.furnaceDummyDiamond.blockID)
-						renderer.renderStandardBlock(Block.blockDiamond, x, y, z);
+			if(block.blockID == BlockManager.furnaceDummy.blockID)
+			{
+				dummy = (TileEntityFurnaceDummy)world1.getBlockTileEntity(x, y, z);
+				renderer.renderBlockUsingTexture(dummy.getBlock(), x, y, z, dummy.getBlock().getIcon(0, dummy.getMeta()));
 
-					if(block.blockID == BlockManager.furnaceDummyEmerald.blockID)
-						renderer.renderStandardBlock(Block.blockEmerald, x, y, z);
+			}
+			if(block.blockID == BlockManager.furnaceMultiDummy.blockID)
+			{
+				dummy2 = (TileEntityMultiFurnaceDummy)world1.getBlockTileEntity(x, y, z);
+				renderer.renderBlockUsingTexture(dummy2.getBlock(), x, y, z, dummy2.getBlock().getIcon(0, dummy2.getMeta()));
+			}
+			if(block.blockID == BlockManager.furnaceDummyDiamond.blockID)
+				renderer.renderStandardBlock(Block.blockDiamond, x, y, z);
 
-					if(block.blockID == BlockManager.furnaceDummyGlowStone.blockID)
-						renderer.renderStandardBlock(Block.blockIron, x, y, z);
+			if(block.blockID == BlockManager.furnaceDummyEmerald.blockID)
+				renderer.renderStandardBlock(Block.blockEmerald, x, y, z);
+			
+			if(block.blockID == BlockManager.furnaceDummyMultiEmerald.blockID)
+				renderer.renderStandardBlock(Block.blockEmerald, x, y, z);
 
-					if(block.blockID == BlockManager.lavaCore.blockID)
-						renderer.renderStandardBlock(Block.lavaMoving, x, y, z);
+			if(block.blockID == BlockManager.furnaceDummyGlowStone.blockID)
+				renderer.renderStandardBlock(Block.blockIron, x, y, z);
+			
+			if(block.blockID == BlockManager.furnaceDummyMultiIron.blockID)
+				renderer.renderStandardBlock(Block.blockIron, x, y, z);
 
-					if(block.blockID == BlockManager.furnaceDummySmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID)
-						renderer.renderStandardBlock(Block.stoneBrick, x, y, z);
+			if(block.blockID == BlockManager.lavaCore.blockID)
+				renderer.renderStandardBlock(Block.lavaMoving, x, y, z);
 
-					if(block.blockID == BlockManager.furnaceDummyActiveIO.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID)
-						renderer.renderBlockUsingTexture(Block.dispenser, x, y, z, Block.dispenser.getIcon(1, 1));
-					
-					if(block.blockID == BlockManager.crafterActive.blockID || block.blockID == BlockManager.crafterInactive.blockID)
-						renderer.renderBlockUsingTexture(Block.workbench, x, y, z, Block.workbench.getIcon(1, 0));
-					
-					if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID)
-					{
-						renderer.renderBlockAllFaces(Block.furnaceIdle, x, y, z);   
-					}
+			if(block.blockID == BlockManager.furnaceDummySmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID)
+				renderer.renderStandardBlock(Block.stoneBrick, x, y, z);
 
-					if(block.blockID == BlockManager.furnaceCoreActive.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
-						renderer.renderBlockAllFaces(Block.furnaceBurning, x, y, z);    
+			if(block.blockID == BlockManager.furnaceDummyActiveIO.blockID || block.blockID == BlockManager.furnaceDummyIO.blockID)
+				renderer.renderBlockUsingTexture(Block.dispenser, x, y, z, Block.dispenser.getIcon(1, 1));
 
-				}
-				else                   
-				{
+			if(block.blockID == BlockManager.crafterActive.blockID || block.blockID == BlockManager.crafterInactive.blockID)
+				renderer.renderBlockUsingTexture(Block.workbench, x, y, z, Block.workbench.getIcon(1, 0));
 
-					if(block.blockID == BlockManager.lavaCore.blockID)
-						renderer.renderStandardBlock(Block.mobSpawner, x, y, z);
-					else if(block.blockID == BlockManager.furnaceDummySmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
-						renderer.renderBlockUsingTexture(BlockManager.smelterOverlay, x, y, z, BlockManager.smelterOverlay.getIcon(1, 0));
-					else
-						renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
-				}
+			if(block.blockID == BlockManager.furnaceCore.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID)
+			{
+				renderer.renderBlockAllFaces(Block.furnaceIdle, x, y, z);   
+			}
 
-				return true;
+			if(block.blockID == BlockManager.furnaceCoreActive.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
+				renderer.renderBlockAllFaces(Block.furnaceBurning, x, y, z);    
+			
+
+			if(block.blockID == BlockManager.furnaceCoreMulti.blockID)
+			{
+			renderer.renderBlockAllFaces(Block.furnaceIdle, x, y, z);   
+			}
+
+			if(block.blockID == BlockManager.furnaceCoreMultiActive.blockID)
+			renderer.renderBlockAllFaces(Block.furnaceBurning, x, y, z);    
+		}
+	else                   
+	{
+
+		if(block.blockID == BlockManager.lavaCore.blockID)
+			renderer.renderStandardBlock(Block.mobSpawner, x, y, z);
+		else if(block.blockID == BlockManager.furnaceDummySmeltery.blockID || block.blockID == BlockManager.furnaceSmelteryBrick.blockID || block.blockID == BlockManager.furnaceCoreSmeltery.blockID || block.blockID == BlockManager.furnaceCoreSmelteryActive.blockID)
+			renderer.renderBlockUsingTexture(BlockManager.smelterOverlay, x, y, z, BlockManager.smelterOverlay.getIcon(1, 0));
+		else if(block.blockID == BlockManager.furnaceCoreMulti.blockID || block.blockID == BlockManager.furnaceMultiDummy.blockID || block.blockID == BlockManager.furnaceDummyMultiEmerald.blockID || block.blockID == BlockManager.furnaceDummyMultiIron.blockID || block.blockID == BlockManager.furnaceDummyMultiRedstone.blockID || block.blockID == BlockManager.furnaceCoreMultiActive.blockID)
+			renderer.renderStandardBlock(BlockManager.furnaceMultiDummy, x, y, z);
+		else
+			renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
 	}
 
+	return true;
+}
 
-	@Override
-	public boolean shouldRender3DInInventory() {
 
-		return true;
-	}
+@Override
+public boolean shouldRender3DInInventory() {
 
-	@Override
-	public int getRenderId() {
+	return true;
+}
 
-		return ClientProxy.dummyRenderType;
-	}
+@Override
+public int getRenderId() {
+
+	return ClientProxy.dummyRenderType;
+}
 
 }

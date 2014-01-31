@@ -47,6 +47,7 @@ public class BlockFurnaceCoreSmeltery extends BlockContainer
         setStepSound(Block.soundStoneFootstep);
         setHardness(3.5f);
         setCreativeTab(ModularFurnace.tabModularFurnace);
+        
     }
     
     @Override

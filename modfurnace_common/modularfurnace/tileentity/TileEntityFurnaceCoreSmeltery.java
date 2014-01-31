@@ -389,7 +389,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 		{
 			int i = par0ItemStack.getItem().itemID;
 
-			if (i == Item.flint.itemID) return 400;
+			if (i == Item.flint.itemID) return 800;
 			return GameRegistry.getFuelValue(par0ItemStack);
 		}
 	}
@@ -519,6 +519,7 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 		if (this.canSmelt())
 		{
 			ItemStack itemstack = ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult(this.furnaceItems[0]);
+			ItemStack itemstack2 = ModularFurnacesSmelteryRecipies.smelting().getSmeltingResult2(this.furnaceItems[0]);
 
 			if (this.furnaceItems[2] == null)
 			{
@@ -531,11 +532,11 @@ public class TileEntityFurnaceCoreSmeltery extends TileEntity implements ISidedI
 			}
 			if (this.furnaceItems[3] == null)
 			{
-				this.furnaceItems[3] = itemstack.copy();
+				this.furnaceItems[3] = itemstack2.copy();
 			}
-			else if (this.furnaceItems[3].isItemEqual(itemstack))
+			else if (this.furnaceItems[3].isItemEqual(itemstack2))
 			{
-				furnaceItems[3].stackSize += itemstack.stackSize;
+				furnaceItems[3].stackSize += itemstack2.stackSize;
 
 			}
 

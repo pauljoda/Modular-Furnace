@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import modularfurnace.GeneralSettings;
-import modularfurnace.ModularFurnace;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 
 
@@ -13,9 +12,9 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "2.6";
+	public static final String Version = "2.7.1";
     public static final String CHANNEL_NAME = MOD_ID;
-    public static final String VERSION_NUMBER = "2.6";
+    public static final String VERSION_NUMBER = "2.7";
     public static final int VERSION_CHECK_ATTEMPTS = 3;
 
 
@@ -43,17 +42,23 @@ public class Reference {
 	public static int paintBrushID = GeneralSettings.paintBrushID;
 	public static int textureOverlayID = GeneralSettings.textureOverlayID;
 	public static int smelterOverlayID = GeneralSettings.smelterOverlayID;
+	public static int furnaceCoreMultiID = GeneralSettings.furnaceCoreMultiID;
+	public static int furnaceCoreMultiActiveID = GeneralSettings.furnaceCoreMultiActiveID;
+	public static int furnaceMultiDummyID = GeneralSettings.furnaceMultiDummyID;
+	public static int furnaceDummyMultiRedstoneID = GeneralSettings.furnaceDummyMultiRedstoneID;
+	public static int furnaceDummyMultiIronID = GeneralSettings.furnaceDummyMultiIronID;
+	public static int furnaceDummyMultiEmeraldID = GeneralSettings.furnaceDummyMultiEmeraldID;
 
 	//GUI ids
 	public static int modularFurnaceGui = 0;
 	public static int modularFurnaceGuiCrafter = 1;
 	public static int modularFurnaceSmelteryGui = 2;
+	public static int modularFurnaceMultiGUI = 3;
 
 	//Getting GUI for Furnace
 	public static int getGui(World world, int x, int y, int z)
 	{
 		TileEntityFurnaceCore tileEntity = (TileEntityFurnaceCore)world.getBlockTileEntity(x, y, z);
-		//TileEntityFurnaceCoreSmeltery tileEntity1 = (TileEntityFurnaceCoreSmeltery)world.getBlockTileEntity(x, y, z);
 
 		if(tileEntity.crafterEnabled)
 		{
@@ -65,7 +70,6 @@ public class Reference {
 	//GUI for smeltery
 	public static int getGuiSmeltery(World world, int x, int y, int z)
 	{
-
 		return 2;
 	}
 
@@ -79,6 +83,7 @@ public class Reference {
 			Block.cloth.blockID, Block.hay.blockID,
 			Block.grass.blockID, Block.bedrock.blockID};
 	*/
+	
 	//Blocks that are from my mod, used to prevent overlaying on reload
 	public static int[] modularTiles = 
 		{furnaceDummyID,
@@ -88,6 +93,9 @@ public class Reference {
 		crafterActive,
 		furnaceDummyIDEmerald,
 		furnaceDummyActiveIOID,
+		furnaceDummyMultiRedstoneID,
+		furnaceDummyMultiIronID,
+		furnaceDummyMultiEmeraldID
 		};
 
 	//Checks if the block is valid to form furnace

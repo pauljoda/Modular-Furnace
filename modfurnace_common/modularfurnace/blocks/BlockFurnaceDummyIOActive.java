@@ -2,9 +2,6 @@ package modularfurnace.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import modularfurnace.client.ClientProxy;
 import modularfurnace.lib.Reference;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
@@ -93,7 +90,7 @@ public class BlockFurnaceDummyIOActive extends BlockContainer
 		return true;
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	private void displaySlot(World world, int x, int y, int z, EntityPlayer player)
 	{
 		TileEntityFurnaceDummy dummy = (TileEntityFurnaceDummy)world.getBlockTileEntity(x, y, z);

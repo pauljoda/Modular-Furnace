@@ -9,6 +9,7 @@ import modularfurnace.ModularFurnace;
 import modularfurnace.client.ClientProxy;
 import modularfurnace.lib.Reference;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
+import modularfurnace.tileentity.TileEntityFurnaceMultiCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -24,30 +25,26 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockFurnaceCore extends BlockContainer
-{
+public class BlockMultiFurnaceCore extends BlockContainer {
 
-	private final boolean isActive;
 	private static boolean keepFurnaceInventory;
+	private final boolean isActive;
 	private final Random furnaceRand = new Random();
-
 
 	@SideOnly(Side.CLIENT)
 	private Icon furnaceIconTop;
 	@SideOnly(Side.CLIENT)
 	private Icon furnaceIconFront;
 
-
-	public BlockFurnaceCore(int blockId, boolean par2)
+	public BlockMultiFurnaceCore(int blockId, boolean par2)
 	{
 		super(blockId, Material.rock);
 		this.isActive = par2;
 
-		setUnlocalizedName("blockFurnaceCore");
+		setUnlocalizedName("blockMultiFurnaceCore");
 		setStepSound(Block.soundStoneFootstep);
 		setHardness(3.5f);
 		setCreativeTab(ModularFurnace.tabModularFurnace);
-
 	}
 
 	@Override
@@ -59,13 +56,13 @@ public class BlockFurnaceCore extends BlockContainer
 	@Override
 	public int idDropped(int par1, Random par2Random, int par3)
 	{
-		return BlockManager.furnaceCore.blockID;
+		return BlockManager.furnaceCoreMulti.blockID;
 	}
 
 	@Override
 	public int idPicked(World par1World, int par2, int par3, int par4)
 	{
-		return BlockManager.furnaceCore.blockID;
+		return BlockManager.furnaceCoreMulti.blockID;
 	}
 
 	@Override
@@ -175,11 +172,11 @@ public class BlockFurnaceCore extends BlockContainer
 
 		if (par0)
 		{
-			par1World.setBlock(par2, par3, par4, Reference.furnaceCoreActiveID);
+			par1World.setBlock(par2, par3, par4, Reference.furnaceCoreMultiActiveID);
 		}
 		else
 		{
-			par1World.setBlock(par2, par3, par4, Reference.furnaceCoreID);
+			par1World.setBlock(par2, par3, par4, Reference.furnaceCoreMultiID);
 		}
 
 		keepFurnaceInventory = false;
@@ -195,7 +192,7 @@ public class BlockFurnaceCore extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
-		TileEntityFurnaceCore tileEntity = (TileEntityFurnaceCore)world.getBlockTileEntity(x, y, z);
+		TileEntityFurnaceMultiCore tileEntity = (TileEntityFurnaceMultiCore)world.getBlockTileEntity(x, y, z);
 		if(player.isSneaking())
 		{
 			return false;
@@ -214,9 +211,9 @@ public class BlockFurnaceCore extends BlockContainer
 			}
 
 			// Check if the multi-block structure has been formed.
-			if(tileEntity.getIsValid() && tileEntity.checkIfProperlyFormed())
+			if(tileEntity.getIsValid())
 			{
-				player.openGui(ModularFurnace.instance, Reference.getGui(world, x, y, z), world, x, y, z);
+				player.openGui(ModularFurnace.instance, 3, world, x, y, z);
 			}
 
 		}
@@ -224,53 +221,16 @@ public class BlockFurnaceCore extends BlockContainer
 		return true;
 	}
 
-
-	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-	{
-		if (this.isActive)
-		{
-			int l = par1World.getBlockMetadata(par2, par3, par4);
-			float f = (float)par2 + 0.5F;
-			float f1 = (float)par3 + 0.0F + par5Random.nextFloat() * 6.0F / 16.0F;
-			float f2 = (float)par4 + 0.5F;
-			float f3 = 0.52F;
-			float f4 = par5Random.nextFloat() * 0.6F - 0.3F;
-
-			if (l == 4)
-			{
-				par1World.spawnParticle("smoke", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 5)
-			{
-				par1World.spawnParticle("smoke", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 2)
-			{
-				par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 3)
-			{
-				par1World.spawnParticle("smoke", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-				par1World.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-			}
-		}
-	}
-
-
 	@Override
 	public TileEntity createNewTileEntity(World world)
 	{
-		return new TileEntityFurnaceCore();
+		return new TileEntityFurnaceMultiCore();
 	}
 
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
 	{
-		TileEntityFurnaceCore tileentityfurnace = (TileEntityFurnaceCore)par1World.getBlockTileEntity(par2, par3, par4);
+		TileEntityFurnaceMultiCore tileentityfurnace = (TileEntityFurnaceMultiCore)par1World.getBlockTileEntity(par2, par3, par4);
 
 		if (!keepFurnaceInventory)
 		{
@@ -324,11 +284,6 @@ public class BlockFurnaceCore extends BlockContainer
 		super.breakBlock(par1World, par2, par3, par4, par5, par6);
 
 	}
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
 
 	@Override
 	public boolean isOpaqueCube()
@@ -354,5 +309,6 @@ public class BlockFurnaceCore extends BlockContainer
 	{
 		return 1;
 	} 
+
 
 }

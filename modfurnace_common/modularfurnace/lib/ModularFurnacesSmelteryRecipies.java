@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import modularfurnace.GeneralSettings;
 import modularfurnace.blocks.BlockManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -95,6 +96,62 @@ public ItemStack getSmeltingResult(ItemStack item)
 	int realCopper = OreDictionary.getOreID("oreCopper");
 	int realTin = OreDictionary.getOreID("oreTin");
 	int realAluminum = OreDictionary.getOreID("oreAluminum");
+	int realLead = OreDictionary.getOreID("oreLead");
+	int realSilver = OreDictionary.getOreID("oreSilver");
+	
+	if(GeneralSettings.smelteryInput.length > 0)
+	{
+		for(int i = 0; i < GeneralSettings.smelteryInput.length; i++)
+		{
+			if(item.itemID == GeneralSettings.smelteryInput[i])
+			{
+				return new ItemStack(Item.itemsList[GeneralSettings.smelteryOutput[(i * 2) + 1]], 1);
+			}
+		}
+	}
+	
+	if(isOre == realCopper)
+	{
+		return new ItemStack(BlockManager.copperIngot, 1);
+	}
+	if(isOre == realTin)
+	{
+		return new ItemStack(BlockManager.tinIngot, 1);
+	}
+	if(isOre == realAluminum)
+	{
+		return new ItemStack(BlockManager.aluminiumIngot, 1);
+	}
+    if (item == null)
+    {
+        return null;
+    }
+    ItemStack ret = (ItemStack)metaSmeltingList.get(Arrays.asList(item.itemID, item.getItemDamage()));
+    if (ret != null) 
+    {
+        return ret;
+    }
+    return (ItemStack)smeltingList.get(Integer.valueOf(item.itemID));
+}
+
+public ItemStack getSmeltingResult2(ItemStack item) 
+{	
+	int isOre = OreDictionary.getOreID(item);
+	int realCopper = OreDictionary.getOreID("oreCopper");
+	int realTin = OreDictionary.getOreID("oreTin");
+	int realAluminum = OreDictionary.getOreID("oreAluminum");
+	
+	if(GeneralSettings.smelteryInput.length > 0)
+	{
+		for(int i = 0; i < GeneralSettings.smelteryInput.length; i++)
+		{
+			if(item.itemID == GeneralSettings.smelteryInput[i])
+			{
+				return new ItemStack(Item.itemsList[GeneralSettings.smelteryOutput[(i * 2)]], 1);
+			}
+		}
+	}
+	
 	
 	if(isOre == realCopper)
 	{

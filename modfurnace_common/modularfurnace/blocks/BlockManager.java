@@ -3,7 +3,6 @@ package modularfurnace.blocks;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import modularfurnace.GeneralSettings;
-import modularfurnace.ModularFurnace;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,6 +28,12 @@ public class BlockManager
 	public static Block furnaceCoreSmelteryActive = null;
 	public static Block furnaceDummySmeltery = null;
 	public static Block furnaceSmelteryBrick = null;
+	public static Block furnaceCoreMulti = null;
+	public static Block furnaceCoreMultiActive = null;
+	public static Block furnaceMultiDummy = null;
+	public static Block furnaceDummyMultiRedstone = null;
+	public static Block furnaceDummyMultiIron = null;
+	public static Block furnaceDummyMultiEmerald = null;
 	
 	//OverLays
 	public static Block overLayTexture = null;
@@ -49,12 +54,12 @@ public class BlockManager
 		furnaceCore = new BlockFurnaceCore(Reference.furnaceCoreID, false);
 		furnaceCoreActive = new BlockFurnaceCore(Reference.furnaceCoreActiveID, true).setLightValue(0.875F);
 		furnaceDummy = new BlockFurnaceDummy(Reference.furnaceDummyID);
-		furnaceDummyRedstone = new BlockFurnaceDummyRedstone(Reference.furnaceDummyIDRedstone);
-		furnaceDummyGlowStone = new BlockFurnaceDummyIron(Reference.furnaceDummyIDGlowStone);
-		furnaceDummyDiamond = new BlockFurnaceDummyDiamond(Reference.furnaceDummyIDDiamond);
+		furnaceDummyRedstone = new BlockFurnaceDummy(Reference.furnaceDummyIDRedstone);
+		furnaceDummyGlowStone = new BlockFurnaceDummy(Reference.furnaceDummyIDGlowStone);
+		furnaceDummyDiamond = new BlockFurnaceDummy(Reference.furnaceDummyIDDiamond);
 		crafterInactive = new BlockCrafterInactive(Reference.crafterInactive, Material.wood);
 		crafterActive = new BlockCrafterActive(Reference.crafterActive);
-		furnaceDummyEmerald = new BlockFurnaceDummyEmerald(Reference.furnaceDummyIDEmerald);
+		furnaceDummyEmerald = new BlockFurnaceDummy(Reference.furnaceDummyIDEmerald);
 		lavaCore = new BlockLavaCore(Reference.lavaCore, Material.iron);
 		furnaceDummyIO = new BlockFurnaceDummyIO(Reference.furnaceDummyIOID, Material.rock);
 		furnaceDummyActiveIO = new BlockFurnaceDummyIOActive(Reference.furnaceDummyActiveIOID);
@@ -62,6 +67,14 @@ public class BlockManager
 		furnaceCoreSmelteryActive = new BlockFurnaceCoreSmeltery(Reference.furnaceCoreSmelteryActiveID, true);
 		furnaceDummySmeltery = new BlockFurnaceDummySmeltery(Reference.furnaceDummySmelteryID);
 		furnaceSmelteryBrick = new BlockFurnaceSmelteryBrick(Reference.furnaceSmelteryBrickID);
+		
+		furnaceCoreMulti = new BlockMultiFurnaceCore(Reference.furnaceCoreMultiID, false);
+		furnaceCoreMultiActive =  new BlockMultiFurnaceCore(Reference.furnaceCoreMultiActiveID, true);
+		furnaceMultiDummy = new BlockMultiFurnaceDummy(Reference.furnaceMultiDummyID);
+		furnaceDummyMultiRedstone = new BlockMultiFurnaceDummy(Reference.furnaceDummyMultiRedstoneID);
+		furnaceDummyMultiIron = new BlockMultiFurnaceDummy(Reference.furnaceDummyMultiIronID);
+		furnaceDummyMultiEmerald = new BlockMultiFurnaceDummy(Reference.furnaceDummyMultiEmeraldID);
+		
 		
 		copperIngot = new MetalCopperIngot(Reference.copperIngotID);
 		aluminiumIngot = new MetalAluminiumIngot(Reference.aluminiumIngotID);
@@ -93,6 +106,12 @@ public class BlockManager
 		GameRegistry.registerBlock(furnaceDummySmeltery, "blockFurnaceDummySmeltery");
 		GameRegistry.registerBlock(furnaceSmelteryBrick, "furnaceSmelteryBrick");
 		
+		GameRegistry.registerBlock(furnaceCoreMulti, "furnaceCoreMulti");
+		GameRegistry.registerBlock(furnaceMultiDummy, "furnaceMultiDummy");
+		GameRegistry.registerBlock(furnaceDummyMultiRedstone, "furnaceDummyMultiRedstone");
+		GameRegistry.registerBlock(furnaceDummyMultiIron, "furnaceDummyMultiIron");
+		GameRegistry.registerBlock(furnaceDummyMultiEmerald, "furnaceDummyMultiEmerald");
+		
 		GameRegistry.registerItem(copperIngot, "copperIngot");
 		GameRegistry.registerItem(aluminiumIngot, "aluminiumIngot");
 		GameRegistry.registerItem(tinIngot, "tinIngot");
@@ -120,6 +139,8 @@ public class BlockManager
 		LanguageRegistry.addName(furnaceCoreSmeltery, "Modular Furnace Core Smeltery");
 		LanguageRegistry.addName(furnaceDummySmeltery, "Modular Furnace Smeltery Dummy");
 		LanguageRegistry.addName(furnaceSmelteryBrick, "Modular Furnace Smeltery Brick");
+		
+		LanguageRegistry.addName(furnaceCoreMulti, "Multi Furnace Core");
 		
 		LanguageRegistry.addName(copperIngot, "Copper Ingot");
 		LanguageRegistry.addName(aluminiumIngot, "Aluminium Ingot");
@@ -164,10 +185,15 @@ public class BlockManager
 				"XxX",
 				"XXX", 'X', BlockManager.furnaceSmelteryBrick, 'x', BlockManager.furnaceCore);
 		
+		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceCoreMulti, 1),
+				"XXX",
+				"XxX",
+				"XXX", 'X', Block.furnaceIdle, 'x', BlockManager.furnaceCore);
+		
 		CraftingManager.getInstance().addRecipe(new ItemStack(furnaceSmelteryBrick, 1),
 				"OXO",
 				"XOX",
-				"OXO", 'X', Block.stoneBrick, 'O', Block.obsidian); 
+				"OXO", 'X', Block.stoneBrick, 'O', Block.stone); 
 		
 		CraftingManager.getInstance().addRecipe(new ItemStack(overLayTexture, 8),
 				"XXX",

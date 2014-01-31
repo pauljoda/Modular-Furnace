@@ -4,10 +4,12 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import modularfurnace.blocks.renderer.DummyRenderer;
 import modularfurnace.client.gui.GuiModularFurnace;
 import modularfurnace.client.gui.GuiModularFurnaceEnabled;
+import modularfurnace.client.gui.GuiModularFurnaceMulti;
 import modularfurnace.client.gui.GuiModularFurnaceSmeltery;
 import modularfurnace.common.CommonProxy;
 import modularfurnace.tileentity.TileEntityFurnaceCore;
 import modularfurnace.tileentity.TileEntityFurnaceCoreSmeltery;
+import modularfurnace.tileentity.TileEntityFurnaceMultiCore;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -26,9 +28,6 @@ public class ClientProxy extends CommonProxy
      }
 	
 	
-	
-
-
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
 	{
@@ -52,10 +51,17 @@ public class ClientProxy extends CommonProxy
 					return new GuiModularFurnace(player.inventory, tileEntity1);
 				}
 			}
+		
 		if(tileEntity instanceof TileEntityFurnaceCoreSmeltery)
 		{
 			TileEntityFurnaceCoreSmeltery tileEntitySmelt = (TileEntityFurnaceCoreSmeltery)world.getBlockTileEntity(x, y, z);
 			return new GuiModularFurnaceSmeltery(player.inventory, tileEntitySmelt);
+		}
+		
+		if(tileEntity instanceof TileEntityFurnaceMultiCore)
+		{
+			TileEntityFurnaceMultiCore tileEntityMulti = (TileEntityFurnaceMultiCore)world.getBlockTileEntity(x, y, z);
+			return new GuiModularFurnaceMulti(player.inventory, tileEntityMulti);
 		}
 
 		return null;

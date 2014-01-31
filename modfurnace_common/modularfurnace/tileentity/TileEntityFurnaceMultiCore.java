@@ -2,11 +2,8 @@ package modularfurnace.tileentity;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import modularfurnace.blocks.BlockFurnaceCore;
 import modularfurnace.blocks.BlockManager;
+import modularfurnace.blocks.BlockMultiFurnaceCore;
 import modularfurnace.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -26,24 +23,26 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
+public class TileEntityFurnaceMultiCore extends TileEntity implements ISidedInventory
 {
 	//Automation related 
-	private static final int[] slots_top = new int[] {0};
-	private static final int[] slots_bottom = new int[] {2, 1};
-	private static final int[] slots_sides = new int[] {1};
-	private static final int[] slots_output_only = new int [] {2};
+	private static final int[] slots_top = new int[] {0,1,2,3,4,5,6,7,8};
+	private static final int[] slots_bottom = new int[] {10,11,12,13,14,15,16,17,18};
+	private static final int[] slots_sides = new int[] {9};
 
 	//Storage for blocks if they have meaning
 	public int redstoneBlocksInFurnace = 0;
 	public int redstoneMultiplier = 6;
-	public int cookSpeed = 175;
+	public int cookSpeed = 300;
 	public int ironBlocksInFurnace = 0;
 	public boolean emeralds;
 
 	//Furnace related things
-	private ItemStack[] furnaceItems = new ItemStack[3];
+	private ItemStack[] furnaceItems = new ItemStack[19];
 	public int furnaceBurnTime;
 	public int currentItemBurnTime;
 	public int furnaceCookTime;
@@ -52,12 +51,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	//Booleans
 	public boolean isValidMultiblock = false;
 	public boolean diamonds = false;
-	public boolean crafterEnabled = false;
 
 	//Randomizer
 	Random r = new Random();
 
-	public TileEntityFurnaceCore()
+	public TileEntityFurnaceMultiCore()
 	{
 	}
 
@@ -70,7 +68,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		ironBlocksInFurnace = 0;
 		redstoneBlocksInFurnace = 0;
 		diamonds = false;
-		crafterEnabled = false;
 		emeralds = false;
 
 		revertDummies();
@@ -186,19 +183,18 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 					if(horiz == 0 && vert == 0)
 						if(depth == 0)
 							continue;
-					
 					if(worldObj.getBlockId(x, y, z) == Block.blockRedstone.blockID)
 					{
 						this.redstoneBlocksInFurnace = this.redstoneBlocksInFurnace + 1;
 						int icon = worldObj.getBlockId(x, y, z);
 						int metadata = worldObj.getBlockMetadata(x, y, z);
 
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDRedstone);
+						worldObj.setBlock(x, y, z, Reference.furnaceDummyMultiRedstoneID);
 
 						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						TileEntityMultiFurnaceDummy dummyTE = (TileEntityMultiFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 
-						if(icon == BlockManager.furnaceDummyRedstone.blockID)
+						if(icon == BlockManager.furnaceDummyMultiRedstone.blockID)
 						{
 							icon = dummyTE.icon;
 							metadata = dummyTE.metadata;
@@ -219,37 +215,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						int icon = worldObj.getBlockId(x, y, z);
 						int metadata = worldObj.getBlockMetadata(x, y, z);
 
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDGlowStone);
+						worldObj.setBlock(x, y, z, Reference.furnaceDummyMultiIronID);
 
 						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						TileEntityMultiFurnaceDummy dummyTE = (TileEntityMultiFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 
-						if(icon == BlockManager.furnaceDummyGlowStone.blockID)
-						{
-							icon = dummyTE.icon;
-							metadata = dummyTE.metadata;
-						}
-						else
-						{
-							dummyTE.icon = icon;
-							dummyTE.metadata = metadata;
-						}
-
-						dummyTE.setCore(this);
-					}
-
-					else if(worldObj.getBlockId(x, y, z) == Block.blockDiamond.blockID)
-					{
-						diamonds = true;
-						int icon = worldObj.getBlockId(x, y, z);
-						int metadata = worldObj.getBlockMetadata(x, y, z);
-
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDDiamond);
-
-						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
-
-						if(icon == BlockManager.furnaceDummyDiamond.blockID)
+						if(icon == BlockManager.furnaceDummyMultiIron.blockID)
 						{
 							icon = dummyTE.icon;
 							metadata = dummyTE.metadata;
@@ -269,12 +240,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						int icon = worldObj.getBlockId(x, y, z);
 						int metadata = worldObj.getBlockMetadata(x, y, z);
 
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyIDEmerald);
+						worldObj.setBlock(x, y, z, Reference.furnaceDummyMultiEmeraldID);
 
 						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						TileEntityMultiFurnaceDummy dummyTE = (TileEntityMultiFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 
-						if(icon == BlockManager.furnaceDummyEmerald.blockID)
+						if(icon == BlockManager.furnaceDummyMultiEmerald.blockID)
 						{
 							icon = dummyTE.icon;
 							metadata = dummyTE.metadata;
@@ -288,34 +259,18 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						dummyTE.setCore(this);
 					}
 
-					else if(worldObj.getBlockId(x, y, z) == Reference.crafterInactive)
-					{
-						crafterEnabled = true;
-						worldObj.setBlock(x, y, z, Reference.crafterActive);
-						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
-						dummyTE.setCore(this);
-					}
-
-					else if(worldObj.getBlockId(x, y, z) == Reference.furnaceDummyIOID)
-					{
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyActiveIOID);
-						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
-						dummyTE.setCore(this);
-					}
 					else if(!Reference.isModularTile(worldObj.getBlockId(x, y, z)) && worldObj.getBlockId(x, y, z) != 0)
 					{
 
 						int icon = worldObj.getBlockId(x, y, z);
 						int metadata = worldObj.getBlockMetadata(x, y, z);
 
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyID);
+						worldObj.setBlock(x, y, z, Reference.furnaceMultiDummyID);
 
 						worldObj.markBlockForUpdate(x, y, z);
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						TileEntityMultiFurnaceDummy dummyTE = (TileEntityMultiFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 
-						if(icon == BlockManager.furnaceDummy.blockID)
+						if(icon == BlockManager.furnaceMultiDummy.blockID)
 						{
 							icon = dummyTE.icon;
 							metadata = dummyTE.metadata;
@@ -378,9 +333,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						if(depth == 0)
 							continue;
 
-					if(blockId == BlockManager.furnaceDummy.blockID)
+					if(blockId == BlockManager.furnaceMultiDummy.blockID)
 					{
-						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
+						TileEntityMultiFurnaceDummy dummyTE = (TileEntityMultiFurnaceDummy)worldObj.getBlockTileEntity(x, y, z);
 
 						worldObj.setBlock(x, y, z, dummyTE.getBlock().blockID);
 						worldObj.setBlockMetadataWithNotify(x, y, z, dummyTE.metadata, 2);
@@ -389,42 +344,23 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						continue;
 					}
 
-					if(blockId == BlockManager.crafterActive.blockID)
-					{
-						worldObj.setBlock(x, y, z, Reference.crafterInactive);
-						worldObj.markBlockForUpdate(x, y, z);
-						continue;
-					}
-
-					if(blockId == BlockManager.furnaceDummyRedstone.blockID)
+					if(blockId == BlockManager.furnaceDummyMultiRedstone.blockID)
 					{
 						worldObj.setBlock(x, y, z, Block.blockRedstone.blockID);
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 
 					}
-					if(blockId == BlockManager.furnaceDummyGlowStone.blockID)
+					if(blockId == BlockManager.furnaceDummyMultiIron.blockID)
 					{
 						worldObj.setBlock(x, y, z, Block.blockIron.blockID);
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 
 					}
-					if(blockId == BlockManager.furnaceDummyDiamond.blockID)
-					{
-						worldObj.setBlock(x, y, z, Block.blockDiamond.blockID);
-						worldObj.markBlockForUpdate(x, y, z);
-						continue;
-					}
-					if(blockId == BlockManager.furnaceDummyEmerald.blockID)
+					if(blockId == BlockManager.furnaceDummyMultiEmerald.blockID)
 					{
 						worldObj.setBlock(x, y, z, Block.blockEmerald.blockID);
-						worldObj.markBlockForUpdate(x, y, z);
-						continue;
-					}
-					if(blockId == BlockManager.furnaceDummyActiveIO.blockID)
-					{
-						worldObj.setBlock(x, y, z, Reference.furnaceDummyIOID);
 						worldObj.markBlockForUpdate(x, y, z);
 						continue;
 					}
@@ -436,59 +372,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		}
 
 		isValidMultiblock = false;
-	}
-
-	//See if crafting core is in the structure
-	public boolean checkIfCrafting()
-	{
-		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
-		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
-		boolean forwardZ = ((dir == 2) || (dir == 3));
-
-		/*
-		 *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
-		 * 
-		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
-		 */
-
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
-		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
-			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
-				{
-					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
-					int y = yCoord + vert;
-					int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
-
-					int blockId = worldObj.getBlockId(x, y, z);
-
-					if(horiz == 0 && vert == 0)
-					{
-						if(depth == 0)  // Looking at self, move on!
-							continue;
-
-						if(depth == 1)  // Center must be air!
-						{
-							if(blockId != 0)
-								return false;
-							else
-								continue;
-						}
-					}
-					if(blockId == Reference.crafterActive || blockId == Reference.crafterInactive)
-					{
-						return true;
-					}
-
-				}
-			}
-		}
-		return false;
 	}
 
 
@@ -514,13 +397,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 				{
 					flag1 = true;
 
-					if (this.furnaceItems[1] != null)
+					if (this.furnaceItems[9] != null)
 					{
-						--this.furnaceItems[1].stackSize;
+						--this.furnaceItems[9].stackSize;
 
-						if (this.furnaceItems[1].stackSize == 0)
+						if (this.furnaceItems[9].stackSize == 0)
 						{
-							this.furnaceItems[1] = this.furnaceItems[1].getItem().getContainerItemStack(furnaceItems[1]);
+							this.furnaceItems[9] = this.furnaceItems[9].getItem().getContainerItemStack(furnaceItems[9]);
 						}
 					}
 				}
@@ -545,7 +428,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 			if (flag != this.furnaceBurnTime > 0)
 			{
 				flag1 = true;
-				BlockFurnaceCore.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);			}
+				BlockMultiFurnaceCore.updateFurnaceBlockState(this.furnaceBurnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);			}
 		}
 
 		if (flag1)
@@ -647,11 +530,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	@Override
 	public boolean isItemValidForSlot(int par1, ItemStack par2ItemStack)
 	{
-		if(par1 == 2)
+		if(par1 > 9 && par1 <= 18)
 			return false;
-		if(par1 == 1 && isItemFuel(par2ItemStack))
+		if(par1 == 9 && isItemFuel(par2ItemStack))
 			return true;
-		if(par1 == 0)
+		if(par1 >= 0 && par1 < 9)
 			return true;
 		else
 			return false;
@@ -738,7 +621,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		this.redstoneBlocksInFurnace = tagCompound.getShort("RedstoneBlock"); 
 		this.ironBlocksInFurnace = tagCompound.getShort("IronStoneBlocks");
 		this.diamonds = tagCompound.getBoolean("Diamonds");
-		this.crafterEnabled = tagCompound.getBoolean("Enabled");
 		this.emeralds = tagCompound.getBoolean("Emeralds");
 
 
@@ -761,7 +643,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		tagCompound.setShort("RedstoneBlock", (short)this.redstoneBlocksInFurnace);
 		tagCompound.setShort("IronStoneBlocks", (short)this.ironBlocksInFurnace);
 		tagCompound.setBoolean("Diamonds", (boolean)this.diamonds);
-		tagCompound.setBoolean("Enabled", (boolean)this.crafterEnabled);
 		tagCompound.setBoolean("Emeralds",(boolean)this.emeralds);
 
 
@@ -823,45 +704,71 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return furnaceBurnTime > 0;
 	}
 
-    private boolean canSmelt()
-    {
-            if(furnaceItems[0] == null)
-                    return false;
-            else
-            {
-                    ItemStack itemStack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItems[0]);
-                    if(itemStack == null)
-                            return false;
-                    if(furnaceItems[2] == null)
-                            return true;
-                    if(!furnaceItems[2].isItemEqual(itemStack))
-                            return false;
+	private boolean canSmelt()
+	{
+		if(!hasItems())
+			return false;
+		else
+		{
+			for(int i = 0; i <= 8; i++)
+				if(FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItems[i])!= null)
+				{
 
-                    int resultingStackSize = furnaceItems[2].stackSize + itemStack.stackSize;
-                    return (resultingStackSize <= getInventoryStackLimit() && resultingStackSize <= itemStack.getMaxStackSize());
-            }
-    }
+					{
+						if(furnaceItems[i + 10] != null)
+						{
+							if(furnaceItems[i + 10].stackSize == furnaceItems[i + 10].getMaxStackSize())
+								return false;
+
+							if(furnaceItems[i] != null)
+							{
+								if(FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItems[i]).itemID != furnaceItems[i + 10].itemID)
+									return false;
+							}
+						}
+					}
+					return true;
+				}
+				return false;
+		}
+	}
+
+	private boolean hasItems()
+	{
+		for(int i = 0; i <= 8; i++)
+		{
+			if(furnaceItems[i] != null)
+				return true;
+		}
+		return false;
+	}
 
 	public void smeltItem()
 	{
 		if (this.canSmelt())
 		{
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItems[0]);
-
-			if (this.furnaceItems[2] == null)
+			for(int i = 0; i <= 8; i++)
 			{
-				this.furnaceItems[2] = itemstack.copy();
-			}
-			else if (this.furnaceItems[2].isItemEqual(itemstack))
-			{
-				furnaceItems[2].stackSize += itemstack.stackSize;
-			}
+				if(furnaceItems[i] != null && FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItems[i]) != null)
+				{
+					ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItems[i]);
 
-			--this.furnaceItems[0].stackSize;
+					if (this.furnaceItems[i + 10] == null)
+					{
+						this.furnaceItems[i + 10] = itemstack.copy();
+					}
+					else if (this.furnaceItems[i + 10].isItemEqual(itemstack))
+					{
+						furnaceItems[i + 10].stackSize += itemstack.stackSize;
+					}
 
-			if (this.furnaceItems[0].stackSize <= 0)
-			{
-				this.furnaceItems[0] = null;
+					--this.furnaceItems[i].stackSize;
+
+					if (this.furnaceItems[i].stackSize <= 0)
+					{
+						this.furnaceItems[i] = null;
+					}
+				}
 			}
 		}
 	}
@@ -913,7 +820,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 							continue;
 						}
 					}
-					if(blockId == Reference.furnaceDummyIDRedstone || blockId == Block.blockRedstone.blockID)
+					if(blockId == Reference.furnaceDummyMultiRedstoneID || blockId == Block.blockRedstone.blockID)
 					{
 						output++;
 					}
@@ -965,7 +872,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 							continue;
 						}
 					}
-					if(blockId == Reference.furnaceDummyIDGlowStone || blockId == Block.blockIron.blockID)
+					if(blockId == Reference.furnaceDummyMultiIronID || blockId == Block.blockIron.blockID)
 					{
 						output++;
 					}
@@ -985,7 +892,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		{
 		case 0 : return slots_bottom;
 		case 1 : return slots_top;
-		case 2 : return slots_output_only;
 		default : return slots_sides;
 
 		}
@@ -1007,13 +913,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	/*public int scaledBurnTime()
 	{
 		int output = TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
-	
+
 		output = (output + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 8) * this.ironBlocksInFurnace)) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 10) * this.redstoneBlocksInFurnace);
 
 		return output;
 
 	}
-*/
+	 */
 	public double scaledBurnTimeTest(double input)
 	{
 		double output = input;
@@ -1051,29 +957,29 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 	}
 
-	
+
 	public int scaledBurnTime()
 	{
 
 		if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace == 0)
 		{
-			return ((TileEntityFurnace.getItemBurnTime(furnaceItems[1])) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * (redstoneBlocksInFurnace - 1))); 
+			return ((TileEntityFurnace.getItemBurnTime(furnaceItems[9])) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[9]) / 25) * (redstoneBlocksInFurnace - 1))); 
 		}
 
 		if (redstoneBlocksInFurnace == 0 && ironBlocksInFurnace >0)
 		{
-			return (TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace));
+			return (TileEntityFurnace.getItemBurnTime(furnaceItems[9]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[9]) / 25) * ironBlocksInFurnace));
 		}
 		if (redstoneBlocksInFurnace > 0 && ironBlocksInFurnace > 0)
 		{
 
-			return (((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * ironBlocksInFurnace)) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[1]) / 25) * redstoneBlocksInFurnace)));
+			return (((TileEntityFurnace.getItemBurnTime(furnaceItems[9]) + ((TileEntityFurnace.getItemBurnTime(furnaceItems[9]) / 25) * ironBlocksInFurnace)) - ((TileEntityFurnace.getItemBurnTime(furnaceItems[9]) / 25) * redstoneBlocksInFurnace)));
 		}
 
 		else
-			return TileEntityFurnace.getItemBurnTime(furnaceItems[1]);
+			return TileEntityFurnace.getItemBurnTime(furnaceItems[9]);
 	}
-	 
+
 
 
 }
