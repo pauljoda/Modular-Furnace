@@ -46,6 +46,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	public int cookSpeed = 200;
 	public boolean emeralds;
 	int direction;
+	int maxSize = 20;
 
 	//Furnace related things
 	private ItemStack[] furnaceItems = new ItemStack[3];
@@ -104,6 +105,134 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
+	public int getHorizontalMin()
+	{
+		int output = 0;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
+		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
+		int yCheck = yCoord;
+		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
+		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+
+		//get hMin (Left)
+		while(airCheck == Blocks.air)
+		{
+			output++;
+			if(forwardZ)
+				xCheck = xCheck + depthMultiplier;
+			else
+				zCheck = zCheck - depthMultiplier;
+
+			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+			if(output > maxSize)
+				return -1;
+		}
+		return output;
+	}
+
+	public int getHorizontalMax()
+	{
+		int output = 0;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
+		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
+		int yCheck = yCoord;
+		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
+		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+
+		//get hMin (Left)
+		while(airCheck == Blocks.air)
+		{
+			output++;
+			if(forwardZ)
+				xCheck = xCheck - depthMultiplier;
+			else
+				zCheck = zCheck + depthMultiplier;
+
+			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+			if(output > maxSize)
+				return -1;
+		}
+		return output;
+	}
+
+	public int getVerticalMin()
+	{
+		int output = 0;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
+		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
+		int yCheck = yCoord;
+		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
+		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+
+		//get hMin (Left)
+		while(airCheck == Blocks.air)
+		{
+			output++;
+			yCheck--;
+
+			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+			if(output > maxSize)
+				return -1;
+		}
+		return output;
+	}
+
+	public int getVerticalMax()
+	{
+		int output = 0;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
+		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
+		int yCheck = yCoord;
+		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
+		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+
+		//get hMin (Left)
+		while(airCheck == Blocks.air)
+		{
+			output++;
+			yCheck++;
+
+			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+			if(output > maxSize)
+				return -1;
+		}
+		return output;
+	}
+
+	public int getDepthVal()
+	{
+		int output = 0;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
+		boolean forwardZ = ((dir == 2) || (dir == 3));
+		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
+		int yCheck = yCoord;
+		int zCheck = zCoord + (forwardZ ? depthMultiplier : 0);
+		Block airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+
+		//get hMin (Left)
+		while(airCheck == Blocks.air)
+		{
+			output++;
+			if(forwardZ)
+				zCheck = zCheck + depthMultiplier;
+			else
+				xCheck = xCheck + depthMultiplier;
+
+			airCheck = worldObj.getBlock(xCheck, yCheck, zCheck);
+			if(output > maxSize)
+				return -1;
+		}
+		return output;
+	}
 	/*
 	 * Checks if the structure has been formed properly
 	 */
@@ -112,21 +241,31 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
+
 		/*
 		 *          FORWARD     BACKWARD
-		 * North:   -z              +z
-		 * South:   +z              -z
-		 * East:    +x              -x
-		 * West:    -x              +x
+		 * North 2:   -z              +z
+		 * South 3:   +z              -z
+		 * East 5:    +x              -x
+		 * West 4:    -x              +x
 		 * 
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
+
+		if(hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0)
+			return false;
+
+		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
 			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				for(int depth = 0; depth <= (depthVal + 1); depth++) // Depth (Z or X)
 				{
 					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
 					int y = yCoord + vert;
@@ -134,27 +273,26 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					Block blockId = worldObj.getBlock(x, y, z);
 
-					if(horiz == 0 && vert == 0)
+					if(depth == 0 && vert == 0 && horiz == 0)
+						continue;
+
+					if(horiz > -hMin && horiz < hMax)
 					{
-						if(depth == 0)  // Looking at self, move on!
-							continue;
-
-						if(depth == 1)  // Center must be air!
+						if(vert > -vMin && vert < vMax)
 						{
-							if(blockId != Blocks.air)
+							if(depth > 0 && depth < (depthVal + 1))
 							{
-								return false;
+								if(blockId == Blocks.air)
+									continue;
+								else
+									return false;
 							}
-							else                    		
-								continue;
-
 						}
 					}
 
 					if(blockId == Blocks.air || (Reference.isBadBlock(blockId) && !Reference.isModularTile(blockId.getUnlocalizedName())))
 						return false;
 
-					//if(blockId != Block.cobblestone.blockID && blockId != Block.blockRedstone.blockID && blockId != Block.blockIron.blockID && blockId != Block.blockDiamond.blockID && blockId != ModularFurnace.crafterInactiveID && blockId != Block.blockEmerald.blockID && blockId != ModularFurnace.furnaceDummyIOID)
 					if(!Reference.isValidBlock(blockId.getUnlocalizedName()))
 					{
 						if(Reference.isModularTile(blockId.getUnlocalizedName()))
@@ -191,26 +329,36 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
+
+		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
 			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				for(int depth = 0; depth <= (depthVal + 1); depth++) // Depth (Z or X)
 				{
 					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
 					int y = yCoord + vert;
 					int z = zCoord + (forwardZ ? (depth * depthMultiplier) : horiz);
 
-					if(horiz == 0 && vert == 0 && depth == 1)
-					{
-
+					if(horiz == 0 && vert == 0 && depth == 0)
 						continue;
 
-					}
-					if(horiz == 0 && vert == 0)
-						if(depth == 0)
-							continue;
+					if(horiz > hMin && horiz < hMax)
+					{
+						if(vert > vMin && vert < vMax)
+						{
+							if(depth > 0 && depth < (depthVal + 1))
+							{
+								continue;
+							}
+						}
 
+					}
 
 					if(worldObj.getBlock(x, y, z) == Blocks.emerald_block)
 					{
@@ -262,7 +410,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 						TileEntityFurnaceDummy dummyTE = (TileEntityFurnaceDummy)worldObj.getTileEntity(x, y, z);
 						dummyTE.setCore(this);
 					}
-					else if(!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null)
+					else if(!Reference.isModularTile(worldObj.getBlock(x, y, z).getUnlocalizedName()) && worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) != Blocks.air)
 					{
 
 						Block icon = worldObj.getBlock(x, y, z);
@@ -321,11 +469,17 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 */
 
 
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
+
+		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
 			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				for(int depth = 0; depth <= (depthVal + 1); depth++) // Depth (Z or X)
 				{
 					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
 					int y = yCoord + vert;
@@ -333,13 +487,20 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					Block blockId = worldObj.getBlock(x, y, z);
 
-					if(horiz == 0 && vert == 0 && depth == 1)
+					if(horiz == 0 && vert == 0 && depth == 0)
+						continue;
+
+					if(horiz > hMin && horiz < hMax)
 					{
-						continue;     	
+						if(vert > vMin && vert < vMax)
+						{
+							if(depth > 0 && depth < (depthVal + 1))
+							{
+								continue;
+							}
+						}
+
 					}
-					if(horiz == 0 && vert == 0)
-						if(depth == 0)
-							continue;
 
 					if(blockId == BlockManager.furnaceDummy)
 					{
@@ -408,11 +569,17 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
+
+		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
 			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				for(int depth = 0; depth <= (depthVal + 1); depth++) // Depth (Z or X)
 				{
 					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
 					int y = yCoord + vert;
@@ -420,19 +587,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					Block blockId = worldObj.getBlock(x, y, z);
 
-					if(horiz == 0 && vert == 0)
-					{
-						if(depth == 0)  // Looking at self, move on!
-							continue;
+					if(horiz == 0 && vert == 0 && depth == 0)
+						continue;
 
-						if(depth == 1)  // Center must be air!
-						{
-							if(blockId != Blocks.air)
-								return false;
-							else
-								continue;
-						}
-					}
 					if(blockId == BlockManager.crafterActive || blockId == BlockManager.crafterInactive)
 					{
 						return true;
@@ -465,11 +622,17 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		for(int horiz = -1; horiz <= 1; horiz++)    // Horizontal (X or Z)
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
+
+		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
-			for(int vert = -1; vert <= 1; vert++)   // Vertical (Y)
+			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
 			{
-				for(int depth = 0; depth <= 2; depth++) // Depth (Z or X)
+				for(int depth = 0; depth <= (depthVal + 1); depth++) // Depth (Z or X)
 				{
 					int x = xCoord + (forwardZ ? horiz : (depth * depthMultiplier));
 					int y = yCoord + vert;
@@ -477,15 +640,19 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					Block blockId = worldObj.getBlock(x, y, z);
 
-					if(horiz == 0 && vert == 0)
-					{
-						if(depth == 0)  // Looking at self, move on!
-							continue;
+					if(horiz == 0 && vert == 0 && depth == 0)
+						continue;
 
-						if(depth == 1)  // Center must be air!
+					if(horiz > hMin && horiz < hMax)
+					{
+						if(vert > vMin && vert < vMax)
 						{
-							continue;
+							if(depth > 0 && depth < (depthVal + 1))
+							{
+								continue;
+							}
 						}
+
 					}
 					if(blockId == BlockManager.furnaceDummy)
 					{
@@ -630,7 +797,7 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityPlayer)
 	{
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : entityPlayer.getDistanceSq((double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5) <= 64.0;
+		return true;
 	}
 
 	//Re-writen for the I/O block

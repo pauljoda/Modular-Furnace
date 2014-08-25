@@ -127,7 +127,7 @@ public class TileEntityFurnaceDummy extends TileEntity implements ISidedInventor
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : entityplayer.getDistanceSq((double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5) <= 64.0;
+		return getCore() != null ? true : false;
 	}
 
 	@Override

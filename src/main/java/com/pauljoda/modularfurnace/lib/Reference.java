@@ -111,11 +111,11 @@ public class Reference {
 	public static double getSpeedMultiplierForBlock(Block block)
 	{
 		if(block == Blocks.redstone_block)
-			return 2;
+			return 1.2;
 		else if(block == Blocks.gold_block)
 			return 1;
 		else if(block == Blocks.diamond_block)
-			return 5;
+			return 3;
 		else if(block == Blocks.netherrack)
 			return 1;
 		else
@@ -125,7 +125,7 @@ public class Reference {
 	public static double getEfficiencyMultiplierForBlock(Block block)
 	{
 		if(block == Blocks.iron_block)
-			return 0.5;
+			return 0.2;
 		else if(block == Blocks.coal_block)
 			return 0.1;
 		else if(block == Blocks.redstone_block)
@@ -135,9 +135,9 @@ public class Reference {
 		else if(block == Blocks.netherrack)
 			return -0.7;
 		else if(block == Blocks.stone)
-			return 0.1;
+			return 0.05;
 		else if(block == Blocks.stonebrick)
-			return 0.2;
+			return 0.1;
 		else
 			return 0.0;
 	}
