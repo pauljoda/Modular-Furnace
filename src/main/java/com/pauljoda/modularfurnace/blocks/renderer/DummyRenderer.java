@@ -2,6 +2,7 @@ package com.pauljoda.modularfurnace.blocks.renderer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularfurnace.GeneralSettings;
 import com.pauljoda.modularfurnace.blocks.BlockManager;
 import com.pauljoda.modularfurnace.client.ClientProxy;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceDummy;
@@ -79,6 +80,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 
 	private static IIcon getOveryLay(Block block, RenderBlocks renderer)
 	{
+
 		IIcon output;
 
 		if(block == BlockManager.furnaceCore || block == BlockManager.crafterInactive || block == BlockManager.furnaceDummyIO || block == BlockManager.furnaceAddition)
@@ -138,8 +140,7 @@ public class DummyRenderer implements ISimpleBlockRenderingHandler {
 		}
 		else                   
 		{
-
-			renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
+				renderer.renderStandardBlock(BlockManager.overLayTexture, x, y, z);
 		}
 
 		return true;
