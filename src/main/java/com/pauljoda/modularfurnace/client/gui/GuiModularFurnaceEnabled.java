@@ -1,5 +1,8 @@
 	package com.pauljoda.modularfurnace.client.gui;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -8,6 +11,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import com.pauljoda.modularfurnace.VersionChecking;
+import com.pauljoda.modularfurnace.lib.Reference;
 import com.pauljoda.modularfurnace.tileentity.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceCore;
 
@@ -78,5 +83,26 @@ public class GuiModularFurnaceEnabled extends GuiContainer
         
         this.mc.getTextureManager().bindTexture(infoPane);
         drawTexturedModalRect(x - 52, y, 0, 0, 50, 75);
-    }
+    	if(VersionChecking.getResult() == VersionChecking.OUTDATED)
+		{
+			drawTexturedModalRect(x, y, 0, 240, 16, 16);
+
+		}
+	}
+
+	@Override
+	public void drawScreen(int par1, int par2, float par3)
+	{
+		super.drawScreen(par1, par2, par3);
+		if(VersionChecking.getResult() == VersionChecking.OUTDATED)
+		{
+			int var5 = (this.width - this.xSize) / 2;
+			int var6 = (this.height - this.ySize) / 2;
+			if(par1 >= 0 + var5 && par2 >= 0 + var6 && par1 <= 16 + var5 && par2 <= 16 + var6) 
+			{
+				List temp = Arrays.asList(Reference.UPDATE_TOOLTIP);
+				drawHoveringText(temp, par1, par2, fontRendererObj); 
+			}
+		}
+	}
 }

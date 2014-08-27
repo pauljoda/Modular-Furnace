@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 version = "3.1"
 group= "com.pauljoda.modularfurnace" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modularfurnace"
+archivesBaseName = "Modular Furnace 2"
 
 minecraft {
     version = "1.7.10-10.13.0.1180"

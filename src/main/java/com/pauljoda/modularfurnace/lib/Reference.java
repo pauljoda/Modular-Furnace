@@ -17,9 +17,11 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "3.002";
+	public static final String Version = "3.1";
+	public static final String MCVersion = "1.7.10";
 	public static final String CHANNEL_NAME = MOD_ID;
-	public static final String VERSION_NUMBER = "3.0";
+
+	public static final String UPDATE_TOOLTIP = "An updated version of this mod is available";
 
 	//GUI ids
 	public static int modularFurnaceGui = 0;

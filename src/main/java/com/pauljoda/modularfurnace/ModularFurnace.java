@@ -52,17 +52,22 @@ public class ModularFurnace {
 	public void preInit(FMLPreInitializationEvent event){
 
 		GeneralSettings.init(new File(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator + "ModularFurnace.cfg"));
-		FMLCommonHandler.instance().bus().register(new GeneralSettings());
 
 		//Grabs the blocks and their recipies
 		BlockManager.registerBlocks();
 		BlockManager.register();
 		BlockManager.registerCraftingRecipes();
+		
+		FMLCommonHandler.instance().bus().register(new GeneralSettings());
+
+		VersionChecking.execute();
 	}
 
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+
+
 
 		//Sets up tileEnties, which are the backbone of this mod
 		proxy.registerTileEntities();
