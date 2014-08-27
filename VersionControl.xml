@@ -1,7 +1,6 @@
-<channel>
-  <item>
-    <mcversion>1.7.10</mcversion>
-    <modversion>3.1</modversion>
-  </item>
-</channel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+    <comment>Version lookup for Modular Furnace 2 Credits Pahimar. Format is "Current Version Number|URL to update page"</comment>
+    <entry key="Minecraft 1.7.10">3.1|http://minecraft.curseforge.com/mc-mods/68528-modular-furnace-2</entry>
+</properties>
