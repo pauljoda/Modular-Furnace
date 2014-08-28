@@ -27,12 +27,10 @@ public class BlockFurnaceDummy extends BlockContainer
 		setStepSound(Block.soundTypeStone);
 		setHardness(3.5f);
 		
-		
 	}
 	public int meta = 0;
 	Random furnaceRand = new Random();
-
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world, int i)
 	{

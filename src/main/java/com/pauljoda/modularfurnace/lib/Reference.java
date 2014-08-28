@@ -17,7 +17,7 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "3.1";
+	public static final String Version = "3.2";
 	public static final String MCVersion = "1.7.10";
 	public static final String CHANNEL_NAME = MOD_ID;
 
@@ -94,7 +94,7 @@ public class Reference {
 
 		if(blockId == BlockManager.crafterInactive || blockId == BlockManager.crafterActive || blockId == BlockManager.furnaceDummyIO || blockId == Blocks.redstone_block || blockId == BlockManager.furnaceAddition || blockId == BlockManager.furnaceAdditionActive)
 			return false;
-
+		
 		if(blockId.hasTileEntity(0))
 			return true;
 
@@ -120,6 +120,18 @@ public class Reference {
 			return 3;
 		else if(block == Blocks.netherrack)
 			return 1;
+		else if(block == Blocks.lapis_block)
+			return 1;
+		else if(block == Blocks.sandstone)
+			return 0.3;
+		else if(block == Blocks.brick_block)
+			return 0.5;
+		else if(block == Blocks.soul_sand)
+			return 0.3;
+		else if(block == Blocks.nether_brick)
+			return 1.0;
+		else if(block == Blocks.hardened_clay)
+			return 0.6;
 		else
 			return 0;
 	}
@@ -139,6 +151,18 @@ public class Reference {
 		else if(block == Blocks.stone)
 			return 0.05;
 		else if(block == Blocks.stonebrick)
+			return 0.1;
+		else if(block == Blocks.sand)
+			return -0.5;
+		else if(block == Blocks.lapis_block)
+			return 0.2;
+		else if(block == Blocks.sandstone)
+			return 0.01;
+		else if(block == Blocks.nether_brick)
+			return -0.5;
+		else if(block == Blocks.quartz_block)
+			return 0.2;
+		else if(block == Blocks.hardened_clay)
 			return 0.1;
 		else
 			return 0.0;

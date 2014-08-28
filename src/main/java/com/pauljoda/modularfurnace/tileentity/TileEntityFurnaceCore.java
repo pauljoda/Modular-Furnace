@@ -275,6 +275,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 					if(depth == 0 && vert == 0 && horiz == 0)
 						continue;
+					if(vert == 0 && horiz == 0 && depth == 1)
+					{
+						if(blockId != Blocks.air)
+							return false;
+					}
 
 					if(horiz > -hMin && horiz < hMax)
 					{
