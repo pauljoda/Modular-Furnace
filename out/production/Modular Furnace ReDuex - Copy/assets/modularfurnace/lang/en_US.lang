@@ -1,0 +1,8 @@
+itemGroup.tabModularFurnace=Modular Furnace
+
+tile.blockFurnaceCore.name=Modular Furnace Core
+tile.crafterInactive.name=Modular Furnace Crafting Upgrade
+tile.ioBlock.name=Modular Furnace I/O Block
+tile.furnaceAdditionInactive.name=Furnace Addition
+tile.overLayTexture.name=Tough Glass
+tile.smelterOverlay.name=Tinted Glass

@@ -4,11 +4,10 @@ import com.pauljoda.modularfurnace.blocks.BlockManager;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import com.pauljoda.modularfurnace.GeneralSettings;
+import com.pauljoda.modularfurnace.util.GeneralSettings;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceCore;
 
 
@@ -17,7 +16,7 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "3.2";
+	public static final String Version = "3.21";
 	public static final String MCVersion = "1.7.10";
 	public static final String CHANNEL_NAME = MOD_ID;
 

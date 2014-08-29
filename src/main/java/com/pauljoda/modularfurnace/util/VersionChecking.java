@@ -1,19 +1,11 @@
-package com.pauljoda.modularfurnace;
+package com.pauljoda.modularfurnace.util;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.pauljoda.modularfurnace.lib.Colours;
 import com.pauljoda.modularfurnace.lib.Reference;

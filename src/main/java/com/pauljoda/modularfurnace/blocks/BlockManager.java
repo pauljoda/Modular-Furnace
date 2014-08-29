@@ -1,23 +1,15 @@
 package com.pauljoda.modularfurnace.blocks;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.pauljoda.modularfurnace.GeneralSettings;
+import com.pauljoda.modularfurnace.util.GeneralSettings;
 import com.pauljoda.modularfurnace.ModularFurnace;
-import com.pauljoda.modularfurnace.lib.Reference;
 
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.util.RegistryNamespaced;
 
 public class BlockManager
 {

@@ -1,4 +1,4 @@
-package com.pauljoda.modularfurnace;
+package com.pauljoda.modularfurnace.util;
 
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;

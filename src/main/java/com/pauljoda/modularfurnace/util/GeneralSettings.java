@@ -1,4 +1,4 @@
-package com.pauljoda.modularfurnace;
+package com.pauljoda.modularfurnace.util;
 
 import java.io.File;
 

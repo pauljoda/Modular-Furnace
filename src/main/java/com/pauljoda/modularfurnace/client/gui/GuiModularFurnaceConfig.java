@@ -1,6 +1,6 @@
 package com.pauljoda.modularfurnace.client.gui;
 
-import com.pauljoda.modularfurnace.GeneralSettings;
+import com.pauljoda.modularfurnace.util.GeneralSettings;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;

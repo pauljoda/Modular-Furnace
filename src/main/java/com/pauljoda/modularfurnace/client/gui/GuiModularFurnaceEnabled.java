@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularfurnace.VersionChecking;
+import com.pauljoda.modularfurnace.util.VersionChecking;
 import com.pauljoda.modularfurnace.lib.Reference;
 import com.pauljoda.modularfurnace.tileentity.ContainerModularFurnaceCrafter;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceCore;

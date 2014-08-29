@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularfurnace.GeneralSettings;
-import com.pauljoda.modularfurnace.VersionChecking;
+import com.pauljoda.modularfurnace.util.VersionChecking;
 import com.pauljoda.modularfurnace.lib.Reference;
 import com.pauljoda.modularfurnace.tileentity.ContainerModularFurnace;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceCore;

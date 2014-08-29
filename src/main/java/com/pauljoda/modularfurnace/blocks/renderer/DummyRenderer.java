@@ -2,7 +2,6 @@ package com.pauljoda.modularfurnace.blocks.renderer;
 
 import org.lwjgl.opengl.GL11;
 
-import com.pauljoda.modularfurnace.GeneralSettings;
 import com.pauljoda.modularfurnace.blocks.BlockManager;
 import com.pauljoda.modularfurnace.client.ClientProxy;
 import com.pauljoda.modularfurnace.tileentity.TileEntityFurnaceDummy;
