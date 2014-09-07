@@ -23,7 +23,6 @@ public class CommonProxy implements IGuiHandler
 	public Object getServerGuiElement(int guiID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
-		//TileEntityFurnaceCoreSmeltery tileEntity1 = (TileEntityFurnaceCoreSmeltery)world.getBlockTileEntity(x, y, z);
 
 		if(tileEntity != null)
 			if(tileEntity instanceof TileEntityFurnaceCore)

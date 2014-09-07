@@ -203,16 +203,17 @@ public class BlockFurnaceCore extends BlockContainer
 	}
 
 	@Override
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+    public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
 	{
+        TileEntityFurnaceCore tileentityfurnace = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
+
+        if (tileentityfurnace != null)
+        {
+            tileentityfurnace.invalidateMultiblock();
+        }
+
 		if (!field_149934_M)
 		{
-			TileEntityFurnaceCore tileentityfurnace = (TileEntityFurnaceCore)p_149749_1_.getTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
-
-			if (tileentityfurnace != null)
-			{				
-				tileentityfurnace.invalidateMultiblock();
-
 				for (int i1 = 0; i1 < tileentityfurnace.getSizeInventory(); ++i1)
 				{
 					ItemStack itemstack = tileentityfurnace.getStackInSlot(i1);
@@ -233,7 +234,7 @@ public class BlockFurnaceCore extends BlockContainer
 							}
 
 							itemstack.stackSize -= j1;
-							EntityItem entityitem = new EntityItem(p_149749_1_, (double)((float)p_149749_2_ + f), (double)((float)p_149749_3_ + f1), (double)((float)p_149749_4_ + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+							EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
 							if (itemstack.hasTagCompound())
 							{
@@ -244,16 +245,15 @@ public class BlockFurnaceCore extends BlockContainer
 							entityitem.motionX = (double)((float)this.field_149933_a.nextGaussian() * f3);
 							entityitem.motionY = (double)((float)this.field_149933_a.nextGaussian() * f3 + 0.2F);
 							entityitem.motionZ = (double)((float)this.field_149933_a.nextGaussian() * f3);
-							p_149749_1_.spawnEntityInWorld(entityitem);
+							world.spawnEntityInWorld(entityitem);
 						}
 					}
 				}
 
-				p_149749_1_.func_147453_f(p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_);
-			}
+				world.func_147453_f(x, y, z, par5);
 		}
 
-		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
 	/**
