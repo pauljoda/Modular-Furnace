@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 //I prefer to use a Reference class to label my mod. Makes it ... modular ;)
-@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.Version, guiFactory = "com.pauljoda.modularfurnace.client.gui.GuiConfigFactory")
+@Mod(name = Reference.MOD_NAME, modid = Reference.MOD_ID, version = Reference.Version)
 
 public class ModularFurnace {
 	@Instance("modularfurnace")

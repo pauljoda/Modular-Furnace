@@ -205,15 +205,14 @@ public class BlockFurnaceCore extends BlockContainer
 	@Override
     public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
 	{
-        TileEntityFurnaceCore tileentityfurnace = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
-
-        if (tileentityfurnace != null)
-        {
-            tileentityfurnace.invalidateMultiblock();
-        }
-
 		if (!field_149934_M)
 		{
+			TileEntityFurnaceCore tileentityfurnace = (TileEntityFurnaceCore)world.getTileEntity(x, y, z);
+
+	        if (tileentityfurnace != null)
+	        {
+	            tileentityfurnace.invalidateMultiblock();
+	        }
 				for (int i1 = 0; i1 < tileentityfurnace.getSizeInventory(); ++i1)
 				{
 					ItemStack itemstack = tileentityfurnace.getStackInSlot(i1);

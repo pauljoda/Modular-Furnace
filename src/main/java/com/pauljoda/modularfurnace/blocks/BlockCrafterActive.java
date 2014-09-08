@@ -78,6 +78,7 @@ public class BlockCrafterActive extends BlockContainer
 	{
 		return false;
 	}
+	
 	@Override
 	public int getRenderType()
 	{
