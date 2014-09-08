@@ -48,6 +48,13 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	int direction;
 	int maxSize = 20;
 
+	//Size
+	public int hMin;
+	public int hMax;
+	public int vMin;
+	public int vMax;
+	public int depthVal;
+
 	//Furnace related things
 	private ItemStack[] furnaceItems = new ItemStack[3];
 	public int furnaceBurnTime;
@@ -76,6 +83,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 
 		revertDummies();
 
+		hMin = 0;
+		hMax = 0;
+		vMin = 0;
+		vMax = 0;
+		depthVal = 0;
 		speedMultiplier = 8;
 		efficiencyMultiplier = 1;
 		crafterEnabled = false;
@@ -105,14 +117,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
-	public int getHorizontalMin(boolean useStoredMeta)
+	public int getHorizontalMin()
 	{
 		int output = 0;
-		int dir;
-		if(useStoredMeta)
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
 			dir = this.direction;
-		else
-			dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
@@ -136,14 +146,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return output;
 	}
 
-	public int getHorizontalMax(boolean useStoredMeta)
+	public int getHorizontalMax()
 	{
 		int output = 0;
-		int dir;
-		if(useStoredMeta)
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
 			dir = this.direction;
-		else
-			dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
@@ -167,14 +175,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return output;
 	}
 
-	public int getVerticalMin(boolean useStoredMeta)
+	public int getVerticalMin()
 	{
 		int output = 0;
-		int dir;
-		if(useStoredMeta)
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
 			dir = this.direction;
-		else
-			dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
@@ -195,14 +201,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return output;
 	}
 
-	public int getVerticalMax(boolean useStoredMeta)
+	public int getVerticalMax()
 	{
 		int output = 0;
-		int dir;
-		if(useStoredMeta)
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
 			dir = this.direction;
-		else
-			dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
@@ -223,14 +227,12 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		return output;
 	}
 
-	public int getDepthVal(boolean useStoredMeta)
+	public int getDepthVal()
 	{
 		int output = 0;
-		int dir;
-		if(useStoredMeta)
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
 			dir = this.direction;
-		else
-			dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 		int xCheck = xCoord + (forwardZ ? 0 : depthMultiplier);
@@ -272,11 +274,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		int hMin = getHorizontalMin(false);
-		int hMax = getHorizontalMax(false);
-		int vMin = getVerticalMin(false);
-		int vMax = getVerticalMax(false);
-		int depthVal = getDepthVal(false);
+		int hMin = getHorizontalMin();
+		int hMax = getHorizontalMax();
+		int vMin = getVerticalMin();
+		int vMax = getVerticalMax();
+		int depthVal = getDepthVal();
 
 		if(hMin < 0 || hMax < 0 || vMin < 0 || vMax < 0 || depthVal < 0)
 			return false;
@@ -310,7 +312,10 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 								if(blockId == Blocks.air)
 									continue;
 								else
+								{
+									worldObj.setBlock(x, y, z, Blocks.cobblestone);
 									return false;
+								}
 							}
 						}
 					}
@@ -354,11 +359,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		int hMin = getHorizontalMin(true);
-		int hMax = getHorizontalMax(true);
-		int vMin = getVerticalMin(true);
-		int vMax = getVerticalMax(true);
-		int depthVal = getDepthVal(true);
+		hMin = getHorizontalMin();
+		hMax = getHorizontalMax();
+		vMin = getVerticalMin();
+		vMax = getVerticalMax();
+		depthVal = getDepthVal();
 
 		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
@@ -476,7 +481,9 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 	 */
 	private void revertDummies()
 	{
-		int dir = direction;
+		int dir = (worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+		if(dir == 0)
+			dir = direction;
 		int depthMultiplier = ((dir == 2 || dir == 4) ? 1 : -1);
 		boolean forwardZ = ((dir == 2) || (dir == 3));
 
@@ -490,12 +497,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-
-		int hMin = getHorizontalMin(true);
-		int hMax = getHorizontalMax(true);
-		int vMin = getVerticalMin(true);
-		int vMax = getVerticalMax(true);
-		int depthVal = getDepthVal(true);
 
 		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
@@ -591,12 +592,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
 
-		int hMin = getHorizontalMin(true);
-		int hMax = getHorizontalMax(true);
-		int vMin = getVerticalMin(true);
-		int vMax = getVerticalMax(true);
-		int depthVal = getDepthVal(true);
-
 		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
 			for(int vert = -vMin; vert <= vMax; vert++)   // Vertical (Y)
@@ -643,12 +638,6 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		 * 
 		 * Should move BACKWARD for depth (facing = direction of block face, not direction of player looking at face)
 		 */
-
-		int hMin = getHorizontalMin(true);
-		int hMax = getHorizontalMax(true);
-		int vMin = getVerticalMin(true);
-		int vMax = getVerticalMax(true);
-		int depthVal = getDepthVal(true);
 
 		for(int horiz = -hMin; horiz <= hMax; horiz++)    // Horizontal (X or Z)
 		{
@@ -917,6 +906,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		this.emeralds = tagCompound.getBoolean("Emeralds");
 		this.direction = tagCompound.getInteger("Direction");
 		this.smeltingMultiplier = tagCompound.getInteger("SmeltingMultiplier");
+		this.hMin = tagCompound.getInteger("hMin");
+		this.hMax = tagCompound.getInteger("hMax");
+		this.vMin = tagCompound.getInteger("vMin");
+		this.vMax = tagCompound.getInteger("vMax");
+		this.depthVal = tagCompound.getInteger("depthVal");
 
 
 		if (tagCompound.hasKey("CustomName"))
@@ -941,7 +935,11 @@ public class TileEntityFurnaceCore extends TileEntity implements ISidedInventory
 		tagCompound.setBoolean("Emeralds",(boolean)this.emeralds);
 		tagCompound.setInteger("Direction", this.direction);
 		tagCompound.setInteger("SmeltingMultiplier", this.smeltingMultiplier);
-
+		tagCompound.setInteger("hMin", hMin);
+		tagCompound.setInteger("hMax", hMax);
+		tagCompound.setInteger("vMin", vMin);
+		tagCompound.setInteger("vMax", vMax);
+		tagCompound.setInteger("depthVal", depthVal);
 
 
 		NBTTagList itemsList = new NBTTagList();

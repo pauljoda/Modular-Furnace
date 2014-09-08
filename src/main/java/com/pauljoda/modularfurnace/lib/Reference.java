@@ -16,7 +16,7 @@ public class Reference {
 	//Used for mcmod.info
 	public static final String MOD_ID = "modularfurnace";
 	public static final String MOD_NAME = "Modular Furnace";
-	public static final String Version = "3.21";
+	public static final String Version = "3.3";
 	public static final String MCVersion = "1.7.10";
 	public static final String CHANNEL_NAME = MOD_ID;
 
